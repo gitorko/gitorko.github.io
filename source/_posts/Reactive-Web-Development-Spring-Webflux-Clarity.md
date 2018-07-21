@@ -4,6 +4,10 @@ date: 2018-07-18 00:00:00
 tags: Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot
 ---
 
+We will develop a full stack web application with a backend rest service written in spring webflux & reactive mongo libraries and then develop a angular front end with Clarity UI.We will link both together and deploy the application as single uber jar and as a docker container. We will also use lombok to reduce boilerplate code.
+
+<!-- more -->
+
 ## Spring WebFlux Backend Service
 
 {% asset_img spring.PNG %}

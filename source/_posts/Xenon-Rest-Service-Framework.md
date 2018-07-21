@@ -4,6 +4,10 @@ date: 2018-07-21 00:00:00
 tags: xenon, rest service, xenon hello world example
 ---
 
+We will develop a simple rest service using VMWare Xenon Framework. We will deploy multi-node instance of the rest service and explore the xenon UI.
+
+<!-- more -->
+
 {% asset_img xenon.PNG %}
 
 ## Xenon

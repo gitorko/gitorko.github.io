@@ -4,6 +4,10 @@ date: 2018-07-22 00:00:00
 tags: vscode, java
 ---
 
+We will look at some of the configurations & tips that java developers using vscode for front end and backend development can use.
+
+<!-- more -->
+
 ## VSCode
 
 {% asset_img vscode.PNG %}
