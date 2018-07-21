@@ -1,14 +1,16 @@
 ---
 title: Reactive Web Development - Spring Webflux & Clarity UI
 date: 2018-07-18 00:00:00
-tags: Reactive Web,Reactor,Clarity UI,Angular,Docker,Reactive Mongo, Spring boot,
+tags: Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot
 ---
 
 ## Spring WebFlux Backend Service
 
+{% asset_img spring.PNG %}
+
 We will now develop a reactive web application. We will use spring webflux,mongo database & clarity UI. We will also be using vscode as IDE for both java & angular development as it works seamlessly for both angular & java projects.
 
-We will first create the backend rest services. Create the intial project using [start.spring.io](http://start.spring.io/). You can also use vscode 'Spring Initializr Java Support' plugin and generate the project. Cntrl+Shift+P on vscode IDE and key in 'Spring Initializer'.
+We will first create the backend rest services. Create the intial project using [start.spring.io](http://start.spring.io/). You can also use vscode 'Spring Initializr Java Support' plugin and generate the project. Ctrl+Shift+P on vscode IDE and key in 'Spring Initializer'.
 
 {% asset_img image01.PNG %}
 
@@ -137,6 +139,8 @@ One of the advantages of adding dev tools in the pom.xml is that you can now mak
 ***
 
 ## Clarity UI Front End
+
+{% asset_img clarity.PNG %}
 
 
 We will now move on to the UI development using clarity  [Clartiy](https://vmware.github.io/clarity/). Clarity is an open source design system that brings together UX guidelines, an HTML/CSS framework, and Angular components. Ensure you have nodejs installed. [nodejs](https://nodejs.org/en/). You now have to install angular cli [Angular Cli](https://cli.angular.io/)
@@ -440,7 +444,7 @@ Update the pom.xml in the service project
         <outputDirectory>${build.directory}/classes/static/</outputDirectory >
         <resources>
           <resource>
-            <directory>../clarity-ui/dist</directory>
+            <directory>../clarity-ui/dist/clarity-ui</directory>
           </resource>
         </resources>
       </configuration>
@@ -562,7 +566,7 @@ $ mvn spring-boot:run '-Dspring-boot.run.arguments=--spring.data.mongodb.host=19
 
 In the next blog we will add authentication & look at streaming support.
 
-References
+## References
 [Angular](https://angular.io/tutorial/)
 [Clartiy](https://vmware.github.io/clarity/)
 [Spring Boot](https://spring.io/projects/spring-boot)
