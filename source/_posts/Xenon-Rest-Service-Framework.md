@@ -246,6 +246,35 @@ Response:
 }
 ```
 
+### Owner Selection
+Now lets assume you have 1 million book entries, will the data be replicated across all nodes? The data replication will be shared among the nodes that have ServiceOption.OWNER_SELECTION enabled. By enabling this you are telling the service that this node will take ownership of storing the data. So if there are 3 nodes in the poll then each node will store 1/3 of the 1 million records in the data store, if one of the node goes down then rebalancing happens and now the 2 nodes each have 1/2 of the 1 million records. When you request hits a server which doesnt have that data stored locally the request then gets forwarded to the node which is the owner of that data. You can have few nodes within the pool with ServiceOption.OWNER_SELECTION disabled they will internally forward the requests to the OWNER nodes.
+
+### Mutlinode
+Multi node capability in xenon provides high availability & scalability in terms of storage & request processing.
+
+### Stateful Service vs Stateless Service
+What we wrote above is a stateful rest service. A stateful service invovles data that needs persistence. An example of a stateless rest service would be a proxy service. 
+
+### Replication factor & Quorum
+The replication factor tells xenon how many nodes the stateful service needs to be replicated over. Default is all. Quroum tells xenon on how many nodes the persist operation should be successful before considering something as persisted. If you have defined quorum of 3 nodes and 1 node fails then all future write requests to will fail as there arent enough members to validate the quorum. Default is majority quorum [n/2+1] where n is replication factor. On a 3 node with replication factor all, quorum is [3/2+1] = 2 which means 2 nodes have to agree for a write to be committed.
+
+
+|ServiceOption                    | Description                                                                           |
+|---------------------------------|---------------------------------------------------------------------------------------|
+|PERSISTENCE                      | persists data                                                                         |
+|REPLICATION                      | replicates data across nodes                                                          |
+|INSTRUMENTATION                  | provides stats about service                                                          |
+|OWNER_SELECTION                  | takes owenrship of storing data                                                       |
+
+|PropertyUsageOption Annotation   | Description                                                                           |
+|---------------------------------|---------------------------------------------------------------------------------------|
+|ID                               | id field                                                                              |
+|AUTO_MERGE_IF_NOT_NULL           | helper method will merge current state with state supplied in body in case of updates |
+|OPTIONAL                         | not optional                                                                          |
+|REQUIRED                         | mandatory field                                                                       |
+|SERVICE_USE                      | used internally                                                                       |
+
+
 Now let us deploy our service in a distributed environment. Delete the test folder as we wont be covering it here. Run the command
 
 {% asset_img image04.PNG %}
@@ -260,13 +289,15 @@ $ java -jar myxenon-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 This should start the single node instance of your book store rest service.
 
-Now lets add 2 more nodes to the quorum
+Now lets add 2 more nodes to the quorum. All the 3 nodes ("Service Host") will form what is called a node group. Replication happens within this node group.
 
 ```bash
 $ java -jar myxenon-1.0-SNAPSHOT-jar-with-dependencies.jar --port=8001 --peerNodes=http://localhost:8000
 $ java -jar myxenon-1.0-SNAPSHOT-jar-with-dependencies.jar --port=8002 --peerNodes=http://localhost:8000
 ```
-It will take a few seconds for the nodes to synchronize. Note: The node name should be unique in the quorum. There must be minimum 3 nodes. You should be able to see all 3 nodes in the UI. You can try shutting down the primary node and see if data is still accessible
+It will take a few seconds for the nodes to synchronize/converge, the nodes use gossip to detect changes and identify new members in group.. Note: The node name should be unique in the quorum. There must be minimum 3 nodes. You should be able to see all 3 nodes in the UI. You can try shutting down the primary node and see if data is still accessible. A node group identifies which node is the owner of the data and forwards request to the owner to retrieve that.
+
+You can also add a node to a group after its started, you can do this by invoking a rest call (JoinPeerRequest). For now we will use the option of adding node to node group at startup time by providing --peerNodes. Such an ability to join a node group will be very useful in IOT based devices.
 
 ```bash
 curl -X GET -H 'Content-Type: application/json' -i http://localhost:8001/myservice/books/e948dec6a69bdd3f57182b45a6740
