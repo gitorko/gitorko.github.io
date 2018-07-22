@@ -264,7 +264,7 @@ The replication factor tells xenon how many nodes the stateful service needs to 
 |PERSISTENCE                      | persists data                                                                         |
 |REPLICATION                      | replicates data across nodes                                                          |
 |INSTRUMENTATION                  | provides stats about service                                                          |
-|OWNER_SELECTION                  | takes owenrship of storing data                                                       |
+|OWNER_SELECTION                  | takes ownership of storing data                                                       |
 
 |PropertyUsageOption Annotation   | Description                                                                           |
 |---------------------------------|---------------------------------------------------------------------------------------|
