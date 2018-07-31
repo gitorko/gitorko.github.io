@@ -8,6 +8,8 @@ We will develop a full stack web application with a backend rest service written
 
 <!-- more -->
 
+<!-- toc -->
+
 ## Spring WebFlux Backend Service
 
 {% asset_img spring.PNG %}

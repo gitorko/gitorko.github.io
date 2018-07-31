@@ -8,6 +8,8 @@ We will develop a simple rest service using VMWare Xenon Framework. We will depl
 
 <!-- more -->
 
+<!-- toc -->
+
 {% asset_img xenon.PNG %}
 
 ## Xenon

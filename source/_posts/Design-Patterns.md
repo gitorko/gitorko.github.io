@@ -4,20 +4,935 @@ date: 2018-07-29 00:00:00
 tags: java design patterns
 ---
 
-We will learn the java design patterns. Creational, Structural & Behavioural design patterns. 
+We will learn the java design patterns. Creational, Structural & Behavioral design patterns. 
 
 <!-- more -->
 
-The examples use lombok annotations for constructor,setter,getter methods to reduce the noise in the code. Add lombok to classpath or pom.xml if you want to run the examples. Now if there is a change in tax rules then we need to change just one class.
+<!-- toc -->
+
+The examples use lombok annotations for constructor,setter,getter methods to reduce the noise in the code. Add [lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok) to classpath or pom.xml if you want to run the examples.
+
+## Creational Design Patterns
+
+Provides way to create objects while hiding the creation logic.
+
+### 1. Singleton Pattern
+
+Singleton pattern ensures that only one instance of the class exists in the java virtual machine.
+
+A singleton class has these common features
+- private constructor to restrict creation of instance by other classes.
+- private static variable of the same class.
+- public static method to get instance of class.
+
+We will first look at eager loaded singleton. This is costly as object is created at time of class loading,also no scope for exception handling if instantiation fails.
+
+```java
+public class EagerLoadedSingleton {
+
+  public static void main(String[] args) {
+    System.out.println(EagerLoadedSingleton.getInstance().hello());
+  }
+
+  private static final EagerLoadedSingleton instance = new EagerLoadedSingleton();
+
+  private EagerLoadedSingleton() {
+  }
+
+  public static EagerLoadedSingleton getInstance() {
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from EagerLoadedSingleton!");
+  }
+}
+```
+
+This can be modified to static block singleton which provides room for handling exception.
+
+```java
+public class StaticBlockSingleton {
+  
+  public static void main(String[] args) {
+    System.out.println(StaticBlockSingleton.getInstance().hello());
+  }
+
+  private static final StaticBlockSingleton instance;
+
+  private StaticBlockSingleton() {
+  }
+
+  static {
+    try {
+      instance = new StaticBlockSingleton();
+    } catch (Exception e) {
+      throw new RuntimeException("Exception occured in creatingsingleton instance");
+    }
+  }
+
+  public static StaticBlockSingleton getInstance() {
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from StaticBlockSingleton!");
+  }
+}
+```
+
+The next step is to use lazy initialization singleton as creating singleton at class loading time and not using it will be costly.
+
+```java
+public class LazyLoadedSingleton {
+
+  public static void main(String[] args) {
+    System.out.println(LazyLoadedSingleton.getInstance().hello());
+  }
+
+  private static LazyLoadedSingleton instance;
+
+  private LazyLoadedSingleton() {
+  }
+
+  public static LazyLoadedSingleton getInstance() {
+    if (instance == null) {
+      instance = new LazyLoadedSingleton();
+    }
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from LazyLoadedSingleton!");
+  }
+}
+```
+
+However this is not thread safe as in multi thread environment 2 threads can get 2 different instances of the object. So lets make this thread safe. Notice we introduced synchronized keyword on the getInstance method.
+
+```java
+public class ThreadSafeSingleton {
+
+  public static void main(String[] args) {
+    System.out.println(ThreadSafeSingleton.getInstance().hello());
+  }
+
+  private static ThreadSafeSingleton instance;
+
+  private ThreadSafeSingleton() {
+  }
+
+  public static synchronized ThreadSafeSingleton getInstance() {
+    if (instance == null) {
+      instance = new ThreadSafeSingleton();
+    }
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from ThreadSafeSingleton!");
+  }
+}
+```
+The above program is thread safe but reduces performance as each thread waits to enter the synchronized block. We now fix that by introducing double check locking. Notice that we removed the synchronized keyword on the getInstance method and moved it inside the method. We now perform 2 if checks on the instance.
+
+```java
+public class ThreadSafeSingletonDoubleCheckLock {
+
+  public static void main(String[] args) {
+    System.out.println(ThreadSafeSingletonDoubleCheckLock.getInstance().hello());
+  }
+
+  private static ThreadSafeSingletonDoubleCheckLock instance;
+
+  private ThreadSafeSingletonDoubleCheckLock() {
+  }
+
+  public static ThreadSafeSingletonDoubleCheckLock getInstance() {
+    if (instance == null) {
+      synchronized (ThreadSafeSingletonDoubleCheckLock.class) {
+        if (instance == null) {
+          instance = new ThreadSafeSingletonDoubleCheckLock();
+        }
+      }
+
+    }
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from ThreadSafeSingleton!");
+  }
+}
+```
+
+There is another approach of writing a singleton called Bill Pugh Singleton implementation which uses static inner helper class instead of using synchronized keyword.
+
+```java
+public class BillPughSingleton {
+
+    public static void main(String[] args) {
+      BillPughSingleton.getInstance().hello();
+    }
+
+    private BillPughSingleton() {
+    }
+
+    private static class SingletonHelper {
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+
+    public static BillPughSingleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    public String hello() {
+        return "Hello from BillPughSingleton";
+    }
+}
+
+```
+
+Using reflection all previous singleton implementaitons can be broken
+
+```java
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+public class BreakSingletonByReflection {
+
+  public static void main(String[] args) {
+    new BreakSingletonByReflection().testSingleton();
+  }
+
+  public void testSingleton() {
+
+    ThreadSafeSingletonDoubleCheckLock instanceOne = ThreadSafeSingletonDoubleCheckLock.getInstance();
+    ThreadSafeSingletonDoubleCheckLock instanceTwo = null;
+    try {
+      Constructor[] constructors = ThreadSafeSingletonDoubleCheckLock.class.getDeclaredConstructors();
+      for (Constructor constructor : constructors) {
+        constructor.setAccessible(true);
+        instanceTwo = (ThreadSafeSingletonDoubleCheckLock) constructor.newInstance();
+        break;
+      }
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+        | InvocationTargetException ex) {
+      ex.printStackTrace();
+    }
+    if (instanceOne.hashCode() != instanceTwo.hashCode()) {
+      System.out.println("Singleton broken!");
+    }
+  }
+}
+```
+
+To avoid this we can use Enum based singleton, The disadvantage is you cant do lazy loading, you cant extend the singleton.
+
+```java
+public enum EnumSingleton {
+  
+    INSTANCE;
+  
+    public static void main(String[] args) {
+      System.out.println(EnumSingleton.INSTANCE.hello()); 
+    }
+    
+    public String hello() {
+        return ("Hello from EnumSingleTon!");
+    }
+}
+```
+In a distributed systems a singleton needs to be serialized and restored from store later and care must be taken to ensure that new instance is not created and the same instance that was serialized is restored. Notice the method readResolve if this method is removed then the singleton design breaks during de-serialization.
+
+```java
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class SerializedSingleton implements Serializable {
+
+  private static final long serialVersionUID = -1L;
+
+  public static void main(String[] args) throws Exception {
+
+    SerializedSingleton instanceOne = SerializedSingleton.getInstance();
+    ObjectOutput out = new ObjectOutputStream(new FileOutputStream("filename.ser"));
+    out.writeObject(instanceOne);
+    out.close();
+
+    ObjectInput in = new ObjectInputStream(new FileInputStream("filename.ser"));
+    SerializedSingleton instanceTwo = (SerializedSingleton) in.readObject();
+    in.close();
+    if (instanceOne.hashCode() != instanceTwo.hashCode()) {
+      System.out.println("Singleton broken!");
+    }else {
+      System.out.println(instanceOne.getInstance().hello());
+    }
+    
+  }
+
+  private SerializedSingleton() {
+  }
+
+  private static class SingletonHelper {
+    private static final SerializedSingleton instance = new SerializedSingleton();
+  }
+
+  public static SerializedSingleton getInstance() {
+    return SingletonHelper.instance;
+  }
+
+  public String hello() {
+    return ("Hello from singleton!");
+  }
+
+  protected Object readResolve() {
+    return getInstance();
+  }
+
+}
+```
+
+### 2. Factory Pattern
+
+
+### 3. Abstract Factory Pattern
+### 4. Builder Pattern
+### 4. Prototype Pattern
+
+Prototype pattern is used when the Object creation is expensive. Instead of creating a new object you can copy the original object to a new object and then modify it according to your needs. This pattern uses java cloning to copy the object. Prototype design pattern mandates that the Object which you are copying should provide the copying feature. It should not be done by any other class. Decision to use shallow or deep copy of the Object properties is a design decision.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+public class Main {
+
+  public static void main(String[] args) throws CloneNotSupportedException {
+    Employees emps = new Employees(new ArrayList<>());
+    emps.seedData();
+    Employees dataSet1 = (Employees) emps.clone();
+    Employees dataSet2 = (Employees) emps.clone();
+
+    System.out.println("dataSet1 size: " + dataSet1.getEmpList().size());
+    System.out.println("dataSet2 size: " + dataSet2.getEmpList().size());
+
+    dataSet2.getEmpList().add("jhon");
+    System.out.println("dataSet1 size: " + dataSet1.getEmpList().size());
+    System.out.println("dataSet2 size: " + dataSet2.getEmpList().size());
+  }
+
+}
+
+@AllArgsConstructor
+@Data
+class Employees implements Cloneable {
+
+  private List<String> empList;
+
+  public void seedData() {
+    for (int i = 0; i < 100; i++) {
+      empList.add("employee_" + i);
+    }
+  }
+
+  @Override
+  public Object clone() throws CloneNotSupportedException {
+    List<String> temp = new ArrayList<>();
+    for (String s : this.empList) {
+      temp.add(s);
+    }
+    return new Employees(temp);
+  }
+}
+```
+
+Output:
+
+```bash
+dataSet1 size: 100
+dataSet2 size: 100
+dataSet1 size: 100
+dataSet2 size: 101
+```
 
 ## Structural Design Patterns
 
+Deal with class and object composition. Provide different ways to create a class structure, using inheritance and composition to create a large object from small objects
 
-## 6. Bridge Pattern
+### 1. Adapter Pattern
 
-Bridge Pattern is used to decouple the interfaces from implementation. Prefer Composition over inheritance. There are interface hierarchies in both interfaces as well a implementations
+Adapter pattern is used when two unrelated interfaces need to work together. There is a AlienCraft which has different type of fire & scan api that takes additional parameter compared to the human readable ship interface. However by writing the adapter we map the appropriate functions for fire and scan. 
 
-First lets look at how a problematic code looks like and then refractor it to bridge pattern.
+{% asset_img adapter-pattern-visual.PNG %}
+
+```java
+import lombok.AllArgsConstructor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    SpaceShipAdapter shipAdapter = new SpaceShipAdapter(new AlienCraft());
+    shipAdapter.scan();
+    shipAdapter.fire();
+  }
+}
+
+class AlienCraft {
+  public void dracarys(String sector) {
+    System.out.println("Firing weapon at sector " + sector);
+  }
+
+  public void zorg(String sector) {
+    System.out.println("Scanning enemy in sector " + sector);
+  }
+}
+
+interface Ship {
+  public void scan();
+
+  public void fire();
+}
+
+class EnterpriseShip implements Ship {
+
+  @Override
+  public void scan() {
+    System.out.println("Scanning enemy in front of ship!");
+  }
+
+  @Override
+  public void fire() {
+    System.out.println("Firing weapon!");
+  }
+
+}
+
+@AllArgsConstructor
+class SpaceShipAdapter implements Ship {
+  AlienCraft ship;
+
+  @Override
+  public void scan() {
+    ship.zorg("NORTH");
+  }
+
+  @Override
+  public void fire() {
+    ship.dracarys("NORTH");
+  }
+
+}
+```
+
+Output:
+
+```bash
+Scanning enemy in sector NORTH
+Firing weapon at sector NORTH
+```
+
+UML Diagram Adapter design pattern.
+
+{% asset_img adapter.PNG %}
+
+### 2. Composite Pattern
+
+Composite pattern is used when we have to represent a part-whole hierarchy.A group of objects should behave in a similar way,tree like structure. Here we have a playlist which can contain songs or other playlist and those playlist can have songs of their own.
+
+{% asset_img composite-pattern-visual.PNG %}
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
+public class Main {
+
+    public static void main(String[] args) {
+      SongComponent playlist1  = new PlayList("playlist_1");
+      SongComponent playlist2  = new PlayList("playlist_2");
+      SongComponent playlist3  = new PlayList("playlist_3");
+      SongComponent myplaylist  = new PlayList("myplaylist");
+      myplaylist.add(playlist1);
+      myplaylist.add(playlist2);
+      playlist1.add(new Song("Song1"));
+      playlist1.add(new Song("Song2"));
+      playlist1.add(playlist3);
+      playlist3.add(new Song("Song3"));
+      
+      myplaylist.displaySongInfo();
+    }
+}
+abstract class SongComponent{
+  
+  public void add(SongComponent c) {
+    throw new UnsupportedOperationException();
+  }
+  
+  public String getSong() {
+    throw new UnsupportedOperationException();
+  }
+  
+  public void displaySongInfo() {
+    throw new UnsupportedOperationException();
+  }
+}
+
+@RequiredArgsConstructor
+class PlayList extends SongComponent{
+  
+  List<SongComponent> componentLst = new ArrayList<>();
+  final String playListName;
+
+  @Override
+  public void add(SongComponent c) {
+    componentLst.add(c);
+  }
+
+  @Override
+  public void displaySongInfo() {
+    System.out.println("Playlist Name: " + playListName);
+    for(SongComponent s: componentLst) {
+      s.displaySongInfo();
+    }
+  }
+}
+
+@AllArgsConstructor
+class Song extends SongComponent{
+  String songName;
+  
+  @Override
+  public String getSong() {
+    return songName;
+  }
+  
+  @Override
+  public void displaySongInfo() {
+    System.out.println("Song: "+ songName);
+  }
+}
+```
+
+Output:
+
+```bash
+Playlist Name: myplaylist
+Playlist Name: playlist_1
+Song: Song1
+Song: Song2
+Playlist Name: playlist_3
+Song: Song3
+Playlist Name: playlist_2
+```
+
+### 3. Proxy Pattern
+
+Proxy pattern is used when we want to provide controlled access of a functionality. A real world example would be when a lawyer restricts the questions police would ask to a mob boss.
+
+{% asset_img proxy-pattern-visual.PNG %}
+
+```java
+package com.tutor.designpattern.proxy;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Proxy proxy = new Proxy();
+        proxy.runCommand("rm");
+        proxy.runCommand("dir");
+    }
+}
+interface Command {
+  public void runCommand(String cmd);
+}
+
+class CommandImpl implements Command {
+
+  @Override
+  public void runCommand(String cmd) {
+      System.out.println("Running : " + cmd);
+  }
+}
+
+class Proxy implements Command {
+
+  Command cmdObj;
+
+  @Override
+  public void runCommand(String cmd) {
+      if (cmd.contains("rm")) {
+          System.out.println("Cant run rm");
+      } else {
+          cmdObj.runCommand(cmd);
+      }
+  }
+
+  public Proxy() {
+      this.cmdObj = new CommandImpl();
+  }
+
+}
+```
+
+Output:
+
+```bash
+Cant run rm
+Running : dir
+```
+
+### 4. Flyweight Pattern
+
+Flyweight pattern is used when we need to create a lot of Objects of a class eg 100,000 objects. Reduce cost of storage for large objects by sharing. When we share objects we need to determine what is intrinsic and extrinsic attributes. Here beeType is an intrinsic state and will be shared by all bees. The (x,y) coordinates are the extrinsic properties which will vary for each object.
+
+{% asset_img flyweight-pattern-visual.PNG %}
+
+```java
+import java.util.HashMap;
+import java.util.Random;
+import lombok.AllArgsConstructor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    for (int i = 0; i < 100000; i++) {
+      Bee b = FlyweightBeeFactory.getBeeType(BeeType.getRandom(new Random().nextInt(4)));
+      b.carryOutMission(new Random().nextInt(100), new Random().nextInt(100));
+    }
+
+    System.out.println("Total Bee objects created:" + FlyweightBeeFactory.bees.size());
+  }
+}
+
+interface Bee {
+  public void carryOutMission(int x, int y);
+}
+
+@AllArgsConstructor
+class WorkerBee implements Bee {
+
+  BeeType beeType;
+
+  @Override
+  public void carryOutMission(int x, int y) {
+    System.out.println(beeType + ", Depositing honey at (" + x + "," + y + ") quadrant!");
+  }
+
+}
+
+@AllArgsConstructor
+class AttackBee implements Bee {
+
+  BeeType beeType;
+
+  @Override
+  public void carryOutMission(int x, int y) {
+    System.out.println(beeType + ", Defending (" + x + "," + y + ") quadrant!");
+  }
+
+}
+
+class FlyweightBeeFactory {
+
+  public static final HashMap<BeeType, Bee> bees = new HashMap<>();
+
+  public static Bee getBeeType(BeeType beeType) {
+    Bee bee = bees.get(beeType);
+    if (bee == null) {
+      if (beeType.equals(BeeType.WORKER)) {
+        bee = new WorkerBee(BeeType.WORKER);
+      } else if (beeType.equals(BeeType.WORKER_LEADER)) {
+        bee = new WorkerBee(BeeType.WORKER_LEADER);
+      } else if (beeType.equals(BeeType.ATTACKER_LEADER)) {
+        bee = new WorkerBee(BeeType.ATTACKER_LEADER);
+      } else {
+        bee = new WorkerBee(BeeType.ATTACKER);
+      }
+      bees.put(beeType, bee);
+    }
+    return bee;
+  }
+
+}
+
+enum BeeType {
+  WORKER, WORKER_LEADER, ATTACKER, ATTACKER_LEADER;
+
+  public static BeeType getRandom(int val) {
+    return BeeType.values()[val];
+  }
+}
+```
+
+Output:
+
+```bash
+...
+...
+WORKER_LEADER, Depositing honey at (9,50) quadrant!
+ATTACKER, Depositing honey at (75,68) quadrant!
+WORKER_LEADER, Depositing honey at (25,78) quadrant!
+Total Bee objects created:4
+```
+
+Now lets look at how the bad design would have looked, Here we end up creating large number of objects there by wasting memory. In the solution above we have moved out the extrinsic properties from the Bee class so that we can share the objects.
+
+
+<span style="color:red;font-size: large;font-weight: bold;">Bad Design Alert!</span>
+
+```java
+package com.tutor.designpattern.flyweight.bad;
+
+import java.util.Random;
+import lombok.AllArgsConstructor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    int i = 0;
+    for (; i < 100000; i++) {
+      BeeType beeType = BeeType.getRandom(new Random().nextInt(4));
+      if (beeType.equals(BeeType.WORKER)) {
+        new WorkerBee(BeeType.WORKER, new Random().nextInt(100), new Random().nextInt(100)).carryOutMission();
+      } else if (beeType.equals(BeeType.WORKER_LEADER)) {
+        new WorkerBee(BeeType.WORKER_LEADER, new Random().nextInt(100), new Random().nextInt(100)).carryOutMission();
+      } else if (beeType.equals(BeeType.ATTACKER_LEADER)) {
+        new WorkerBee(BeeType.ATTACKER_LEADER, new Random().nextInt(100), new Random().nextInt(100)).carryOutMission();
+      } else {
+        new WorkerBee(BeeType.ATTACKER, new Random().nextInt(100), new Random().nextInt(100)).carryOutMission();
+      }
+    }
+    System.out.println("Total Bee objects created:" + i);
+  }
+}
+
+interface Bee {
+  public void carryOutMission();
+}
+
+@AllArgsConstructor
+class WorkerBee implements Bee {
+
+  BeeType beeType;
+  int x;
+  int y;
+
+  @Override
+  public void carryOutMission() {
+    System.out.println(beeType + ", Depositing honey at (" + x + "," + y + ") quadrant!");
+  }
+
+}
+
+@AllArgsConstructor
+class AttackBee implements Bee {
+
+  BeeType beeType;
+  int x;
+  int y;
+
+  @Override
+  public void carryOutMission() {
+    System.out.println(beeType + ", Defending (" + x + "," + y + ") quadrant!");
+  }
+
+}
+
+enum BeeType {
+  WORKER, WORKER_LEADER, ATTACKER, ATTACKER_LEADER;
+
+  public static BeeType getRandom(int val) {
+    return BeeType.values()[val];
+  }
+}
+```
+
+Output:
+
+```bash
+...
+...
+WORKER_LEADER, Depositing honey at (77,41) quadrant!
+ATTACKER_LEADER, Depositing honey at (54,35) quadrant!
+WORKER, Depositing honey at (7,17) quadrant!
+Total Bee objects created:100000
+```
+
+### 5. Facade Pattern
+
+Facade pattern is used to give unified interface to a set of interfaces in a subsystem.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        HelperFacade.generateReport("oracle");
+        HelperFacade.generateReport("mysql");
+    }
+}
+class MysqlHelper {
+
+  public void queryMysql() {
+      System.out.println("Generating report in mysql");
+  }
+}
+
+class OracleHelper {
+
+  public void queryOracle(){
+      System.out.println("Generating report in oracle");
+  }
+
+}
+
+class HelperFacade {
+
+  public static void generateReport(String db) {
+
+      switch (db) {
+          case "oracle":
+              OracleHelper ohelper = new OracleHelper();
+              ohelper.queryOracle();
+              break;
+          case "mysql":
+              MysqlHelper mhelper = new MysqlHelper();
+              mhelper.queryMysql();
+              break;
+      }
+
+  }
+}
+```
+
+Output:
+
+```bash
+Generating report in oracle
+Generating report in mysql
+
+```
+
+### 6. Bridge Pattern
+
+Bridge Pattern is used to decouple the interfaces from implementation. Prefer Composition over inheritance. There are interface hierarchies in both interfaces as well a implementations.
+
+{% asset_img bridge-pattern-visual.PNG %}
+
+By decoupling the switch & electric device from each other each can vary independently. You can add new switches, you can add new electric devices independently without increasing complexity.
+
+```java
+import lombok.AllArgsConstructor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Switch switch1 = new PullSwitch(new Light());
+    switch1.toggle();
+    System.out.println("----------------");
+    Switch switch2 = new PressSwitch(new Fan());
+    switch2.toggle();
+  }
+
+}
+
+interface ElectricDevice {
+  public void doSomething();
+}
+
+class Fan implements ElectricDevice {
+
+  @Override
+  public void doSomething() {
+    System.out.println("Fan!");
+  }
+}
+
+class Light implements ElectricDevice {
+
+  @Override
+  public void doSomething() {
+    System.out.println("Light!");
+  }
+}
+
+@AllArgsConstructor
+abstract class Switch {
+
+  protected ElectricDevice eDevice;
+
+  public abstract void toggle();
+}
+
+class PressSwitch extends Switch {
+
+  boolean state;
+
+  public PressSwitch(ElectricDevice d) {
+    super(d);
+  }
+
+  @Override
+  public void toggle() {
+    if (state) {
+      System.out.print("Pressed Switch, Now turning off :");
+      eDevice.doSomething();
+      state = Boolean.FALSE;
+    } else {
+      System.out.print("Pressed Switch, Now turning on :");
+      eDevice.doSomething();
+      state = Boolean.TRUE;
+    }
+  }
+}
+
+class PullSwitch extends Switch {
+
+  boolean state;
+
+  public PullSwitch(ElectricDevice d) {
+    super(d);
+  }
+
+  @Override
+  public void toggle() {
+    if (state) {
+      System.out.print("Pulled Switch, Now turning off :");
+      eDevice.doSomething();
+      state = Boolean.FALSE;
+    } else {
+      System.out.print("Pulled Switch, Now turning on :");
+      eDevice.doSomething();
+      state = Boolean.TRUE;
+    }
+  }
+}
+
+```
+
+Output:
+
+```bash
+Pulled Switch, Now turning on :Light!
+----------------
+Pressed Switch, Now turning on :Fan!
+```
+
+UML of Bridge Pattern. There is a bridge between Switch class and ElectricDevice class.
+
+{% asset_img bridge.PNG %}
+
+<span style="color:red;font-size: large;font-weight: bold;">Bad Design Alert!</span>
+
+Lets look at how a problematic code looks like and its eligibility for bridge pattern. In the below code trying to add a new Electric Device + Switch combination is a pain which is solved by the bridge pattern mentioned above.
 
 ```java
 package com.tutor.designpattern.bridge.badway;
@@ -118,114 +1033,11 @@ UML Diagram of problematic code, you can see that heirarchy exists.
 
 {% asset_img bridge-bad.PNG %}
 
-As you see in the above problem adding a new switch or electric device quickly causes the code to become large and unmanageable. Now lets refractor it to bridge pattern.
+### 7. Decorator Pattern
 
-```java
-import lombok.AllArgsConstructor;
+Decorator design pattern is used to modify the functionality of an object at runtime. Disadvantage of decorator pattern is that it uses a lot of similar kind of objects.
 
-public class Main {
-
-  public static void main(String[] args) {
-    Switch switch1 = new PullSwitch(new Light());
-    switch1.toggle();
-    System.out.println("----------------");
-    Switch switch2 = new PressSwitch(new Fan());
-    switch2.toggle();
-  }
-
-}
-
-interface ElectricDevice {
-  public void doSomething();
-}
-
-class Fan implements ElectricDevice {
-
-  @Override
-  public void doSomething() {
-    System.out.println("Fan!");
-  }
-}
-
-class Light implements ElectricDevice {
-
-  @Override
-  public void doSomething() {
-    System.out.println("Light!");
-  }
-}
-
-@AllArgsConstructor
-abstract class Switch {
-
-  protected ElectricDevice eDevice;
-
-  public abstract void toggle();
-}
-
-class PressSwitch extends Switch {
-
-  boolean state;
-
-  public PressSwitch(ElectricDevice d) {
-    super(d);
-  }
-
-  @Override
-  public void toggle() {
-    if (state) {
-      System.out.print("Pressed Switch, Now turning off :");
-      eDevice.doSomething();
-      state = Boolean.FALSE;
-    } else {
-      System.out.print("Pressed Switch, Now turning on :");
-      eDevice.doSomething();
-      state = Boolean.TRUE;
-    }
-  }
-}
-
-class PullSwitch extends Switch {
-
-  boolean state;
-
-  public PullSwitch(ElectricDevice d) {
-    super(d);
-  }
-
-  @Override
-  public void toggle() {
-    if (state) {
-      System.out.print("Pulled Switch, Now turning off :");
-      eDevice.doSomething();
-      state = Boolean.FALSE;
-    } else {
-      System.out.print("Pulled Switch, Now turning on :");
-      eDevice.doSomething();
-      state = Boolean.TRUE;
-    }
-  }
-}
-
-```
-
-Output:
-
-```bash
-Pulled Switch, Now turning on :Light!
-----------------
-Pressed Switch, Now turning on :Fan!
-```
-
-With the change we can now add new switches or new electric devices without increasing complexity.
-
-UML of Bridge Pattern. There is a bridge between Switch class and ElectricDevice class.
-
-{% asset_img bridge.PNG %}
-
-## 7. Decorator Pattern
-
-Decorator design pattern is used to modify the functionality of an object at runtime. Disadvantage of decorator pattern is that it uses a lot of similar kind of objects
+{% asset_img decorator-pattern-visual.PNG %}
 
 ```java
 import lombok.AllArgsConstructor;
@@ -262,8 +1074,8 @@ abstract class CarDecorator implements Car {
 
   @Override
   public void assemble() {
-    System.out.println("Decorator");
     this.car.assemble();
+    System.out.println("Default features added as no specific feature requested!");
   }
 
 }
@@ -313,13 +1125,15 @@ UML of Decorator Pattern
 
 {% asset_img decorator.PNG %}
 
-## Behavioural Design Patterns
+## Behavioral Design Patterns
 
 Behavioral patterns help design classes with better interaction between objects and provide lose coupling.
 
 ### 1. Template Pattern
 
 Template Pattern used to create a method stub and deferring some of the steps of implementation to the subclasses. Template method defines the steps to execute an algorithm and it can provide default implementation that might be common for all or some of the subclasses.
+
+{% asset_img template-pattern-visual.PNG %}
 
 ```java
 public class Main {
@@ -1261,3 +2075,5 @@ In observer, many objects are interested in the state change of one object. They
 #### 3. Difference between chain of responsibility and command pattern
 In chain of responsibility pattern, the request is passed to potential receivers, whereas the command pattern uses a command object that encapsulates a request.
 
+#### 3. Difference between adapter pattern and decorator pattern
+Adapter pattern only adapts functionality, decorator adds more functionality.
