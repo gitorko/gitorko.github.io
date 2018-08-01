@@ -10,6 +10,7 @@ We will learn the java design patterns. Creational, Structural & Behavioral desi
 
 <!-- toc -->
 
+
 The examples use lombok annotations for constructor,setter,getter methods to reduce the noise in the code. Add [lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok) to classpath or pom.xml if you want to run the examples.
 
 ## Creational Design Patterns
@@ -193,7 +194,7 @@ public class BillPughSingleton {
 
 ```
 
-Using reflection all previous singleton implementaitons can be broken
+Using reflection all previous singleton implementation can be broken
 
 ```java
 import java.lang.reflect.Constructor;
@@ -227,7 +228,48 @@ public class BreakSingletonByReflection {
 }
 ```
 
-To avoid this we can use Enum based singleton, The disadvantage is you cant do lazy loading, you cant extend the singleton.
+To safegaurd against reflection we will introduce the volatile keyword & throw RuntimeException in the constructor. 
+
+How volatile works in java?
+The volatile keyword in Java is used as an indicator to Java compiler and Thread that do not cache value of this variable and always read it from main memory. Java volatile keyword also guarantees visibility and ordering, write to any volatile variable happens before any read into the volatile variable. It also prevents compiler or JVM from the reordering of code.
+
+If we do not make the instance variable volatile than the Thread which is creating instance of Singleton is not able to communicate to the other thread, that the instance has been created until it comes out of the Singleton block, so if Thread A is creating Singleton instance and just after creation lost the CPU, all other thread will not be able to see value of instance as not null and they will believe its still null. By adding volatile java will not read the variable into thread context local memory and instead read it from the main memory each time.
+
+{% asset_img volatile-memory-model.PNG %}
+
+```java
+public class SingletonDefendReflection {
+
+  public static void main(String[] args) {
+    System.out.println(SingletonDefendReflection.getInstance().hello());
+  }
+
+  private static volatile SingletonDefendReflection instance;
+
+  private SingletonDefendReflection() {
+    if(instance != null) {
+      throw new RuntimeException("Use get instance to create object!");
+    }
+  }
+
+  public static SingletonDefendReflection getInstance() {
+    if (instance == null) {
+      synchronized (SingletonDefendReflection.class) {
+        if (instance == null) {
+          instance = new SingletonDefendReflection();
+        }
+      }
+    }
+    return instance;
+  }
+
+  public String hello() {
+    return ("Hello from ThreadSafeSingleton!");
+  }
+}
+```
+
+To defend against reflection you can also use Enum based singleton, The disadvantage is you cant do lazy loading, you cant extend the singleton.
 
 ```java
 public enum EnumSingleton {
@@ -298,9 +340,36 @@ public class SerializedSingleton implements Serializable {
 }
 ```
 
+A singleton example within java sdk is the Runtime class for garbage collection.
+
+```java
+public class RuntimeSingleton {
+  public static void main(String[] args) {
+    Runtime singleton1 = Runtime.getRuntime();
+    singleton1.gc();
+    Runtime singleton2 = Runtime.getRuntime();
+    if(singleton1 == singleton2) {
+      System.out.println("Singleton!");
+    }else {
+      System.out.println("Not Singleton!");
+    }
+  }
+}
+```
+
+Why not use a static class instead of writing a singleton class?
+Because static class doesnt guarantee thread safety.
+
+Can i have parameters in a singleton?
+A singleton constructor cant take parameters that violates the rule of singleton. If there are parameters then it classifies as a factory pattern.
+
+If singleton is unique instance per JVM instance how does it work in a tomcat server which can have 2 instances of same web application deployed on it. Since the applications still run on single JVM will they share the singleton?
+In this case both web applications will get their own instance of singleton because of class loader visibility.Tomcat uses individual class loaders for webapps. However if both application request a JRE or Tomcat singleton eg: Runtime then both get the same singleton.
+
+
 ### 2. Factory Pattern
 
-Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
+Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class. The main method doesnt know the details of instantiating a object its deferred to the factory subclass. Factory calls the new operator.
 
 ```java
 public class Main {
@@ -426,8 +495,7 @@ class CatFactory implements BaseFactory {
 
 ### 4. Builder Pattern
 
-Builder pattern is used when an class contains a lot of attributes. It becomes difficult to pass the correct type in correct order to a constructor. If some of the attributes are optional then there is overhead of having to pass null each time to the constructor. Notice that in the example below builder pattern returns immutable object. Notice the static inner class and the missing setter methods. Notice the private constructor of the Dog class. The name of dog and breed are the only mandatory fields so you dont need to pass null to a constructor for other optional attributes.
-
+Builder pattern is used to build a complex object with lot of attributes. It becomes difficult to pass the correct type in correct order to a constructor when there are many attributes. If some of the attributes are optional then there is overhead of having to pass null each time to the constructor or having to write multiple constructors(telescoping). Notice that in the example below builder pattern returns <b>immutable object</b> hence no setter methods exist. Notice the <b>static inner class</b> you can write an external class as well if you choose not to modify an existing class. Notice the private constructor of the Dog class as the only way to create an instance is via Builder. The name of dog and breed are the only mandatory fields this defines a contract that a dog object atleast needs these 2 attributes.
 
 ```java
 import lombok.Getter;
@@ -515,7 +583,6 @@ import lombok.ToString;
 public class Main {
   public static void main(String[] args) {
     Dog dog1 = Dog.builder().name("Rocky").breed("German Sheperd").build();
-    new Dog("nam", "dane", "red", 5, 34.0);
     System.out.println(dog1);
   }
 }
@@ -540,9 +607,11 @@ Output:
 Dog(name=Rocky, breed=German Sheperd, color=null, age=0, weight=30.0)
 ```
 
+An example in the java SDK is the StringBuilder class.
+
 ### 4. Prototype Pattern
 
-Prototype pattern is used when the Object creation is expensive. Instead of creating a new object you can copy the original object to a new object and then modify it according to your needs. This pattern uses java cloning to copy the object. Prototype design pattern mandates that the Object which you are copying should provide the copying feature. It should not be done by any other class. Decision to use shallow or deep copy of the Object properties is a design decision.
+Prototype pattern is used when the object creation is expensive. Instead of creating a new object you can copy the original object using clone and then modify it according to your needs. Prototype design pattern mandates that the object which you are copying should provide the copying feature, it should not be done by any other class. Decision to use shallow or deep copy of the object attributes is a design decision a shallow copy just copies immediate property and deep copy copies all object references as well. Notice we dont use new to create prototype objects after the first instance is created. Prototype avoid subclassing.
 
 ```java
 import java.util.ArrayList;
@@ -599,6 +668,8 @@ dataSet2 size: 100
 dataSet1 size: 100
 dataSet2 size: 101
 ```
+
+You can also create a registry to stored newly created objects when there are different types of objects and lookup against the registry when you want to clone objects.
 
 ## Structural Design Patterns
 
@@ -774,7 +845,7 @@ Playlist Name: playlist_2
 
 ### 3. Proxy Pattern
 
-Proxy pattern is used when we want to provide controlled access of a functionality. A real world example would be when a lawyer restricts the questions police would ask to a mob boss.
+Proxy pattern is used when we want to provide controlled access of a functionality. A real world example would be when a lawyer restricts the questions police would ask a mob boss.
 
 {% asset_img proxy-pattern-visual.PNG %}
 
@@ -1535,7 +1606,9 @@ Stan: Received Message:Hi All
 
 ### 3. Chain of Responsibility Pattern
 
-Chain of responsibility pattern is used when a request from client is passed to a chain of objects to process them
+Chain of responsibility pattern is used when a request from client is passed to a chain of objects to process them.
+
+{% asset_img chainofresponsibility-pattern-visual.PNG %}
 
 ```java
 import lombok.AllArgsConstructor;
@@ -1668,6 +1741,8 @@ Dispensing 1 10$ note
 ### 4. Observer Pattern
 
 Observer design pattern is used when we want to get notified about state changes of a object. An Observer watches the Subject here and any changes on Subject are notified to the Observer.
+
+{% asset_img observer-pattern-visual.PNG %}
 
 ```java
 import java.util.ArrayList;
