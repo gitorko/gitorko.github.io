@@ -109,7 +109,7 @@ public class LazyLoadedSingleton {
 }
 ```
 
-However this is not thread safe as in multi thread environment 2 threads can get 2 different instances of the object. So lets make this thread safe. Notice we introduced synchronized keyword on the getInstance method.
+However this is not thread safe as in multithread environment 2 threads can get 2 different instances of the object. So lets make this thread safe. Notice we introduced synchronized keyword on the getInstance method.
 
 ```java
 public class ThreadSafeSingleton {
@@ -167,33 +167,6 @@ public class ThreadSafeSingletonDoubleCheckLock {
 }
 ```
 
-There is another approach of writing a singleton called Bill Pugh Singleton implementation which uses static inner helper class instead of using synchronized keyword.
-
-```java
-public class BillPughSingleton {
-
-    public static void main(String[] args) {
-      BillPughSingleton.getInstance().hello();
-    }
-
-    private BillPughSingleton() {
-    }
-
-    private static class SingletonHelper {
-        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
-    }
-
-    public static BillPughSingleton getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-
-    public String hello() {
-        return "Hello from BillPughSingleton";
-    }
-}
-
-```
-
 Using reflection all previous singleton implementation can be broken
 
 ```java
@@ -228,7 +201,7 @@ public class BreakSingletonByReflection {
 }
 ```
 
-To safegaurd against reflection we will introduce the volatile keyword & throw RuntimeException in the constructor. 
+To safegaurd against reflection we will throw RuntimeException in the constructor. We will introduce the volatile keyword to make it even more thread safe.
 
 How volatile works in java?
 The volatile keyword in Java is used as an indicator to Java compiler and Thread that do not cache value of this variable and always read it from main memory. Java volatile keyword also guarantees visibility and ordering, write to any volatile variable happens before any read into the volatile variable. It also prevents compiler or JVM from the reordering of code.
@@ -285,6 +258,34 @@ public enum EnumSingleton {
     }
 }
 ```
+
+There is another approach of writing a singleton called Bill Pugh Singleton implementation which uses static inner helper class instead of using synchronized keyword.
+
+```java
+public class BillPughSingleton {
+
+    public static void main(String[] args) {
+      BillPughSingleton.getInstance().hello();
+    }
+
+    private BillPughSingleton() {
+    }
+
+    private static class SingletonHelper {
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+
+    public static BillPughSingleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+
+    public String hello() {
+        return "Hello from BillPughSingleton";
+    }
+}
+
+```
+
 In a distributed systems a singleton needs to be serialized and restored from store later and care must be taken to ensure that new instance is not created and the same instance that was serialized is restored. Notice the method readResolve if this method is removed then the singleton design breaks during de-serialization.
 
 ```java
@@ -375,13 +376,17 @@ Factory design pattern is used when we have a super class with multiple sub-clas
 public class Main {
 
   public static void main(String[] args) {
-    Animal animal = Factory.getAnimal("cat");
+    Animal animal = Factory.getAnimal(AnimalType.CAT);
     System.out.println(animal.sound());
   }
 }
 
 interface Animal {
   public String sound();
+}
+
+enum AnimalType{
+  DOG,DUCK,CAT;
 }
 
 class Duck implements Animal {
@@ -409,14 +414,16 @@ class Cat implements Animal {
 }
 
 class Factory {
-  public static Animal getAnimal(String type) {
+  public static Animal getAnimal(AnimalType type) {
     switch (type) {
-    case "dog":
+    case DOG:
       return new Dog();
-    case "cat":
+    case CAT:
       return new Cat();
-    default:
+    case DUCK:
       return new Duck();
+    default:
+      return null;
     }
   }
 }
@@ -609,7 +616,7 @@ Dog(name=Rocky, breed=German Sheperd, color=null, age=0, weight=30.0)
 
 An example in the java SDK is the StringBuilder class.
 
-### 4. Prototype Pattern
+### 5. Prototype Pattern
 
 Prototype pattern is used when the object creation is expensive. Instead of creating a new object you can copy the original object using clone and then modify it according to your needs. Prototype design pattern mandates that the object which you are copying should provide the copying feature, it should not be done by any other class. Decision to use shallow or deep copy of the object attributes is a design decision a shallow copy just copies immediate property and deep copy copies all object references as well. Notice we dont use new to create prototype objects after the first instance is created. Prototype avoid subclassing.
 
@@ -845,7 +852,7 @@ Playlist Name: playlist_2
 
 ### 3. Proxy Pattern
 
-Proxy pattern is used when we want to provide controlled access of a functionality. A real world example would be when a lawyer restricts the questions police would ask a mob boss.
+Proxy pattern is used when we want to provide controlled access of a functionality. A real world example would be when a lawyer restricts the questions police would ask a mob boss. You can add only one proxy per class.
 
 {% asset_img proxy-pattern-visual.PNG %}
 
@@ -899,9 +906,70 @@ Cant run rm
 Running : dir
 ```
 
+A much more generic way to doing this using default java class InvocationHandler is shown below.
+
+```java
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Command cmd = (Command) CommandProxy.newInstance(new CommandImpl());
+    cmd.runCommand("ls");
+    cmd.runCommand("rm");
+  }
+
+}
+
+interface Command {
+  public void runCommand(String cmd);
+}
+
+class CommandImpl implements Command {
+
+  @Override
+  public void runCommand(String cmd) {
+    System.out.println("Running : " + cmd);
+  }
+}
+
+class CommandProxy implements InvocationHandler {
+  private Object obj;
+
+  private CommandProxy(Object obj) {
+    this.obj = obj;
+  }
+
+  public static Object newInstance(Object obj) {
+    return java.lang.reflect.Proxy.newProxyInstance(obj.getClass().getClassLoader(), obj.getClass().getInterfaces(),
+        new CommandProxy(obj));
+  }
+
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    Object result;
+    try {
+      if (args[0].equals("rm")) {
+        throw new IllegalAccessException("rm command not allowed");
+      } else {
+        result = method.invoke(obj, args);
+      }
+      return result;
+    } catch (InvocationTargetException ex) {
+      throw ex.getTargetException();
+    } catch (Exception ex) {
+      throw new RuntimeException("invocation exception " + ex.getMessage());
+    }
+  }
+
+}
+```
+
 ### 4. Flyweight Pattern
 
-Flyweight pattern is used when we need to create a lot of Objects of a class eg 100,000 objects. Reduce cost of storage for large objects by sharing. When we share objects we need to determine what is intrinsic and extrinsic attributes. Here beeType is an intrinsic state and will be shared by all bees. The (x,y) coordinates are the extrinsic properties which will vary for each object.
+Flyweight pattern is used when we need to create a lot of Objects of a class eg 100,000 objects. Reduce cost of storage for large objects by sharing. When we share objects we need to determine what is intrinsic and extrinsic attributes. Here beeType is an intrinsic state and will be shared by all bees. The (x,y) coordinates are the extrinsic properties which will vary for each object. Notice that a factory pattern is also seen in the flyweight example below.
 
 {% asset_img flyweight-pattern-visual.PNG %}
 
@@ -1081,41 +1149,48 @@ Total Bee objects created:100000
 Facade pattern is used to give unified interface to a set of interfaces in a subsystem.
 
 ```java
+package com.tutor.designpattern.facade;
+
 public class Main {
-    public static void main(String[] args) {
-        HelperFacade.generateReport("oracle");
-        HelperFacade.generateReport("mysql");
-    }
+  public static void main(String[] args) {
+    HelperFacade.generateReport(DbType.ORACLE);
+    HelperFacade.generateReport(DbType.MYSQL);
+  }
 }
+
+enum DbType {
+  ORACLE, MYSQL;
+}
+
 class MysqlHelper {
 
-  public void queryMysql() {
-      System.out.println("Generating report in mysql");
+  public void mysqlReport() {
+    System.out.println("Generating report in mysql");
   }
 }
 
 class OracleHelper {
 
-  public void queryOracle(){
-      System.out.println("Generating report in oracle");
+  public void oracleReport() {
+    System.out.println("Generating report in oracle");
   }
 
 }
 
 class HelperFacade {
 
-  public static void generateReport(String db) {
+  public static void generateReport(DbType db) {
 
-      switch (db) {
-          case "oracle":
-              OracleHelper ohelper = new OracleHelper();
-              ohelper.queryOracle();
-              break;
-          case "mysql":
-              MysqlHelper mhelper = new MysqlHelper();
-              mhelper.queryMysql();
-              break;
-      }
+    switch (db) {
+    case ORACLE:
+      OracleHelper ohelper = new OracleHelper();
+      ohelper.oracleReport();
+      break;
+    case MYSQL:
+      MysqlHelper mhelper = new MysqlHelper();
+      mhelper.mysqlReport();
+      break;
+    }
 
   }
 }
@@ -1343,7 +1418,7 @@ UML Diagram of problematic code, you can see that heirarchy exists.
 
 ### 7. Decorator Pattern
 
-Decorator design pattern is used to modify the functionality of an object at runtime. Disadvantage of decorator pattern is that it uses a lot of similar kind of objects.
+Decorator design pattern is used to add the functionality by wrapping another class around the core class without modifying the core class. Disadvantage of decorator pattern is that it uses a lot of similar kind of objects.
 
 {% asset_img decorator-pattern-visual.PNG %}
 
@@ -1812,6 +1887,8 @@ Google Stock Price: GOOGL: 1031.22
 ### 5. Strategy Pattern
 
 Strategy pattern is used when we have multiple algorithm for a specific task and client decides the actual implementation to be used at runtime. This is also known as Policy Pattern.
+
+{% asset_img strategy-pattern-visual.PNG %}
 
 ```java
 public class Main {
@@ -2378,7 +2455,7 @@ Current State: State #2
 ## Differences
 
 #### 1. Difference between bridge pattern and adapter pattern
-Bridge pattern is built upfront you break things at design time to make changes so that functionality can be added without tight coupling, adapter pattern works after code is already designed like legacy code. We are not adding new code in adapter pattern but we are just providing different interface.
+Bridge pattern is built upfront you break things at design time to make changes so that functionality can be added without tight coupling, adapter pattern works after code is already designed like legacy code.
 
 #### 2. Difference between mediator pattern and observer pattern
 In observer, many objects are interested in the state change of one object. They are not interested in each other. So the relation is one to many. In mediator, many objects are interested to communicate many other objects. Here the relation is many to many.
@@ -2387,5 +2464,8 @@ In observer, many objects are interested in the state change of one object. They
 #### 3. Difference between chain of responsibility and command pattern
 In chain of responsibility pattern, the request is passed to potential receivers, whereas the command pattern uses a command object that encapsulates a request.
 
-#### 3. Difference between adapter pattern and decorator pattern
+#### 4. Difference between adapter pattern and decorator pattern
 Adapter pattern only adapts functionality, decorator adds more functionality.
+
+#### 4. Difference between adapter pattern and facade pattern
+Adapter pattern just links two incompatible interfaces. A facade is used when one wants an easier or simpler interface to work with.
