@@ -1,5 +1,5 @@
 ---
-title: Apache Kafka with Spring - Producer & Consumer
+title: Apache Kafka with Spring
 date: 2018-08-06 00:00:00
 tags: kafka,spring,producer,consumer,stream
 ---
@@ -8,9 +8,15 @@ We will learn how to integrate kafka server with spring and write a producer con
 
 <!-- more -->
 
+<!-- toc -->
+
 ## Kafka
 
-Kafka is a distributed & fault-tolerant, scalable stream processing system. Similar to spring rest template or jdbc template which abstracts the rest/jdbc calls spring provides kafka template also abstract the api to kafka server. There is an even higher level of abstraction provided by spring cloud which lets you integrate with kafka,rabbitmq and other messaging systems, however for now we will look at spring kafka template only.
+Kafka is a distributed & fault-tolerant, scalable stream processing system. You can use kafka as publisher-subscriber messaging system, you can use kafka as stream processing system that reacts to event in realtime, you can use kafka as a store for data.
+
+Similar to spring rest template or jdbc template which abstracts the rest/jdbc calls spring provides kafka template which provides high level abstraction to interact with kafka. There is an even higher level of abstraction provided by spring cloud which lets you integrate with kafka,rabbitmq and other messaging systems, however for now we will look at spring kafka template only.
+
+### Setup
 
 The first step is to get your kafka instance up. You can choose to do the deployment by following [Quick Start](https://kafka.apache.org/quickstart) or use docker to stand up your kafka server. Kafka requires zookeeper hence using docke compose we will orchestrate both these servers. Create a docker-compose.yml file.
 
@@ -24,8 +30,6 @@ services:
       - 2181:2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-    networks:
-      - kafkanet
   kafkaserver:
     hostname: kafkaserver
     container_name: kafkaserver
@@ -34,17 +38,12 @@ services:
       - 9092:9092
     depends_on:
       - zookeeper
-    networks:
-      - kafkanet      
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_HOST_NAME=kafkaserver
       - ALLOW_PLAINTEXT_LISTENER=yes
     links:
       - zookeeper:zookeeper
-networks:
-  kafkanet:
-    driver: bridge
 ```
 
 Ensure the C:\Windows\System32\drivers\etc\hosts file has these 2 entries.
@@ -73,6 +72,9 @@ Then run the command to create topic
 ```bash
 /opt/bitnami/kafka/bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic mytopic
 ```
+
+### Publisher Subscriber Application
+
 Create a maven project using [start.spring.io](https://start.spring.io/)
 
 {% asset_img image-01.PNG %}
@@ -89,6 +91,8 @@ Add the jackson dependency to the pom.xml
 Create a Main.java file
 
 ```java
+package kafademo;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -104,14 +108,14 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @Slf4j
 public class Main {
 
-    @Autowired
-    private KafkaTemplate<String, User> kafkaTemplate;
+    private final static String TOPIC_NAME = "mytopic";
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -120,31 +124,42 @@ public class Main {
     @Component
     class MainRunner implements ApplicationRunner {
 
+        @Autowired
+        private KafkaTemplate<String, User> kafkaTemplate;
+
         public void run(ApplicationArguments args) throws Exception {
-            List<String> users = Arrays.asList("david","john","raj","peter");
-            List<String> company = Arrays.asList("ibm","apple","google","vmware");
+            sendDataToStream();
+        }
+
+        public void sendDataToStream() throws InterruptedException {
+            List<String> users = Arrays.asList("david", "john", "raj", "peter");
+            List<String> company = Arrays.asList("ibm", "apple", "google", "vmware");
             while (true) {
-                kafkaTemplate.send("mytopic", new User(users.get(new Random().nextInt(users.size())),company.get(new Random().nextInt(company.size())),new Random().nextInt(100)));
-                TimeUnit.SECONDS.sleep(5);
+                kafkaTemplate.send(TOPIC_NAME, new User(users.get(new Random().nextInt(users.size())),
+                        company.get(new Random().nextInt(company.size())), new Random().nextInt(100)));
+                TimeUnit.SECONDS.sleep(15);
             }
         }
-    }
 
-    @KafkaListener(topics = "mytopic")
-    public void receiveTopic1(ConsumerRecord<?, ?> userRecord) {
-        log.info("Received : {} ", userRecord);
+        @KafkaListener(topics = TOPIC_NAME, groupId = "test-group")
+        public void topicConsumer(ConsumerRecord<?, ?> userRecord) {
+            log.info("Received : {} ", userRecord);
+        }
     }
 }
 
 @Data
 @AllArgsConstructor
-class User{
-    String userName,company;
+@NoArgsConstructor
+class User {
+    String userName, company;
     int salary;
 }
 ```
 
-Enter the following properites in application.properties file under src/main/resources. This basically tell your application which kafka server to connect to, how to serialzie the key, how to deserialize the value. The group id of your client etc.
+Enter the following properites in application.properties file under src/main/resources. This basically tell your application which kafka server to connect to, how to serialzie the key, how to deserialize the value. The group id of your client which uses group management to assign topic partitions to consumers, auto-offset-reset=earliest ensures the new consumer group will get the messages we just sent. The ProducerFactory and ConsumerFactory read these properites and create the instances.
+
+application.properties
 
 ```yml
 spring.kafka.consumer.group-id=test-group
@@ -153,6 +168,18 @@ spring.kafka.bootstrap-servers=localhost:9092
 spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
 spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
 spring.main.web-application-type=NONE
+```
+
+We can have multiple kakfa listner for a topic with different group id,A consumer can listen to more than one topic. We had created the topic 'mytopic' with only one partition. For a topic with multiple partitions, @KafkaListener can explicitly subscribe to a particular partition of a topic with an initial offset.
+
+```java
+@KafkaListener(topics = "topic1", group = "group1")
+@KafkaListener(topics = "topic1,topic2", group = "group1")
+@KafkaListener(topicPartitions = @TopicPartition(topic = "topic1",
+  partitionOffsets = {
+    @PartitionOffset(partition = "0", initialOffset = "0"), 
+    @PartitionOffset(partition = "2", initialOffset = "0")
+}))
 ```
 
 Run the project. It will print the list of ProducerConfig and ConsumerConfig and then the producer sends a event and consumer consumes the event. 
@@ -297,4 +324,119 @@ Run the project. It will print the list of ProducerConfig and ConsumerConfig and
 2018-08-06 15:17:40.783  INFO 25300 --- [ntainer#0-0-C-1] kafademo.Main                            : Received : ConsumerRecord(topic = mytopic, partition = 0, offset = 7, CreateTime = 1533548860773, serialized key size = -1, serialized value size = 46, headers = RecordHeaders(headers = [RecordHeader(key = __TypeId__, value = [107, 97, 102, 97, 100, 101, 109, 111, 46, 85, 115, 101, 114])], isReadOnly = false), key = null, value = {"userName":"raj","company":"ibm","salary":44}) 
 ```
 
-What we have done so far is simple produce consumer similar to other JMS systems. However the next step is to use Streams feature of kafka to achive something similar to map reduce functionality. We will look at that in the next post.
+What we have done so far is simple produce consumer similar to other JMS systems. However the next step is to use Streams feature of kafka to achive something similar to map reduce functionality. 
+
+### Kafka Streams
+
+When you use other projects like apache spark, storm,flink you write code and copy the jar to the nodes where the actual work happens. With the introduction of kafka stream you can now write your processing logic for streams and then it can run anywhere the jar can run. KafkaStreams enables us to consume from Kafka topics, analyze or transform data, and potentially, send it to another Kafka topic.
+
+Now modify your code to add kafka stream functionality to count the employees in a company as and when the employees get added. The method processStream prints the employee count. The method sendDataToStream sends new employee events to the stream.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.Consumed;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Serialized;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.serializer.JsonSerde;
+import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@SpringBootApplication
+@Slf4j
+public class Main {
+
+    private final static String TOPIC_NAME = "mytopic";
+
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+    @Component
+    class MainRunner implements ApplicationRunner {
+
+        @Autowired
+        private KafkaTemplate<String, User> kafkaTemplate;
+
+        @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+        public Properties kStreamsConfigs() {
+            Properties props = new Properties();
+            props.put(StreamsConfig.APPLICATION_ID_CONFIG, "countstream");
+            props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+            return props;
+        }
+
+        public void run(ApplicationArguments args) throws Exception {
+            processStream();
+            sendDataToStream();
+        }
+
+        public void sendDataToStream() throws InterruptedException {
+            List<String> users = Arrays.asList("david", "john", "raj", "peter");
+            List<String> company = Arrays.asList("ibm", "apple", "google", "vmware");
+            while (true) {
+                kafkaTemplate.send(TOPIC_NAME, new User(users.get(new Random().nextInt(users.size())),
+                        company.get(new Random().nextInt(company.size())), new Random().nextInt(100)));
+                TimeUnit.SECONDS.sleep(15);
+            }
+        }
+
+        public void processStream() {
+            StreamsBuilder builder = new StreamsBuilder();
+            KStream<String, User> streamOfUsers = builder.stream(TOPIC_NAME,
+                    Consumed.with(Serdes.String(), new JsonSerde<>(User.class)));
+
+            //streamOfUsers.foreach((k, v) -> {
+            //    log.info("key: " + k + " value: " + v.getCompany());
+            //});
+
+            KTable<String, Long> employeeCountByCompany = streamOfUsers
+                    .map((k,v)-> new KeyValue<>(v.getCompany(), "0"))
+                    .groupByKey(Serialized.with(Serdes.String(), Serdes.String()))
+                    .count();
+            employeeCountByCompany.foreach((w, c) -> log.info("Company: " + w + " -> " + c));
+
+            KafkaStreams streams = new KafkaStreams(builder.build(), kStreamsConfigs());
+            //streams.cleanUp();
+            streams.start();
+            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+        }
+
+        @KafkaListener(topics = TOPIC_NAME, groupId = "test-group")
+        public void topicConsumer(ConsumerRecord<?, ?> userRecord) {
+            log.info("Received : {} ", userRecord);
+        }
+    }
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class User {
+    String userName, company;
+    int salary;
+}
+
+```
