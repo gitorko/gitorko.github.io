@@ -6,6 +6,10 @@ tags: drools,spring
 
 We will learn how to integrate spring and drools.
 
+<!-- more -->
+
+<!-- toc -->
+
 ## Drools
 
 Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.
