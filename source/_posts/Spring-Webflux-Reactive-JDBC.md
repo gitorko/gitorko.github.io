@@ -62,12 +62,14 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 @SpringBootApplication
+@Slf4j
 public class Application implements ApplicationRunner {
 
     @Autowired
@@ -79,7 +81,7 @@ public class Application implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("Seeding data!");
+        log.info("Seeding data!");
 
         Flux<String> names = Flux.just("raj", "david", "pam").delayElements(Duration.ofSeconds(2));
         Flux<String> colors = Flux.just("red", "blue", "green").delayElements(Duration.ofSeconds(3));
