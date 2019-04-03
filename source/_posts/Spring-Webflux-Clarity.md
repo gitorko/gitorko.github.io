@@ -1,5 +1,5 @@
 ---
-title: Reactive Web Development - Spring Webflux & Clarity UI
+title: Spring Webflux & Clarity UI
 date: 2018-07-18 00:00:00
 tags: Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot
 ---

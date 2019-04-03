@@ -1,10 +1,10 @@
 ---
-title: Apache Kafka with Spring
+title: Spring Boot & Apache Kafka
 date: 2018-08-06 00:00:00
 tags: kafka,spring,producer,consumer,stream
 ---
 
-We will learn how to integrate kafka server with spring and write a producer consumer application.
+Spring boot integration with kafka server to create a producer consumer application.
 
 <!-- more -->
 
@@ -76,8 +76,6 @@ Then run the command to create topic
 ### Publisher Subscriber Application
 
 Create a maven project using [start.spring.io](https://start.spring.io/)
-
-{% asset_img image-01.PNG %}
 
 Add the jackson dependency to the pom.xml
 

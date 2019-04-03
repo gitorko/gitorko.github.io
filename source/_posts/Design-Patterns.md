@@ -4,7 +4,7 @@ date: 2018-07-29 00:00:00
 tags: java design patterns
 ---
 
-We will learn the java design patterns. Creational, Structural & Behavioral design patterns. 
+Creational, Structural & Behavioral design patterns.
 
 <!-- more -->
 

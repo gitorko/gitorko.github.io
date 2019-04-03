@@ -4,25 +4,54 @@ date: 2019-04-02 00:00:00
 tags: spring-webflux, jdbc,reactive support
 ---
 
-We will learn how to integrate spring webflux with jdbc to allow non-blocking calls to database. We will be using postgres db but any db can be used.
+A Webflux application integration with JDBC to allow non-blocking calls to database. R2DBC is still not production ready hence this approach should help you integrate existing relational database with webflux.
+
+Github: [https://github.com/gitorko/project64](https://github.com/gitorko/project64)
 
 <!-- more -->
 
 <!-- toc -->
 
-## Spring Webflux
-
-Spring webflux provided non-blocking support for rest api. However with R2dbc still under experimental support cant be used for production applications. Hence the following approach provides a way to make non-blocking calls to JDBC.
-
-You can create an empty postgres database with the following commands
+## Postgres Docker Instance
+For development activities lets bring up a postgres server as a docker container. 
 
 ```bash
-psql -h localhost -U postgres postgres
-    postgres=# CREATE USER demodb WITH PASSWORD 'demopwd';
-    postgres=# CREATE DATABASE demodb WITH OWNER demouser ENCODING UTF8 TEMPLATE template0;
+docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER="demouser" -e POSTGRES_PASSWORD="demopwd" -e POSTGRES_DB="demodb" -d postgres
 ```
 
-Create a gradle project using spring init. The Application.java file.
+We will now connect to the db and create the table.
+
+```bash
+docker exec -it postgres psql -U demouser demodb
+```
+Run the sql
+
+```sql
+CREATE TABLE customer (
+   id  SERIAL PRIMARY KEY,
+   name VARCHAR(50) NOT NULL,
+   AGE INT NOT NULL
+);
+```
+
+You should be able to see your table.
+```bash
+demodb=# \dt
+          List of relations
+ Schema |   Name   | Type  |  Owner   
+--------+----------+-------+----------
+ public | customer | table | demouser
+(1 row)
+```
+
+## Webflux Application
+
+Spring webflux provided non-blocking support for rest api. However with R2DBC still under experimental support the following approach provides a way to make non-blocking calls to JDBC.
+
+
+You can now create a gradle project using using [start.spring.io](http://start.spring.io/)
+
+Application.java
 
 
 ```java
@@ -35,6 +64,7 @@ import java.util.concurrent.Executors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +113,9 @@ public class Application implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("Seeding data!");
 
-        Flux<String> names = Flux.just("raj", "david", "pam").delayElements(Duration.ofSeconds(2));
-        Flux<String> colors = Flux.just("red", "blue", "green").delayElements(Duration.ofSeconds(3));
-        Flux<Customer> customers = Flux.zip(names, colors).map(tupple -> {
+        Flux<String> names = Flux.just("raj", "david", "pam").delayElements(Duration.ofSeconds(1));
+        Flux<Integer> ages = Flux.just(25, 27, 30).delayElements(Duration.ofSeconds(1));
+        Flux<Customer> customers = Flux.zip(names, ages).map(tupple -> {
             return new Customer(null, tupple.getT1(), tupple.getT2());
         });
 
@@ -173,7 +203,7 @@ class AppController {
     }
 
     @GetMapping("/id/{customerId}")
-    public Mono<Optional<Customer>> findAll(@PathVariable Long customerId) {
+    public Mono<Optional<Customer>> findById(@PathVariable Long customerId) {
         return appService.findById(customerId);
     }
 
@@ -192,19 +222,20 @@ interface AddressRepository extends CrudRepository<Customer, Long> {
 @Entity(name = "customer")
 class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NonNull
     private String name;
     @NonNull
-    private String color;
+    private Integer age;
 }
 ```
 
-The application.yaml file 
+The application.yaml file
 
 ```yaml
 spring:
+  port: 8080
   datasource:
     url: jdbc:postgresql://localhost:5432/demodb
     username: demouser
@@ -213,7 +244,6 @@ spring:
     maximum-pool-size: 100
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
-    hibernate.ddl-auto: create
     properties:
       hibernate:
         temp:
@@ -245,55 +275,46 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    runtime group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+    runtime 'org.postgresql:postgresql:42.2.5'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 ```
 
-Run the project with "./gradlew bootRun
+You can run the project
 
-Get list of customers
+```bash
+./gradlew bootRun
+```
+
+Your service should now be up
+
 ```bash
 curl -X GET \
   http://localhost:8080/api/all \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: fe758acc-0ff1-4a20-866b-2fb83e79d9e8' \
+  -H 'Postman-Token: 03d44176-e636-4174-a0da-b2286a3d580d' \
   -H 'cache-control: no-cache'
 
-[{"id":1,"name":"raj","color":"red"},{"id":2,"name":"david","color":"blue"},{"id":3,"name":"pam","color":"green"}]
-```
-
-Get by id
-```bash
 curl -X GET \
   http://localhost:8080/api/id/1 \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: f4003fb3-503e-40cd-9e0f-2061cefdbc29' \
+  -H 'Postman-Token: 7649705c-8b3e-4c4d-b222-fafeddcbcc1c' \
   -H 'cache-control: no-cache'
 
-{"id":1,"name":"raj","color":"red"}
-```
-
-Save new customer
-```bash
 curl -X POST \
   http://localhost:8080/api/save \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 4f3f4fae-9c5f-4cc0-8b5b-ac32d38bd4ab' \
+  -H 'Postman-Token: 765e1c69-4328-4ff4-9418-58f9cb6d4caa' \
   -H 'cache-control: no-cache' \
   -d '{
-    "name": "dave",
-    "color": "red"
+    "name": "david",
+    "age": 25
 }'
-
 ```
