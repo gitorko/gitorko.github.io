@@ -91,8 +91,6 @@ public class Product {
 application.yaml
 
 ```yaml
-server:
-  port: 8080
 spring:
   main:
     web-application-type: none

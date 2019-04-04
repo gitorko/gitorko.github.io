@@ -84,3 +84,6 @@ deploy:
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
 
 disqus_shortname: gitorko
+
+theme_config:
+  google_analytics: UA-137709172-1
