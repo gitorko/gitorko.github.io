@@ -25,7 +25,7 @@ As of this writing only 3 relational database have r2dbc libraries
 For development activities lets bring up a postgres server as a docker container. 
 
 ```bash
-docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER="demouser" -e POSTGRES_PASSWORD="demopwd" -e POSTGRES_DB="demodb" -d postgres
+docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER="demouser" -e POSTGRES_PASSWORD="demopwd" -e POSTGRES_DB="demodb" postgres
 ```
 
 We will now connect to the db and create the table.
@@ -194,7 +194,7 @@ server:
   port: 8080
 ```
 
-You can run the project
+Run the project
 
 ```bash
 ./gradlew bootRun

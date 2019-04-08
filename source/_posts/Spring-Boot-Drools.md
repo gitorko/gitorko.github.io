@@ -4,7 +4,7 @@ date: 2019-03-29 00:00:00
 tags: drools,spring boot,spring
 ---
 
-A Spring boot application integration Drools. Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.
+A Spring boot application integration with Drools. Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.
 
 Github: [https://github.com/gitorko/project63](https://github.com/gitorko/project63)
 
@@ -153,7 +153,7 @@ dependencies {
 
 ```
 
-You can run the project
+Run the project
 
 ```bash
 ./gradlew bootRun

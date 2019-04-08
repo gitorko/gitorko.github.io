@@ -4,76 +4,281 @@ date: 2018-07-22 00:00:00
 tags: vscode, java
 ---
 
-Some of the configurations & tips that java developers using vscode for front end and backend development can use.
+VSCode is free, open source IDE and with support for Java & Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration with maven, gradle, checkstyle, code coverage, lombok etc. Here we look at some of the tips and tricks to work with VSCode as IDE.
+
+Github: [https://github.com/gitorko/project61](https://github.com/gitorko/project61)
 
 <!-- more -->
 
+<!-- toc -->
+
 ## VSCode
 
+&nbsp;
 {% asset_img vscode.PNG %}
+&nbsp;
 
-VSCode is free, open source IDE and with support for Java & Angular Development it checks all the boxes. The below is the user setting file that I use 
+### Feature 1: Use Git Clone & Spring Init in command Pallette
+
+You can use the command palette (Ctrl+Shift+P) to clone repositories, or create new projects using start.spring.io integration.
+
+{% asset_img image01.JPG %}
+
+### Feature 2: Create a new Class using template, you can avoid typing the packagename, class name etc.
+
+{% asset_img image02.JPG %}
+
+### Feature 3: Use language support to avoid typing main: 'public static void main' or sysout: 'System.out.println'
+
+{% asset_img image03.JPG %}
+
+### Feature 4: Hide files you dont wish to view by editing setting.json
+
+{% asset_img image04.JPG %}
+
+Add this to settings.json
+
+```json
+"files.exclude": {
+  "**/.classpath": true,
+  "**/.DS_Store": true,
+  "**/.factorypath": true,
+  "**/.git": true,
+  "**/.gitignore": true,
+  "**/.gradle": true,
+  "**/.hg": true,
+  "**/.mvn": true,
+  "**/.project": true,
+  "**/.settings": true,
+  "**/.sts4-cache": true,
+  "**/.svn": true,
+  "**/.vscode": true,
+  "**/.idea": true,
+  "**/out": true,
+  "**/bin": true,
+  "**/build": true,
+  "**/CVS": true,
+  "**/gradle": true,
+  "**/target": true,
+  "**/.attach_pid*": true,
+  "**/logs": true
+}
+```
+
+### Feature 5: If you want to view white spaces
+
+Add this to settings.json
+
+```json
+"editor.renderWhitespace": "all",
+"editor.insertSpaces": true,
+```
+
+### Feature 6: Increase page length to 120
+
+Add this to settings.json
+
+```json
+"editor.rulers": [
+    120
+]
+```
+
+### Feature 7: Decide on import order
+
+Add this to settings.json
+
+```json
+"java.completion.importOrder": [
+        "java",
+        "javax",
+        "org",
+        "com"
+    ],
+```
+
+Use Right click Source Action->Organize Imports or (Alt+Shift+O)
+
+### Feature 8: To enable hot swap of code on save during debugging
+
+Add this to settings.json, Not required if you are using spring dev tools as spring dev tools support auto reload on save.
+
+```json
+"java.debug.settings.enableHotCodeReplace": true,
+```
+
+### Feature 8: To enable eclipse formatting
+
+[Formatter settings](https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings)
+
+Use (Ctrl+Shift+I) to format
+
+### Feature 9: Install Lombok plugin for lombok support
+
+[Lombok Annotations Support for VS Code](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok)
+
+### Feature 10: Install licenser to add license info to each java file.
+
+[licenser](https://marketplace.visualstudio.com/items?itemName=ymotongpoo.licenser)
+
+Add this to settings.json
+
+```json
+"licenser.customHeader": "Copyright (c) 2019 Company, Inc. All Rights Reserved.",
+"licenser.customTermsAndConditions": "",
+"licenser.license": "Custom",
+"licenser.useSingleLineStyle": false,
+```
+
+Use command palette to insert license
+
+{% asset_img image05.JPG %}
+
+
+### Feature 16: View libraries using the java dependency
+
+{% asset_img image06.JPG %}
+
+### Feature 17: View the git blame feature inline your class file, explore git integration support.
+
+{% asset_img image07.JPG %}
+
+### Feature 17: Explore unit test support & debug unit tests
+
+{% asset_img image08.JPG %}
+
+### Feature 17: Enable checkstyle support & view the inline highlight feature, view the split editor feature
+
+Make the settings change in the workspace instead of global file so that this applies only to the specific project.
+
+[Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle)
+
+{% asset_img image09.JPG %}
+
+[Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters)
+
+If the coverage file name is different then change the settings.json 
+
+```json
+"coverage-gutters.xmlname": "jacocoTestReport.xml",
+```
+
+### Feature 18: Enable Coverage Gutters plugin and view code coverage details inline
+
+You need xml report enabled for this to work, check build.gradle
+
+{% asset_img image10.JPG %}
+
+### Feature 19: Explore debugging & view the variable values
+
+Dock the debugger tool bar.
+
+```json
+"debug.toolBarLocation": "docked"
+```
+
+{% asset_img image11.JPG %}
+
+### Feature 20: Explore spring boot support for run & application.properties file
+
+Start or debug spring boot application
+
+{% asset_img image12.JPG %}
+
+Get spring property support
+
+{% asset_img image13.JPG %}
+
+### Feature 21: Create shortcut to key bindings to build project
+
+For gradle projects instead of running ./gradlew build each time in terminal you can map it to a task and give a keyboard shortcut.
+
+{% asset_img image14.JPG %}
+
+Add this to the tasks.json, everytime you run a task called 'run' it will build the project.
 
 ```json
 {
-    "workbench.editor.enablePreview": false,
-    "workbench.editor.enablePreviewFromQuickOpen": false,
-    "editor.renderWhitespace": "all",
-    "editor.insertSpaces": true,
-    "java.debug.settings.enableHotCodeReplace": true,
-    "editor.rulers": [
-        120
-    ],
-    "window.zoomLevel": 0,
-    "editor.tabSize": 2,
-    "editor.minimap.enabled": false,
-    "editor.detectIndentation": false,
-    "checkstyle.configurationFile": "google_checks",
-    "checkstyle.version": "8.8",
-    "checkstyle.showCheckstyleVersionInvalid": true,
-    "checkstyle.autocheck": false,
-    "files.exclude": {
-      "**/.git": true,
-      "**/.gitignore": true,
-      "**/build": true,
-      "**/.svn": true,
-      "**/.hg": true,
-      "**/CVS": true,
-      "**/.vscode": true,
-      "**/.mvn": true,
-      "**/.DS_Store": true,
-      "**/.settings": true,
-      "**/.classpath": true,
-      "**/.project": true,
-      "**/.sts4-cache": true,
-      "**/target": true
-    },
-    "java.errors.incompleteClasspath.severity": "ignore",
-    "git.autofetch": true,
-    "editor.wordWrap": "on",
-    "editor.multiCursorModifier": "ctrlCmd",
-    "java.completion.importOrder": [
-      "java",
-      "javax",
-      "org",
-      "com"
-    ],
-    "java.saveActions.organizeImports": false,
-    "editor.formatOnSave": false,
-    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"C:\\Users\\gitorko\\.vscode\\extensions\\GabrielBB.vscode-lombok-0.9.4/server/lombok.jar\" -Xbootclasspath/a:\"C:\\Users\\gitorko\\.vscode\\extensions\\GabrielBB.vscode-lombok-0.9.4/server/lombok.jar\"",
-    "workbench.colorTheme": "Default Light+",
-    "workbench.iconTheme": "vscode-icons",
-    "workbench.startupEditor": "newUntitledFile",
-    "gitlens.advanced.messages": {
-      "suppressShowKeyBindingsNotice": true,
-    },
-    "vsicons.projectDetection.autoReload": true
-  }
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "./gradlew clean build",
+            "group": "none"
+        }
+    ]
+}
 ```
 
-One of the things i miss is the ability to run a project similar to Ctrl+F11 in eclipse. There is a new run button introduced but that works only on plain java files. Hence given a maven project how does one run the program?
+Now lets create a shortcut goto "Keyboard Shortcuts" and click on '{}' icon.  Add this to keybindings.json, now press F6 to build the project
 
-You need to add org.codehaus.mojo.exec-maven-plugin in your pom.xml
+```json
+[
+    {
+        "key": "f6",
+        "command": "workbench.action.tasks.runTask",
+        "args" : "build"
+      }
+]
+```
+
+### Feature 23: Taking user input
+
+To take user input you need to change shell type in tasks.json config.
+
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "mvn exec:java  '-Dexec.mainClass=com.myproject.Main'",
+      "group": "none"
+    }
+  ]
+}
+```
+
+### Feature 24: Run a project
+
+Code lens provides support to run a project by simplying pressing (Ctrl+F5)
+
+### Feature 15: Short Cuts
+
+Goto Implementation - (Ctrl + F12)
+Goto Terminal       - (Ctrl + ~  )
+
+## Features To Explore
+
+Other features to explore on your own are
+
+1. Multiline edit
+2. Live Share
+3. Docker Support
+4. Kubernetes Support
+
+## Features missing
+
+1. Google Java format plugin
+2. Static Import
+3. Renaming class files
+
+## Problems
+
+1. Often times workspace gets corrupted so I delete the storage in %APPDATA%\\Code\\User\\workspaceStorage and restart the IDE to get things back in order. [Clean the workspace directory](https://github.com/redhat-developer/vscode-java/wiki/Troubleshooting#clean-the-workspace-directory)
+
+    Windows : %APPDATA%\Code[ - Variant]\User\workspaceStorage\
+    MacOS : $HOME/Library/Application Support/Code[ - Variant]/User/workspaceStorage/
+    Linux : $HOME/.config/Code[ - Variant]/User/workspaceStorage/
+
+2. Another problem often seen is when multiple project exist on workspace but if one of them fails to build then all the projects in the workspace wont work. So for now keep one workspace to one project mapping.
+
+### Maven Execution
+
+If you need to execute maven project from command line, You need to add org.codehaus.mojo.exec-maven-plugin in your pom.xml
 
 ```xml
 <plugin>
@@ -82,6 +287,7 @@ You need to add org.codehaus.mojo.exec-maven-plugin in your pom.xml
   <version>1.6.0</version>
 </plugin>
 ```
+
 Then configure task by 'Ctrl+Shift+P' then 'Tasks: Configure task' and select the project. Edit the tasks.json
 
 ```json
@@ -97,48 +303,46 @@ Then configure task by 'Ctrl+Shift+P' then 'Tasks: Configure task' and select th
   ]
 }
 ```
-Now goto keyboard shortcuts and click on keybindings.json and enter the below config. The args should match the label in task.json. Now click F6 and you have run capability on your IDE. For this to work the build should be successful and java language server should start correctly. Each time you make the change in the java file the language server picks up the changes and compiles it and you should be able to run it immediately.
 
-```json
-[
-  {
-    "key": "f6",
-    "command": "workbench.action.tasks.runTask",
-    "args" : "run"
-  }
-]
-```
+## Plugins recommended
 
-Often times workspace gets corrupted so I delete the storage in %APPDATA%\\Code\\User\\workspaceStorage and restart the IDE to get things back in order.
-
-For formatter setting refer [https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings](https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings)
-
-Hot code replacement works only when the user setting has this entry
-```json
-"java.debug.settings.enableHotCodeReplace": true,
-```
-
-Other plugins recommended are
-1. Lombok - Reduce writing boiler plate getter,setter,constructor,toString etc.
-2. Annotator - Git blame feature
-3. Checkstyle for Java - You can now view the checkstyle errors in the IDE.
-4. Code Spell Checker - Spell check.
-5. Debugger for Chrome
-6. Debugger for Java
-7. Docker
-8. ESlint
+1. Checkstyle
+2. Coverage Gutters
+3. Debugger for Java
+4. Dependency Analytics
+5. Docker
+6. Drools
+7. ESlint
+8. Git History
 9. GitLens
-10. Java Exention Pack
-11. Java Test Runner
-12. Language Suppor for Java
-13. Maven for Java
-14. Spring Boot Tools
-15. Spring Initializr Java Support
-16. vscode-icons
-17. Spring boot Application Properties Support
+10. Go
+11. Gradle Language Support
+12. Java Decompiler
+13. Java Dependency Viewer
+14. Java Extension Pack
+15. Java Test Runner
+16. Kubernetes
+17. Language Support for Java
+18. licenser
+19. Live Share
+20. Lombok
+21. markdownlint
+22. Maven for Java
+23. Python
+24. Spring Boot Dashboard
+25. Spring Boot Tools
+26. Spring Initializer Java Support
+27. SQL Server
+28. Team Chat
+29. TSLint
+30. Visual Studio INtelliCode
+31. vscode-icons
+32. XML Tools
+33. YAML
 
 ## References
-[VSCode] (https://code.visualstudio.com/)
+
+[VSCode](https://code.visualstudio.com/)
 [Java in VSCode](https://code.visualstudio.com/docs/languages/java)
 
 [Java Tutorial with VS Code](https://code.visualstudio.com/docs/java/java-tutorial)
