@@ -225,20 +225,16 @@ Now lets create a shortcut goto "Keyboard Shortcuts" and click on '{}' icon.  Ad
 
 ### Feature 23: Taking user input
 
-To take user input you need to change shell type in tasks.json config.
-
+To take user input from command line you need to change shell type in launch.json config to integratedTerminal
 
 ```json
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "run",
-      "type": "shell",
-      "command": "mvn exec:java  '-Dexec.mainClass=com.myproject.Main'",
-      "group": "none"
-    }
-  ]
+  "type": "java",
+  "name": "CodeLens (Launch) - Main",
+  "request": "launch",
+  "mainClass": "com.demo.project61.Application",
+  "projectName": "project61",
+  "console": "integratedTerminal"
 }
 ```
 
@@ -246,19 +242,38 @@ To take user input you need to change shell type in tasks.json config.
 
 Code lens provides support to run a project by simplying pressing (Ctrl+F5)
 
-### Feature 15: Short Cuts
+### Feature 26: Docker
+
+Build the docker image
+
+{% asset_img image15.JPG %}
+
+Run the docker image
+
+{% asset_img image16.JPG %}
+
+Tag the docker image and push it to public docker hub registry. You need to run docker login before pushing the image.
+
+```bash
+docker login
+```
+
+{% asset_img image17.JPG %}
+
+### Feature 27: Kubernetes
+
+Deploy to kubernetes cluster
+
+{% asset_img image18.JPG %}
+
+View the deployments
+
+{% asset_img image19.JPG %}
+
+### Feature 28: Short Cuts
 
 Goto Implementation - (Ctrl + F12)
 Goto Terminal       - (Ctrl + ~  )
-
-## Features To Explore
-
-Other features to explore on your own are
-
-1. Multiline edit
-2. Live Share
-3. Docker Support
-4. Kubernetes Support
 
 ## Features missing
 
