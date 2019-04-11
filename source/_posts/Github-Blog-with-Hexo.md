@@ -104,7 +104,7 @@ You can embed images with the tag, Images associated with the .md files goto a f
 {% asset_img IMG-01.JPG %}
 ```
 
-## Menu Bar & Favicon
+## Menu Bar
 
 Modify the gitorkouser/themes/landscape/_config.yml and menubar link. Notice that this config file is different and found under themes folder.
 
@@ -115,20 +115,26 @@ menu:
   About: https://github.com/gitorkouser
 rss: /atom.xml
 ```
-Change the favicon, the png file needs to be placed under gitokouser/source/images folder.
 
-```json
-favicon: /images/favicon.png
-```
+## Banner Image
 
 To change the banner image edit gitorkouser/themes/landscape/source/css/_variables.styl
 
 ```html
-// Header
 logo-size = 40px
 subtitle-size = 16px
 banner-height = 100px
 banner-url = "images/banner.jpg"
+```
+
+Change the jpg to update a different image for banner. The path of this banner image will be gitorko/themes/landscape/source/css/images/banner.jpg
+
+## Favicon
+
+Change the favicon, the png/jpg file needs to be placed under gitokouser/source/images folder. If the images folder doesnt exist create one. Then update the gitorkouser/themes/landscape/_config.yml
+
+```json
+favicon: /images/favicon.png
 ```
 
 ## Sitemap
@@ -182,7 +188,7 @@ Install the search plugin to allow users to search within the blog. This generat
 npm install hexo-generator-search --save
 ```
 
-## Discuss & Comments
+## Discuss Comments
 
 Modify the gitorkouser/_config.yml and add your disqus account name. You can create your disqus account [https://disqus.com/](https://disqus.com/)
 
