@@ -87,3 +87,8 @@ disqus_shortname: gitorko
 
 theme_config:
   google_analytics: UA-137709172-1
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
