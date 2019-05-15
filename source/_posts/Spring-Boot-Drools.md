@@ -19,6 +19,11 @@ You can now create a gradle project using using [start.spring.io](http://start.s
 ```java
 package com.demo.project63;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -48,13 +53,45 @@ public class Application implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        KieSession kieSession = kContainer.newKieSession();
-        Product product = new Product();
-        product.setType("gold");
-        kieSession.insert(product);
-        kieSession.fireAllRules();
-        kieSession.dispose();
-        log.info("!! Discount !! " + product.getDiscount());
+
+
+        //Simple
+        KieSession kieSession1 = kContainer.newKieSession();
+        Product p1 = new Product();
+        p1.setType("desktop");
+        p1.setRegions(Collections.EMPTY_MAP);
+        p1.setManufacturers(Collections.emptyList());
+        kieSession1.insert(p1);
+        kieSession1.fireAllRules();
+        kieSession1.dispose();
+        log.info("Discount on {} is {}", p1.getType(), p1.getDiscount());
+
+        //Iterates a Map.
+        KieSession kieSession2 = kContainer.newKieSession();
+        Product p2 = new Product();
+        p2.setType("laptop");
+        Map<String,String> r2 = new HashMap<>();
+        r2.put("region1","A");
+        r2.put("region2","B");
+        r2.put("region3","C");
+        p2.setRegions(r2);
+        p2.setManufacturers(Collections.emptyList());
+        kieSession2.insert(p2);
+        kieSession2.fireAllRules();
+        kieSession2.dispose();
+        log.info("Discount on {} is {}", p2.getType(), p2.getDiscount());
+
+        //Iterates List
+        KieSession kieSession3 = kContainer.newKieSession();
+        Product p3 = new Product();
+        p3.setType("keyboard");
+        p3.setRegions(Collections.EMPTY_MAP);
+        p3.setManufacturers(Arrays.asList("Company1", "Company2"));
+        kieSession3.insert(p3);
+        kieSession3.fireAllRules();
+        kieSession3.dispose();
+        log.info("Discount on {} is {}", p3.getType(), p3.getDiscount());
+
     }
 
     @Bean
@@ -70,12 +107,16 @@ public class Application implements ApplicationRunner {
     }
 
 }
+
 ```
 
 Create Product.java
 
 ```java
 package com.demo.project63;
+
+import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -85,33 +126,45 @@ import lombok.NoArgsConstructor;
 public class Product {
     private String type;
     private int discount;
+    private Map<String, String> regions;
+    private List<String> manufacturers;
 }
-```
-
-application.yaml
-
-```yaml
-spring:
-  main:
-    web-application-type: none
 ```
 
 Create a drools file product-discount.drl in the resources folder.
 
 ```java
 import com.demo.project63.Product;
+import java.util.Map;
 
-rule "Offer for Diamond"
-	when 
-		productObject: Product(type=="diamond")
+rule "Discount Based on Product"
+	when
+		$product: Product(type == "desktop")
 	then
-		productObject.setDiscount(15);
+	    System.out.println("Discount provided for product");
+		$product.setDiscount(15);
 	end
-rule "Offer for Gold"
+
+
+rule "Discount Based on Store A,B,C"
 	when 
-		productObject: Product(type=="gold")
+		$product: Product($regions : regions)
+		$region: Map() from $regions
+		$entry: Map.Entry( $key: key, $val: value ) from $region.entrySet()
+		eval($val.equals("A") || $val.equals("B") || $val.equals("C"))
 	then
-		productObject.setDiscount(25);
+	    System.out.println("Discount provided for product in specific region");
+		$product.setDiscount(10);
+	end
+
+rule "Discount Based Manufacturer"
+	when
+		$product: Product($manufacturers : manufacturers)
+		$manufacturer: String() from $manufacturers
+		eval($manufacturer.equals("Company1") || $manufacturer.equals("Company2"))
+	then
+	    System.out.println("Discount provided for manufacturer");
+		$product.setDiscount(5);
 	end
 
 ```
@@ -158,5 +211,3 @@ Run the project
 ```bash
 ./gradlew bootRun
 ```
-
-!! Discount !! 25
