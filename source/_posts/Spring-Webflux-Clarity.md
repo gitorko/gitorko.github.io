@@ -402,7 +402,7 @@ Now we will populate the customer details in the home page. Navigate to the clar
 
 ```
 
-If the angular application running on port 4200 tries to access service layer rest API running on port 8080 we will get a CORS (Cross-Origin Resource Sharing) issue.A web application makes a cross-origin HTTP request when it requests a resource that has a different origin (domain, protocol, and port) than its own origin. We can use the annotation on spring application like @CrossOrigin(origins = "http://localhost:4200") but then this applies only to dev environment and we dont want to modify the source code. To address this we create a proxy. Create a proxy.config.json in clarity-ui folder. The proxy forwards all requests responses to the service layer.
+If the angular application running on port 4200 tries to access service layer rest API running on port 8080 we will get a CORS (Cross-Origin Resource Sharing) issue.A web application makes a cross-origin HTTP request when it requests a resource that has a different origin (domain, protocol, and port) than its own origin. We can use the annotation on spring application like @CrossOrigin(origins = \"http://localhost:4200\") but then this applies only to dev environment and we dont want to modify the source code. To address this we create a proxy. Create a proxy.config.json in clarity-ui folder. The proxy forwards all requests responses to the service layer.
 
 ```json
 {
