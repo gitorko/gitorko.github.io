@@ -29,6 +29,9 @@ vault server -dev -log-level=INFO -dev-root-token-id=00000000-0000-0000-0000-000
 Once vault is up, insert some values
 
 ```bash
+export VAULT_ADDR=http://localhost:8200
+export VAULT_SKIP_VERIFY=true
+export VAULT_TOKEN=00000000-0000-0000-0000-000000000000
 vault kv put secret/myapp username=demouser password=demopassword myKey=foobar group.key1=val1 group.key2=val2
 ```
 
