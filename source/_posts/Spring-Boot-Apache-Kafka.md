@@ -75,8 +75,6 @@ Then run the command to create topic
 
 ### Publisher Subscriber Application
 
-Create a maven project using [start.spring.io](https://start.spring.io/)
-
 Add the jackson dependency to the pom.xml
 
 ```xml

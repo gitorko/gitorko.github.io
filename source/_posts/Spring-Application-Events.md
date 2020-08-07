@@ -18,8 +18,6 @@ Lets say you have 2 async functions that needs co-ordinate. When async1 is compl
 
 ## Code
 
-You can now create a gradle project using using [start.spring.io](http://start.spring.io/)
-
 Application.java
 
 ```java

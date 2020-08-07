@@ -14,8 +14,6 @@ Github: [https://github.com/gitorko/project63](https://github.com/gitorko/projec
 
 ## Drools
 
-You can now create a gradle project using using [start.spring.io](http://start.spring.io/)
-
 ```java
 package com.demo.project63;
 

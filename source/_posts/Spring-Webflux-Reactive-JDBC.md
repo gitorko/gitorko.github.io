@@ -48,11 +48,7 @@ demodb=# \dt
 
 Spring webflux provided non-blocking support for rest api. However with R2DBC still under experimental support the following approach provides a way to make non-blocking calls to JDBC.
 
-
-You can now create a gradle project using using [start.spring.io](http://start.spring.io/)
-
 Application.java
-
 
 ```java
 package com.demo.reactdb.project64;

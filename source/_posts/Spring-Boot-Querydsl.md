@@ -18,8 +18,6 @@ Lets say you used Spring Data to query the db by using spring naming convention.
 
 ## Code
 
-You can now create a gradle project using using [start.spring.io](http://start.spring.io/)
-
 Application.java
 
 ```java

@@ -16,7 +16,7 @@ We will develop a full stack web application with a backend rest service written
 
 We will now develop a reactive web application. We will use spring webflux,mongo database & clarity UI. We will also be using vscode as IDE for both java & angular development as it works seamlessly for both angular & java projects.
 
-We will first create the backend rest services. Create the intial project using [start.spring.io](http://start.spring.io/). You can also use vscode 'Spring Initializr Java Support' plugin and generate the project. Ctrl+Shift+P on vscode IDE and key in 'Spring Initializer'.
+We will first create the backend rest services.
 
 {% asset_img image01.PNG %}
 
@@ -576,5 +576,4 @@ In the next blog we will add authentication & look at streaming support.
 [Angular](https://angular.io/tutorial/)
 [Clartiy](https://vmware.github.io/clarity/)
 [Spring Boot](https://spring.io/projects/spring-boot)
-[start.spring.io](http://start.spring.io/)
 [Spring Webflux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
