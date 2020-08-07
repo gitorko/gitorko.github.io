@@ -184,12 +184,12 @@ repositories {
 }
 
 ext {
-    springCloudVersion = 'Greenwich.SR2'
+    set('springCloudVersion', "Hoxton.SR7")
 }
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR7"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -223,7 +223,7 @@ Few other vault command to try
 
 ```bash
 vault kv get secret/myapp
-vault kv put -cas=1 secret/myapp username=demo-user
+vault kv put secret/myapp username=demo-user
 vault kv delete secret/myapp
 ```
 
