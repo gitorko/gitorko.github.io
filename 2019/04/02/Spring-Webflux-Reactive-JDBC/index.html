@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="google-site-verification" content="mYa58vD3K-6eFb828JrGMSswWxry_NqZO6MALJalWh0" />
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137709172-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>Spring Webflux &amp; Reactive JDBC | gitorko</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A Webflux application integration with JDBC to allow non-blocking calls to database. R2DBC is still not production ready hence this approach should help you integrate existing relational database with">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Webflux &amp; Reactive JDBC">
+<meta property="og:url" content="https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/index.html">
+<meta property="og:site_name" content="gitorko">
+<meta property="og:description" content="A Webflux application integration with JDBC to allow non-blocking calls to database. R2DBC is still not production ready hence this approach should help you integrate existing relational database with">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-04-01T18:30:00.000Z">
+<meta property="article:modified_time" content="2020-08-07T19:24:41.959Z">
+<meta property="article:author" content="Arjun Surendra">
+<meta property="article:tag" content="spring, webflux, jdbc, reactive">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="gitorko" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">gitorko</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" target="_blank" rel="noopener" href="https://github.com/gitorko">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gitorko.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Spring-Webflux-Reactive-JDBC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/02/Spring-Webflux-Reactive-JDBC/" class="article-date">
+  <time datetime="2019-04-01T18:30:00.000Z" itemprop="datePublished">2019-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spring Webflux &amp; Reactive JDBC
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>A Webflux application integration with JDBC to allow non-blocking calls to database. R2DBC is still not production ready hence this approach should help you integrate existing relational database with webflux.</p>
+<p>Github: <a target="_blank" rel="noopener" href="https://github.com/gitorko/project64">https://github.com/gitorko/project64</a></p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#postgres-docker-instance">Postgres Docker Instance</a></li>
+<li><a href="#webflux-application">Webflux Application</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="postgres-docker-instance">Postgres Docker Instance</span></h2><p>For development activities lets bring up a postgres server as a docker container. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name postgres -p 5432:5432 -e POSTGRES_USER=<span class="string">&quot;demouser&quot;</span> -e POSTGRES_PASSWORD=<span class="string">&quot;demopwd&quot;</span> -e POSTGRES_DB=<span class="string">&quot;demodb&quot;</span> postgres</span><br></pre></td></tr></table></figure>
+
+<p>We will now connect to the db and create the table.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it postgres psql -U demouser demodb</span><br></pre></td></tr></table></figure>
+<p>Run the sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> customer (</span><br><span class="line">   <span class="keyword">id</span>  <span class="built_in">SERIAL</span> PRIMARY <span class="keyword">KEY</span>,</span><br><span class="line">   <span class="keyword">name</span> <span class="built_in">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">   AGE <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>You should be able to see your table.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">demodb=<span class="comment"># \dt</span></span><br><span class="line">          List of relations</span><br><span class="line"> Schema |   Name   | Type  |  Owner   </span><br><span class="line">--------+----------+-------+----------</span><br><span class="line"> public | customer | table | demouser</span><br><span class="line">(1 row)</span><br></pre></td></tr></table></figure>
+
+<h2><span id="webflux-application">Webflux Application</span></h2><p>Spring webflux provided non-blocking support for rest api. However with R2DBC still under experimental support the following approach provides a way to make non-blocking calls to JDBC.</p>
+<p>Application.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.demo.reactdb.project64;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.time.Duration;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Callable;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.Entity;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GeneratedValue;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.GenerationType;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.Id;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.ApplicationArguments;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.ApplicationRunner;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.SpringApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.repository.CrudRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.MediaType;</span><br><span class="line"><span class="keyword">import</span> org.springframework.lang.NonNull;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.PlatformTransactionManager;</span><br><span class="line"><span class="keyword">import</span> org.springframework.transaction.support.TransactionTemplate;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.PostMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestBody;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.AllArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.NoArgsConstructor;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> reactor.core.publisher.Flux;</span><br><span class="line"><span class="keyword">import</span> reactor.core.publisher.Mono;</span><br><span class="line"><span class="keyword">import</span> reactor.core.scheduler.Scheduler;</span><br><span class="line"><span class="keyword">import</span> reactor.core.scheduler.Schedulers;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> <span class="keyword">implements</span> <span class="title">ApplicationRunner</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    AppService appService;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(ApplicationArguments args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        log.info(<span class="string">&quot;Seeding data!&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Flux&lt;String&gt; names = Flux.just(<span class="string">&quot;raj&quot;</span>, <span class="string">&quot;david&quot;</span>, <span class="string">&quot;pam&quot;</span>).delayElements(Duration.ofSeconds(<span class="number">1</span>));</span><br><span class="line">        Flux&lt;Integer&gt; ages = Flux.just(<span class="number">25</span>, <span class="number">27</span>, <span class="number">30</span>).delayElements(Duration.ofSeconds(<span class="number">1</span>));</span><br><span class="line">        Flux&lt;Customer&gt; customers = Flux.zip(names, ages).map(tupple -&gt; &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Customer(<span class="keyword">null</span>, tupple.getT1(), tupple.getT2());</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        appService.deleteAll().thenMany(customers.flatMap(c -&gt; appService.save(c))</span><br><span class="line">                .thenMany(appService.findAll())).subscribe(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;spring.datasource.maximum-pool-size:100&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> connectionPoolSize;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Scheduler <span class="title">jdbcScheduler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Schedulers.fromExecutor(Executors.newFixedThreadPool(connectionPoolSize));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> TransactionTemplate <span class="title">transactionTemplate</span><span class="params">(PlatformTransactionManager transactionManager)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> TransactionTemplate(transactionManager);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier(&quot;jdbcScheduler&quot;)</span></span><br><span class="line">    Scheduler jdbcScheduler;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TransactionTemplate transactionTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    AddressRepository repo;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Flux&lt;Customer&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asyncIterable(() -&gt; repo.findAll().iterator());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Optional&lt;Customer&gt;&gt; findById(Long id) &#123;</span><br><span class="line">        <span class="keyword">return</span> asyncCallable(() -&gt; repo.findById(id));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Customer&gt; <span class="title">save</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asyncCallable(() -&gt; repo.save(customer));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">delete</span><span class="params">(Customer customer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asyncCallable(() -&gt; &#123;</span><br><span class="line">            repo.delete(customer);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">deleteAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> asyncCallable(() -&gt; &#123;</span><br><span class="line">            repo.deleteAll();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> &lt;S&gt; <span class="function">Mono&lt;S&gt; <span class="title">asyncCallable</span><span class="params">(Callable&lt;S&gt; callable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Mono.fromCallable(callable).subscribeOn(Schedulers.parallel()).publishOn(jdbcScheduler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> &lt;S&gt; <span class="function">Flux&lt;S&gt; <span class="title">asyncIterable</span><span class="params">(Iterable&lt;S&gt; iterable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Flux.fromIterable(iterable).subscribeOn(Schedulers.parallel()).publishOn(jdbcScheduler);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    AppService appService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/all&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Flux&lt;Customer&gt; <span class="title">findAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> appService.findAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/id/&#123;customerId&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Optional&lt;Customer&gt;&gt; findById(<span class="meta">@PathVariable</span> Long customerId) &#123;</span><br><span class="line">        <span class="keyword">return</span> appService.findById(customerId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/save&quot;, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Customer&gt; <span class="title">save</span><span class="params">(<span class="meta">@RequestBody</span> Customer customer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> appService.save(customer);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">AddressRepository</span> <span class="keyword">extends</span> <span class="title">CrudRepository</span>&lt;<span class="title">Customer</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@Entity(name = &quot;customer&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Customer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    <span class="meta">@NonNull</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@NonNull</span></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The application.yaml file</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:postgresql://localhost:5432/demodb</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">demouser</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">demopwd</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">org.postgresql.Driver</span></span><br><span class="line">    <span class="attr">maximum-pool-size:</span> <span class="number">100</span></span><br><span class="line">  <span class="attr">jpa:</span></span><br><span class="line">    <span class="attr">database-platform:</span> <span class="string">org.hibernate.dialect.PostgreSQL9Dialect</span></span><br><span class="line">    <span class="attr">properties:</span></span><br><span class="line">      <span class="attr">hibernate:</span></span><br><span class="line">        <span class="attr">temp:</span></span><br><span class="line">          <span class="attr">use_jdbc_metadata_defaults:</span> <span class="literal">false</span></span><br><span class="line">        <span class="attr">jdbc:</span></span><br><span class="line">          <span class="attr">lob:</span></span><br><span class="line">            <span class="attr">non_contextual_creation:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>The build.gradle file</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">&#x27;org.springframework.boot&#x27;</span> version <span class="string">&#x27;2.1.3.RELEASE&#x27;</span></span><br><span class="line">    id <span class="string">&#x27;java&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;io.spring.dependency-management&#x27;</span></span><br><span class="line"></span><br><span class="line">group = <span class="string">&#x27;com.demo.reactdb&#x27;</span></span><br><span class="line">version = <span class="string">&#x27;0.0.1-SNAPSHOT&#x27;</span></span><br><span class="line">sourceCompatibility = <span class="string">&#x27;1.8&#x27;</span></span><br><span class="line"></span><br><span class="line">configurations &#123;</span><br><span class="line">    compileOnly &#123;</span><br><span class="line">        extendsFrom annotationProcessor</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation <span class="string">&#x27;org.springframework.boot:spring-boot-starter-data-jpa&#x27;</span></span><br><span class="line">    implementation <span class="string">&#x27;org.springframework.boot:spring-boot-starter-webflux&#x27;</span></span><br><span class="line">    runtime <span class="string">&#x27;org.postgresql:postgresql:42.2.5&#x27;</span></span><br><span class="line">    compileOnly <span class="string">&#x27;org.projectlombok:lombok&#x27;</span></span><br><span class="line">    annotationProcessor <span class="string">&#x27;org.projectlombok:lombok&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Run the project</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew bootRun</span><br></pre></td></tr></table></figure>
+
+<p>Your service should now be up</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET \</span><br><span class="line">  http://localhost:8080/api/all \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Postman-Token: 03d44176-e636-4174-a0da-b2286a3d580d&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;cache-control: no-cache&#x27;</span></span><br><span class="line"></span><br><span class="line">curl -X GET \</span><br><span class="line">  http://localhost:8080/api/id/1 \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Postman-Token: 7649705c-8b3e-4c4d-b222-fafeddcbcc1c&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;cache-control: no-cache&#x27;</span></span><br><span class="line"></span><br><span class="line">curl -X POST \</span><br><span class="line">  http://localhost:8080/api/save \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Postman-Token: 765e1c69-4328-4ff4-9418-58f9cb6d4caa&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;cache-control: no-cache&#x27;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;name&quot;: &quot;david&quot;,</span></span><br><span class="line"><span class="string">    &quot;age&quot;: 25</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/" data-id="ckdmsumnu000v10st4xngaq57" class="article-share-link">Share</a>
+      
+        <a href="https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring-webflux-jdbc-reactive/" rel="tag">spring, webflux, jdbc, reactive</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/04/03/Spring-Webflux-R2DBC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Spring Webflux &amp; R2DBC
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/29/Spring-Boot-Drools/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Spring Boot &amp; Drools</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reactive-Web-Spring-Webflux-Clarity-UI-Angular-Docker-Reactive-Mongo-Spring-Boot/" rel="tag">Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-kubernetes-minikube-windows/" rel="tag">docker,kubernetes,minikube,windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/drools-spring-boot-spring/" rel="tag">drools,spring boot,spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo-github-google-search-analytics/" rel="tag">hexo, github, google search, analytics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-design-patterns/" rel="tag">java design patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8-java11-amazon-correto-jnlp-openjdk/" rel="tag">java8, java11,amazon correto, jnlp, openjdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka-spring-producer-consumer-stream/" rel="tag">kafka,spring,producer,consumer,stream</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus-jmx-micrometer-spring-boot-grafana/" rel="tag">prometheus, jmx, micrometer, spring boot, grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-webflux-jdbc-reactive/" rel="tag">spring, webflux, jdbc, reactive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-webflux-reactive-r2dbc/" rel="tag">spring, webflux, reactive, r2dbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vscode-java/" rel="tag">vscode, java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xenon-rest-service-xenon-hello-world-example/" rel="tag">xenon, rest service, xenon hello world example</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zipkin-sleuth/" rel="tag">zipkin, sleuth</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Reactive-Web-Spring-Webflux-Clarity-UI-Angular-Docker-Reactive-Mongo-Spring-Boot/" style="font-size: 10px;">Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot</a> <a href="/tags/docker-kubernetes-minikube-windows/" style="font-size: 10px;">docker,kubernetes,minikube,windows</a> <a href="/tags/drools-spring-boot-spring/" style="font-size: 10px;">drools,spring boot,spring</a> <a href="/tags/hexo-github-google-search-analytics/" style="font-size: 10px;">hexo, github, google search, analytics</a> <a href="/tags/java-design-patterns/" style="font-size: 10px;">java design patterns</a> <a href="/tags/java8-java11-amazon-correto-jnlp-openjdk/" style="font-size: 10px;">java8, java11,amazon correto, jnlp, openjdk</a> <a href="/tags/kafka-spring-producer-consumer-stream/" style="font-size: 10px;">kafka,spring,producer,consumer,stream</a> <a href="/tags/prometheus-jmx-micrometer-spring-boot-grafana/" style="font-size: 10px;">prometheus, jmx, micrometer, spring boot, grafana</a> <a href="/tags/spring-webflux-jdbc-reactive/" style="font-size: 10px;">spring, webflux, jdbc, reactive</a> <a href="/tags/spring-webflux-reactive-r2dbc/" style="font-size: 10px;">spring, webflux, reactive, r2dbc</a> <a href="/tags/vscode-java/" style="font-size: 10px;">vscode, java</a> <a href="/tags/xenon-rest-service-xenon-hello-world-example/" style="font-size: 10px;">xenon, rest service, xenon hello world example</a> <a href="/tags/zipkin-sleuth/" style="font-size: 10px;">zipkin, sleuth</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/08/Spring-Boot-Property-Refresh/">Spring Boot Property Refresh</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/07/Spring-Boot-Querydsl/">Spring Boot Querydsl</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/06/Spring-Application-Events/">Spring Application Events</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/06/Spring-Cloud-Vault/">Spring Cloud Vault</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/05/Spring-Cloud-Sleuth-Zipkin/">Spring Cloud Sleuth &amp; Zipkin</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Arjun Surendra<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/gitorko" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'gitorko';
+  
+  var disqus_url = 'https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

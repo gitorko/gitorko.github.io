@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="google-site-verification" content="mYa58vD3K-6eFb828JrGMSswWxry_NqZO6MALJalWh0" />
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-137709172-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>VSCode Essentials For Java Developers | gitorko</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="VSCode is free, open source IDE and with support for Java &amp; Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VSCode Essentials For Java Developers">
+<meta property="og:url" content="https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/index.html">
+<meta property="og:site_name" content="gitorko">
+<meta property="og:description" content="VSCode is free, open source IDE and with support for Java &amp; Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-07-21T18:30:00.000Z">
+<meta property="article:modified_time" content="2020-02-19T10:18:30.363Z">
+<meta property="article:author" content="Arjun Surendra">
+<meta property="article:tag" content="vscode, java">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="gitorko" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">gitorko</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" target="_blank" rel="noopener" href="https://github.com/gitorko">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gitorko.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-VSCode-Essentials-For-Java-Developers" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/22/VSCode-Essentials-For-Java-Developers/" class="article-date">
+  <time datetime="2018-07-21T18:30:00.000Z" itemprop="datePublished">2018-07-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      VSCode Essentials For Java Developers
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>VSCode is free, open source IDE and with support for Java &amp; Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration with maven, gradle, checkstyle, code coverage, lombok etc. Here we look at some of the tips and tricks to work with VSCode as IDE.</p>
+<p>Github: <a target="_blank" rel="noopener" href="https://github.com/gitorko/project61">https://github.com/gitorko/project61</a></p>
+<a id="more"></a>
+
+<!-- toc -->
+
+<ul>
+<li><a href="#vscode">VSCode</a><ul>
+<li><a href="#feature-1-use-git-clone-spring-init-in-command-pallette">Feature 1: Use Git Clone &amp; Spring Init in command Pallette</a></li>
+<li><a href="#feature-2-create-a-new-class-using-template-you-can-avoid-typing-the-packagename-class-name-etc">Feature 2: Create a new Class using template, you can avoid typing the packagename, class name etc.</a></li>
+<li><a href="#feature-3-use-language-support-to-avoid-typing-main-public-static-void-main-or-sysout-systemoutprintln">Feature 3: Use language support to avoid typing main: ‘public static void main’ or sysout: ‘System.out.println’</a></li>
+<li><a href="#feature-4-hide-files-you-dont-wish-to-view-by-editing-settingjson">Feature 4: Hide files you dont wish to view by editing setting.json</a></li>
+<li><a href="#feature-5-if-you-want-to-view-white-spaces">Feature 5: If you want to view white spaces</a></li>
+<li><a href="#feature-6-increase-page-length-to-120">Feature 6: Increase page length to 120</a></li>
+<li><a href="#feature-7-decide-on-import-order">Feature 7: Decide on import order</a></li>
+<li><a href="#feature-8-to-enable-hot-swap-of-code-on-save-during-debugging">Feature 8: To enable hot swap of code on save during debugging</a></li>
+<li><a href="#feature-8-to-enable-eclipse-formatting">Feature 8: To enable eclipse formatting</a></li>
+<li><a href="#feature-9-install-lombok-plugin-for-lombok-support">Feature 9: Install Lombok plugin for lombok support</a></li>
+<li><a href="#feature-10-install-licenser-to-add-license-info-to-each-java-file">Feature 10: Install licenser to add license info to each java file.</a></li>
+<li><a href="#feature-16-view-libraries-using-the-java-dependency">Feature 16: View libraries using the java dependency</a></li>
+<li><a href="#feature-17-view-the-git-blame-feature-inline-your-class-file-explore-git-integration-support">Feature 17: View the git blame feature inline your class file, explore git integration support.</a></li>
+<li><a href="#feature-17-explore-unit-test-support-debug-unit-tests">Feature 17: Explore unit test support &amp; debug unit tests</a></li>
+<li><a href="#feature-17-enable-checkstyle-support-view-the-inline-highlight-feature-view-the-split-editor-feature">Feature 17: Enable checkstyle support &amp; view the inline highlight feature, view the split editor feature</a></li>
+<li><a href="#feature-18-enable-coverage-gutters-plugin-and-view-code-coverage-details-inline">Feature 18: Enable Coverage Gutters plugin and view code coverage details inline</a></li>
+<li><a href="#feature-19-explore-debugging-view-the-variable-values">Feature 19: Explore debugging &amp; view the variable values</a></li>
+<li><a href="#feature-20-explore-spring-boot-support-for-run-applicationproperties-file">Feature 20: Explore spring boot support for run &amp; application.properties file</a></li>
+<li><a href="#feature-21-create-shortcut-to-key-bindings-to-build-project">Feature 21: Create shortcut to key bindings to build project</a></li>
+<li><a href="#feature-23-taking-user-input">Feature 23: Taking user input</a></li>
+<li><a href="#feature-24-run-a-project">Feature 24: Run a project</a></li>
+<li><a href="#feature-26-docker">Feature 26: Docker</a></li>
+<li><a href="#feature-27-kubernetes">Feature 27: Kubernetes</a></li>
+<li><a href="#feature-28-short-cuts">Feature 28: Short Cuts</a></li>
+</ul>
+</li>
+<li><a href="#features-missing">Features missing</a></li>
+<li><a href="#problems">Problems</a><ul>
+<li><a href="#maven-execution">Maven Execution</a></li>
+</ul>
+</li>
+<li><a href="#plugins-recommended">Plugins recommended</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<!-- tocstop -->
+
+<h2><span id="vscode">VSCode</span></h2><p>&nbsp;</p>
+
+<p>&nbsp;</p>
+<h3><span id="feature-1-use-git-clone-amp-spring-init-in-command-pallette">Feature 1: Use Git Clone &amp; Spring Init in command Pallette</span></h3><p>You can use the command palette (Ctrl+Shift+P) to clone repositories, or create new projects using start.spring.io integration.</p>
+
+
+<h3><span id="feature-2-create-a-new-class-using-template-you-can-avoid-typing-the-packagename-class-name-etc">Feature 2: Create a new Class using template, you can avoid typing the packagename, class name etc.</span></h3>
+
+<h3><span id="feature-3-use-language-support-to-avoid-typing-main-public-static-void-main-or-sysout-systemoutprintln">Feature 3: Use language support to avoid typing main: ‘public static void main’ or sysout: ‘System.out.println’</span></h3>
+
+<h3><span id="feature-4-hide-files-you-dont-wish-to-view-by-editing-settingjson">Feature 4: Hide files you dont wish to view by editing setting.json</span></h3>
+
+<p>Add this to settings.json</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&quot;files.exclude&quot;: &#123;</span><br><span class="line">  &quot;**/.classpath&quot;: true,</span><br><span class="line">  &quot;**/.DS_Store&quot;: true,</span><br><span class="line">  &quot;**/.factorypath&quot;: true,</span><br><span class="line">  &quot;**/.git&quot;: true,</span><br><span class="line">  &quot;**/.gitignore&quot;: true,</span><br><span class="line">  &quot;**/.gradle&quot;: true,</span><br><span class="line">  &quot;**/.hg&quot;: true,</span><br><span class="line">  &quot;**/.mvn&quot;: true,</span><br><span class="line">  &quot;**/.project&quot;: true,</span><br><span class="line">  &quot;**/.settings&quot;: true,</span><br><span class="line">  &quot;**/.sts4-cache&quot;: true,</span><br><span class="line">  &quot;**/.svn&quot;: true,</span><br><span class="line">  &quot;**/.vscode&quot;: true,</span><br><span class="line">  &quot;**/.idea&quot;: true,</span><br><span class="line">  &quot;**/out&quot;: true,</span><br><span class="line">  &quot;**/bin&quot;: true,</span><br><span class="line">  &quot;**/build&quot;: true,</span><br><span class="line">  &quot;**/CVS&quot;: true,</span><br><span class="line">  &quot;**/gradle&quot;: true,</span><br><span class="line">  &quot;**/target&quot;: true,</span><br><span class="line">  &quot;**/.attach_pid*&quot;: true,</span><br><span class="line">  &quot;**/logs&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-5-if-you-want-to-view-white-spaces">Feature 5: If you want to view white spaces</span></h3><p>Add this to settings.json</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;editor.renderWhitespace&quot;: &quot;all&quot;,</span><br><span class="line">&quot;editor.insertSpaces&quot;: true,</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-6-increase-page-length-to-120">Feature 6: Increase page length to 120</span></h3><p>Add this to settings.json</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;editor.rulers&quot;: [</span><br><span class="line">    <span class="number">120</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-7-decide-on-import-order">Feature 7: Decide on import order</span></h3><p>Add this to settings.json</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;java.completion.importOrder&quot;: [</span><br><span class="line">        &quot;java&quot;,</span><br><span class="line">        &quot;javax&quot;,</span><br><span class="line">        &quot;org&quot;,</span><br><span class="line">        <span class="string">&quot;com&quot;</span></span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
+
+<p>Use Right click Source Action-&gt;Organize Imports or (Alt+Shift+O)</p>
+<h3><span id="feature-8-to-enable-hot-swap-of-code-on-save-during-debugging">Feature 8: To enable hot swap of code on save during debugging</span></h3><p>Add this to settings.json, Not required if you are using spring dev tools as spring dev tools support auto reload on save.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;java.debug.settings.enableHotCodeReplace&quot;: true,</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-8-to-enable-eclipse-formatting">Feature 8: To enable eclipse formatting</span></h3><p><a target="_blank" rel="noopener" href="https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings">Formatter settings</a></p>
+<p>Use (Ctrl+Shift+I) to format</p>
+<h3><span id="feature-9-install-lombok-plugin-for-lombok-support">Feature 9: Install Lombok plugin for lombok support</span></h3><p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok">Lombok Annotations Support for VS Code</a></p>
+<h3><span id="feature-10-install-licenser-to-add-license-info-to-each-java-file">Feature 10: Install licenser to add license info to each java file.</span></h3><p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ymotongpoo.licenser">licenser</a></p>
+<p>Add this to settings.json</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;licenser.customHeader&quot;: &quot;Copyright (c) 2019 Company, Inc. All Rights Reserved.&quot;,</span><br><span class="line">&quot;licenser.customTermsAndConditions&quot;: &quot;&quot;,</span><br><span class="line">&quot;licenser.license&quot;: &quot;Custom&quot;,</span><br><span class="line">&quot;licenser.useSingleLineStyle&quot;: false,</span><br></pre></td></tr></table></figure>
+
+<p>Use command palette to insert license</p>
+
+
+
+<h3><span id="feature-16-view-libraries-using-the-java-dependency">Feature 16: View libraries using the java dependency</span></h3>
+
+<h3><span id="feature-17-view-the-git-blame-feature-inline-your-class-file-explore-git-integration-support">Feature 17: View the git blame feature inline your class file, explore git integration support.</span></h3>
+
+<h3><span id="feature-17-explore-unit-test-support-amp-debug-unit-tests">Feature 17: Explore unit test support &amp; debug unit tests</span></h3>
+
+<h3><span id="feature-17-enable-checkstyle-support-amp-view-the-inline-highlight-feature-view-the-split-editor-feature">Feature 17: Enable checkstyle support &amp; view the inline highlight feature, view the split editor feature</span></h3><p>Make the settings change in the workspace instead of global file so that this applies only to the specific project.</p>
+<p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle">Checkstyle for Java</a></p>
+
+
+<p><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters">Coverage Gutters</a></p>
+<p>If the coverage file name is different then change the settings.json </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;coverage-gutters.xmlname&quot;: &quot;jacocoTestReport.xml&quot;,</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-18-enable-coverage-gutters-plugin-and-view-code-coverage-details-inline">Feature 18: Enable Coverage Gutters plugin and view code coverage details inline</span></h3><p>You need xml report enabled for this to work, check build.gradle</p>
+
+
+<h3><span id="feature-19-explore-debugging-amp-view-the-variable-values">Feature 19: Explore debugging &amp; view the variable values</span></h3><p>Dock the debugger tool bar.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;debug.toolBarLocation&quot;: &quot;docked&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="feature-20-explore-spring-boot-support-for-run-amp-applicationproperties-file">Feature 20: Explore spring boot support for run &amp; application.properties file</span></h3><p>Start or debug spring boot application</p>
+
+
+<p>Get spring property support</p>
+
+
+<h3><span id="feature-21-create-shortcut-to-key-bindings-to-build-project">Feature 21: Create shortcut to key bindings to build project</span></h3><p>For gradle projects instead of running ./gradlew build each time in terminal you can map it to a task and give a keyboard shortcut.</p>
+
+
+<p>Add this to the tasks.json, everytime you run a task called ‘run’ it will build the project.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;2.0.0&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tasks&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;label&quot;</span>: <span class="string">&quot;build&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;shell&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;./gradlew clean build&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;group&quot;</span>: <span class="string">&quot;none&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now lets create a shortcut goto “Keyboard Shortcuts” and click on ‘{}’ icon.  Add this to keybindings.json, now press F6 to build the project</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;key&quot;</span>: <span class="string">&quot;f6&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;workbench.action.tasks.runTask&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;args&quot;</span> : <span class="string">&quot;build&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-23-taking-user-input">Feature 23: Taking user input</span></h3><p>To take user input from command line you need to change shell type in launch.json config to integratedTerminal</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;java&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;CodeLens (Launch) - Main&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;request&quot;</span>: <span class="string">&quot;launch&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;mainClass&quot;</span>: <span class="string">&quot;com.demo.project61.Application&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;projectName&quot;</span>: <span class="string">&quot;project61&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;console&quot;</span>: <span class="string">&quot;integratedTerminal&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3><span id="feature-24-run-a-project">Feature 24: Run a project</span></h3><p>Code lens provides support to run a project by simplying pressing (Ctrl+F5)</p>
+<h3><span id="feature-26-docker">Feature 26: Docker</span></h3><p>Build the docker image</p>
+
+
+<p>Run the docker image</p>
+
+
+<p>Tag the docker image and push it to public docker hub registry. You need to run docker login before pushing the image.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login</span><br></pre></td></tr></table></figure>
+
+
+
+<h3><span id="feature-27-kubernetes">Feature 27: Kubernetes</span></h3><p>Deploy to kubernetes cluster</p>
+
+
+<p>View the deployments</p>
+
+
+<h3><span id="feature-28-short-cuts">Feature 28: Short Cuts</span></h3><p>Goto Implementation - (Ctrl + F12)<br>Goto Terminal       - (Ctrl + ~  )</p>
+<h2><span id="features-missing">Features missing</span></h2><ol>
+<li>Google Java format plugin</li>
+<li>Static Import</li>
+<li>Renaming class files</li>
+</ol>
+<h2><span id="problems">Problems</span></h2><ol>
+<li><p>Often times workspace gets corrupted so I delete the storage in %APPDATA%\Code\User\workspaceStorage and restart the IDE to get things back in order. <a target="_blank" rel="noopener" href="https://github.com/redhat-developer/vscode-java/wiki/Troubleshooting#clean-the-workspace-directory">Clean the workspace directory</a></p>
+<p> Windows : %APPDATA%\Code[ - Variant]\User\workspaceStorage<br> MacOS : $HOME/Library/Application Support/Code[ - Variant]/User/workspaceStorage/<br> Linux : $HOME/.config/Code[ - Variant]/User/workspaceStorage/</p>
+</li>
+<li><p>Another problem often seen is when multiple project exist on workspace but if one of them fails to build then all the projects in the workspace wont work. So for now keep one workspace to one project mapping.</p>
+</li>
+</ol>
+<h3><span id="maven-execution">Maven Execution</span></h3><p>If you need to execute maven project from command line, You need to add org.codehaus.mojo.exec-maven-plugin in your pom.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.codehaus.mojo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>exec-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Then configure task by ‘Ctrl+Shift+P’ then ‘Tasks: Configure task’ and select the project. Edit the tasks.json</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;2.0.0&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;tasks&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;label&quot;</span>: <span class="string">&quot;run&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;shell&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;mvn exec:java  &#x27;-Dexec.mainClass=com.myproject.Main&#x27;&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;group&quot;</span>: <span class="string">&quot;none&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="plugins-recommended">Plugins recommended</span></h2><ol>
+<li>Checkstyle</li>
+<li>Coverage Gutters</li>
+<li>Debugger for Java</li>
+<li>Dependency Analytics</li>
+<li>Docker</li>
+<li>Drools</li>
+<li>ESlint</li>
+<li>Git History</li>
+<li>GitLens</li>
+<li>Go</li>
+<li>Gradle Language Support</li>
+<li>Java Decompiler</li>
+<li>Java Dependency Viewer</li>
+<li>Java Extension Pack</li>
+<li>Java Test Runner</li>
+<li>Kubernetes</li>
+<li>Language Support for Java</li>
+<li>licenser</li>
+<li>Live Share</li>
+<li>Lombok</li>
+<li>markdownlint</li>
+<li>Maven for Java</li>
+<li>Python</li>
+<li>Spring Boot Dashboard</li>
+<li>Spring Boot Tools</li>
+<li>Spring Initializer Java Support</li>
+<li>SQL Server</li>
+<li>Team Chat</li>
+<li>TSLint</li>
+<li>Visual Studio INtelliCode</li>
+<li>vscode-icons</li>
+<li>XML Tools</li>
+<li>YAML</li>
+</ol>
+<h2><span id="references">References</span></h2><p><a target="_blank" rel="noopener" href="https://code.visualstudio.com/">VSCode</a><br><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/languages/java">Java in VSCode</a></p>
+<p><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/java/java-tutorial">Java Tutorial with VS Code</a><br><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/java/java-spring-boot">Spring Boot with VS Code</a><br><a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/java/java-debugging">Java Debugging and Testing</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/" data-id="ckdmsumml000410stgu4lfkfy" class="article-share-link">Share</a>
+      
+        <a href="https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vscode-java/" rel="tag">vscode, java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/29/Design-Patterns/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Design Patterns
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/21/Xenon-Rest-Service-Framework/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Xenon Rest Service Framework</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reactive-Web-Spring-Webflux-Clarity-UI-Angular-Docker-Reactive-Mongo-Spring-Boot/" rel="tag">Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker-kubernetes-minikube-windows/" rel="tag">docker,kubernetes,minikube,windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/drools-spring-boot-spring/" rel="tag">drools,spring boot,spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo-github-google-search-analytics/" rel="tag">hexo, github, google search, analytics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java-design-patterns/" rel="tag">java design patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8-java11-amazon-correto-jnlp-openjdk/" rel="tag">java8, java11,amazon correto, jnlp, openjdk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kafka-spring-producer-consumer-stream/" rel="tag">kafka,spring,producer,consumer,stream</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/prometheus-jmx-micrometer-spring-boot-grafana/" rel="tag">prometheus, jmx, micrometer, spring boot, grafana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-webflux-jdbc-reactive/" rel="tag">spring, webflux, jdbc, reactive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-webflux-reactive-r2dbc/" rel="tag">spring, webflux, reactive, r2dbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vscode-java/" rel="tag">vscode, java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xenon-rest-service-xenon-hello-world-example/" rel="tag">xenon, rest service, xenon hello world example</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zipkin-sleuth/" rel="tag">zipkin, sleuth</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Reactive-Web-Spring-Webflux-Clarity-UI-Angular-Docker-Reactive-Mongo-Spring-Boot/" style="font-size: 10px;">Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot</a> <a href="/tags/docker-kubernetes-minikube-windows/" style="font-size: 10px;">docker,kubernetes,minikube,windows</a> <a href="/tags/drools-spring-boot-spring/" style="font-size: 10px;">drools,spring boot,spring</a> <a href="/tags/hexo-github-google-search-analytics/" style="font-size: 10px;">hexo, github, google search, analytics</a> <a href="/tags/java-design-patterns/" style="font-size: 10px;">java design patterns</a> <a href="/tags/java8-java11-amazon-correto-jnlp-openjdk/" style="font-size: 10px;">java8, java11,amazon correto, jnlp, openjdk</a> <a href="/tags/kafka-spring-producer-consumer-stream/" style="font-size: 10px;">kafka,spring,producer,consumer,stream</a> <a href="/tags/prometheus-jmx-micrometer-spring-boot-grafana/" style="font-size: 10px;">prometheus, jmx, micrometer, spring boot, grafana</a> <a href="/tags/spring-webflux-jdbc-reactive/" style="font-size: 10px;">spring, webflux, jdbc, reactive</a> <a href="/tags/spring-webflux-reactive-r2dbc/" style="font-size: 10px;">spring, webflux, reactive, r2dbc</a> <a href="/tags/vscode-java/" style="font-size: 10px;">vscode, java</a> <a href="/tags/xenon-rest-service-xenon-hello-world-example/" style="font-size: 10px;">xenon, rest service, xenon hello world example</a> <a href="/tags/zipkin-sleuth/" style="font-size: 10px;">zipkin, sleuth</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/08/08/Spring-Boot-Property-Refresh/">Spring Boot Property Refresh</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/07/Spring-Boot-Querydsl/">Spring Boot Querydsl</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/06/Spring-Application-Events/">Spring Application Events</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/06/Spring-Cloud-Vault/">Spring Cloud Vault</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/05/Spring-Cloud-Sleuth-Zipkin/">Spring Cloud Sleuth &amp; Zipkin</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Arjun Surendra<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a target="_blank" rel="noopener" href="https://github.com/gitorko" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'gitorko';
+  
+  var disqus_url = 'https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
