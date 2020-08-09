@@ -5,5 +5,7 @@ db.json
 node_modules/
 public/
 .deploy*/
-package-lock.json
 .idea
+.vscode
+package-lock.json
+yarn.lock
