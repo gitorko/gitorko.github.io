@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2020/02/11/State-Machine/</loc>
     
     <lastmod>2020-08-12</lastmod>
@@ -11,7 +25,49 @@
   <url>
     <loc>https://gitorko.github.io/2018/07/18/Spring-Webflux-Clarity/</loc>
     
-    <lastmod>2020-08-07</lastmod>
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/03/10/Github-Blog-with-Hexo/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/10/Kubernetes-on-Docker-Desktop/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/07/29/Design-Patterns/</loc>
+    
+    <lastmod>2020-08-12</lastmod>
     
   </url>
   
@@ -23,28 +79,7 @@
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://gitorko.github.io/2020/08/07/Spring-Boot-Querydsl/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
     
     <lastmod>2020-08-07</lastmod>
     
@@ -82,41 +117,6 @@
     <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
     
     <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
-    
-    <lastmod>2020-02-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/22/VSCode-Essentials-For-Java-Developers/</loc>
-    
-    <lastmod>2020-02-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/03/10/Github-Blog-with-Hexo/</loc>
-    
-    <lastmod>2020-02-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/10/Kubernetes-on-Docker-Desktop/</loc>
-    
-    <lastmod>2020-02-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/29/Design-Patterns/</loc>
-    
-    <lastmod>2020-02-19</lastmod>
     
   </url>
   

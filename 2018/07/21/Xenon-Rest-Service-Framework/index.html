@@ -28,11 +28,20 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="gitorko">
 <meta property="og:description" content="We will develop a simple rest service using VMWare Xenon Framework. We will deploy multi-node instance of the rest service and explore the xenon UI.">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/xenon.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image01.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image02.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image03.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image04.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image05.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image06.PNG">
+<meta property="og:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/image07.PNG">
 <meta property="article:published_time" content="2018-07-20T18:30:00.000Z">
-<meta property="article:modified_time" content="2020-02-19T10:18:30.365Z">
+<meta property="article:modified_time" content="2020-08-12T20:32:22.601Z">
 <meta property="article:author" content="Arjun Surendra">
 <meta property="article:tag" content="xenon, rest service, xenon hello world example">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/xenon.PNG">
   
     <link rel="alternate" href="/atom.xml" title="gitorko" type="application/atom+xml">
   
@@ -122,7 +131,7 @@ ga('send', 'pageview');
 </ul>
 <!-- tocstop -->
 
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/xenon.PNG" class>
 
 <h2><span id="xenon">Xenon</span></h2><p><a target="_blank" rel="noopener" href="https://vmware.github.io/xenon/">Xenon</a> is a framework for writing small REST-based services. When you write a rest service in other frameworks like spring you have to pick a data store like mongo db to persist your data, you have to maintain separate instances of mongo db to ensure replication works. You have to then deploy your rest service on distributed environment using docker swarm and ensure high availability of your service. Xenon framework does all this for you with just a single library. Here we will see how to create a simple rest service using xenon and then see how we can achieve asynchronous call,distributed node deployment, replication, synchronization, ordering, and consistency of data across those nodes. We will see how we can scale the application etc.</p>
 <p>Create a simple maven project. If you are using vscode ctrl+shift+p ‘Maven: Generate from maven Archetype’ and select a folder, click on ‘maven-archetype-quickstart’ and enter the project details. You can also run the command and enter ‘groupId’: com.demo.xenon &amp; ‘artifactId’: myxenon</p>
@@ -137,8 +146,8 @@ ga('send', 'pageview');
 <p>Build the project and execute the code. Note: Do not try the approach mvn exec:exec as this will detach the java process on ctrl+c and you will have to kill the java process manually. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mvn clean install</span><br><span class="line">$ mvn exec:java</span><br></pre></td></tr></table></figure>
 <p>Your xenon server should now be up. You should view <a target="_blank" rel="noopener" href="http://localhost:8000/core/ui/default">http://localhost:8000/core/ui/default</a></p>
-
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image01.PNG" class>
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image02.PNG" class>
 
 <p>You just hosted the xenon server. You have not yet written a rest service. At this point you already get 13 core services which are transactions,resource-groups,roles,local-query-tasks,credentials,sync-tasks,graph-queries,users,user-groups,node-groups,tenants,processes,query-tasks. The custom services card at the bottom shows a count of 0. Now lets write our first xenon rest service.</p>
 <p>Create a new class BookStoreService.java</p>
@@ -149,7 +158,7 @@ ga('send', 'pageview');
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn <span class="built_in">exec</span>:java</span><br></pre></td></tr></table></figure>
 
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image03.PNG" class>
 
 <p>You can now create a book.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -i http://localhost:8000/myservice/books --data <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">bookName: &quot;book1&quot;,</span></span><br><span class="line"><span class="string">bookPrice: 2.0</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line">curl -X GET -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -i http://localhost:8000/myservice/books</span><br><span class="line"></span><br><span class="line">curl -X GET -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -i http://localhost:8000/myservice/books/b5533c1dd2d595c557181891d2dc0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -214,7 +223,7 @@ ga('send', 'pageview');
 </tr>
 </tbody></table>
 <p>Now let us deploy our service in a distributed environment. Delete the test folder as we wont be covering it here. Run the command</p>
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image04.PNG" class>
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mvn clean install</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cd</span> target;</span><br><span class="line"></span><br><span class="line">$ java -jar myxenon-1.0-SNAPSHOT-jar-with-dependencies.jar</span><br></pre></td></tr></table></figure>
 
@@ -225,13 +234,13 @@ ga('send', 'pageview');
 <p>You can also add a node to a group after its started, you can do this by invoking a rest call (JoinPeerRequest). For now we will use the option of adding node to node group at startup time by providing –peerNodes. Such an ability to join a node group will be very useful in IOT based devices.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -i http://localhost:8001/myservice/books/e948dec6a69bdd3f57182b45a6740</span><br></pre></td></tr></table></figure>
 
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image05.PNG" class>
 
 <p>Clicking on the <a target="_blank" rel="noopener" href="http://localhost:8000/core/ui/default/#/main/service/id__myservice_books">http://localhost:8000/core/ui/default/#/main/service/id__myservice_books</a> should show up more details on the record. You can edit/delete records from the UI as well.</p>
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image06.PNG" class>
 
 <p>You can also query for your data in the query tab.</p>
-
+<img src="/2018/07/21/Xenon-Rest-Service-Framework/image07.PNG" class>
 
 <h2><span id="references">References</span></h2><p><a target="_blank" rel="noopener" href="https://vmware.github.io/xenon/">Xenon</a><br><a target="_blank" rel="noopener" href="https://github.com/vmware/xenon">Xenon Github</a></p>
 

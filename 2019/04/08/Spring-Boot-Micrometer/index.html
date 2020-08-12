@@ -28,11 +28,18 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="gitorko">
 <meta property="og:description" content="A Spring boot application integration with micrometer. Micrometer provides vendor neutral application metrics facade that can integrate with various monitoring systems like Prometheus, Wavefront, Atla">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image01.JPG">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image02.JPG">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image03.JPG">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image04.JPG">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image05.JPG">
+<meta property="og:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image06.JPG">
 <meta property="article:published_time" content="2019-04-07T18:30:00.000Z">
-<meta property="article:modified_time" content="2020-08-07T19:23:03.395Z">
+<meta property="article:modified_time" content="2020-08-12T20:32:22.598Z">
 <meta property="article:author" content="Arjun Surendra">
 <meta property="article:tag" content="prometheus, jmx, micrometer, spring boot, grafana">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/image01.JPG">
   
     <link rel="alternate" href="/atom.xml" title="gitorko" type="application/atom+xml">
   
@@ -150,26 +157,26 @@ ga('send', 'pageview');
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hello_api_count_total&#123;application=&quot;myapp&quot;,type=&quot;order&quot;,&#125; 27.0</span><br><span class="line">hello_api_time_seconds_count&#123;application=&quot;myapp&quot;,exception=&quot;None&quot;,method=&quot;GET&quot;,outcome=&quot;SUCCESS&quot;,status=&quot;200&quot;,uri=&quot;/api/hello&quot;,&#125; 27.0</span><br><span class="line">hello_api_time_seconds_sum&#123;application=&quot;myapp&quot;,exception=&quot;None&quot;,method=&quot;GET&quot;,outcome=&quot;SUCCESS&quot;,status=&quot;200&quot;,uri=&quot;/api/hello&quot;,&#125; 102.162818601</span><br><span class="line">hello_api_time_seconds_max&#123;application=&quot;myapp&quot;,exception=&quot;None&quot;,method=&quot;GET&quot;,outcome=&quot;SUCCESS&quot;,status=&quot;200&quot;,uri=&quot;/api/hello&quot;,&#125; 0.0</span><br></pre></td></tr></table></figure>
 
 <p>Prometheus should now start pulling data from the spring application. Click on status -&gt; targets on prometheus dashboard to confirm that endpoint is up.</p>
-
+<img src="/2019/04/08/Spring-Boot-Micrometer/image01.JPG" class>
 
 <p>Query the metric hello_api_count_total and view as graph</p>
-
+<img src="/2019/04/08/Spring-Boot-Micrometer/image02.JPG" class>
 
 <h2><span id="grafana">Grafana</span></h2><p>The dashboard in promethues are minimal, to add more complex dashboard and visualization you can look at Grafana. To start the grafana docker instance run the command.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name grafana -d -p 3000:3000 grafana/grafana</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000/</a></p>
 <p>Login as admin/admin</p>
 <p>Add the prometheus data source</p>
-
+<img src="/2019/04/08/Spring-Boot-Micrometer/image03.JPG" class>
 
 <p>Import a dashboard, Downlaod the json file for micrometer dashboard and import it in grafana and open the dashboard.</p>
 <p><a target="_blank" rel="noopener" href="https://grafana.com/dashboards/4701">https://grafana.com/dashboards/4701</a></p>
+<img src="/2019/04/08/Spring-Boot-Micrometer/image04.JPG" class>
 
-
-
+<img src="/2019/04/08/Spring-Boot-Micrometer/image05.JPG" class>
 
 <p>Create a dashboard on the ‘hello_api_count_total’ metric</p>
-
+<img src="/2019/04/08/Spring-Boot-Micrometer/image06.JPG" class>
 
 <h2><span id="references">References</span></h2><p>Micrometer Reference Document : <a target="_blank" rel="noopener" href="https://micrometer.io/docs">https://micrometer.io/docs</a><br>Prometheus : <a target="_blank" rel="noopener" href="https://prometheus.io/">https://prometheus.io/</a></p>
 
