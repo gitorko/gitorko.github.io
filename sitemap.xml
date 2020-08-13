@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2020/08/11/Scatter-Gather-Pattern/</loc>
+    
+    <lastmod>2020-08-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
     
     <lastmod>2020-08-13</lastmod>
