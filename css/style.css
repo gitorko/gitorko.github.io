@@ -366,8 +366,9 @@ body {
 #subtitle {
   text-decoration: none;
   color: #fff;
-  font-weight: 300;
+  font-weight: 900;
   text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  font-family: "Tangerine", Times, serif;
 }
 #logo {
   font-size: 40px;
