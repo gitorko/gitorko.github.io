@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
+    
+    <lastmod>2020-08-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2018/07/22/Java-Development-In-VSCode/</loc>
     
     <lastmod>2020-08-13</lastmod>
@@ -108,13 +115,6 @@
   
   <url>
     <loc>https://gitorko.github.io/2019/04/03/Spring-Webflux-R2DBC/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
     
     <lastmod>2020-08-07</lastmod>
     
