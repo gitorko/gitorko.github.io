@@ -10,3 +10,4 @@ New Setup:
 npm install hexo-cli -g
 npm install
 hexo server
+npm i -s hexo-asset-link

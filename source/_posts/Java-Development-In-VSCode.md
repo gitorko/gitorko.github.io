@@ -1,5 +1,5 @@
 ---
-title: VSCode Essentials For Java Developers
+title: Java Development in VSCode
 date: 2018-07-22 00:00:00
 tags: vscode, java
 ---
@@ -22,19 +22,19 @@ Github: [https://github.com/gitorko/project61](https://github.com/gitorko/projec
 
 You can use the command palette (Ctrl+Shift+P) to clone repositories, or create new projects using start.spring.io integration.
 
-{% asset_img IMG-01.JPG %}
+{% asset_img image01.JPG %}
 
 ### Feature 2: Create a new Class using template, you can avoid typing the packagename, class name etc.
 
-{% asset_img IMG-02.JPG %}
+{% asset_img image02.JPG %}
 
 ### Feature 3: Use language support to avoid typing main: 'public static void main' or sysout: 'System.out.println'
 
-{% asset_img IMG-03.JPG %}
+{% asset_img image03.JPG %}
 
 ### Feature 4: Hide files you dont wish to view by editing setting.json
 
-{% asset_img IMG-04.JPG %}
+{% asset_img image04.JPG %}
 
 Add this to settings.json
 
@@ -132,20 +132,20 @@ Add this to settings.json
 
 Use command palette to insert license
 
-{% asset_img IMG-05.JPG %}
+{% asset_img image05.JPG %}
 
 
 ### Feature 16: View libraries using the java dependency
 
-{% asset_img IMG-06.JPG %}
+{% asset_img image06.JPG %}
 
 ### Feature 17: View the git blame feature inline your class file, explore git integration support.
 
-{% asset_img IMG-07.JPG %}
+{% asset_img image07.JPG %}
 
 ### Feature 17: Explore unit test support & debug unit tests
 
-{% asset_img IMG-08.JPG %}
+{% asset_img image08.JPG %}
 
 ### Feature 17: Enable checkstyle support & view the inline highlight feature, view the split editor feature
 
@@ -153,7 +153,7 @@ Make the settings change in the workspace instead of global file so that this ap
 
 [Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle)
 
-{% asset_img IMG-09.JPG %}
+{% asset_img image09.JPG %}
 
 [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters)
 
@@ -167,7 +167,7 @@ If the coverage file name is different then change the settings.json
 
 You need xml report enabled for this to work, check build.gradle
 
-{% asset_img IMG-10.JPG %}
+{% asset_img image10.JPG %}
 
 ### Feature 19: Explore debugging & view the variable values
 
@@ -177,23 +177,23 @@ Dock the debugger tool bar.
 "debug.toolBarLocation": "docked"
 ```
 
-{% asset_img IMG-11.JPG %}
+{% asset_img image11.JPG %}
 
 ### Feature 20: Explore spring boot support for run & application.properties file
 
 Start or debug spring boot application
 
-{% asset_img IMG-12.JPG %}
+{% asset_img image12.JPG %}
 
 Get spring property support
 
-{% asset_img IMG-13.JPG %}
+{% asset_img image13.JPG %}
 
 ### Feature 21: Create shortcut to key bindings to build project
 
 For gradle projects instead of running ./gradlew build each time in terminal you can map it to a task and give a keyboard shortcut.
 
-{% asset_img IMG-14.JPG %}
+{% asset_img image14.JPG %}
 
 Add this to the tasks.json, everytime you run a task called 'run' it will build the project.
 
@@ -246,11 +246,11 @@ Code lens provides support to run a project by simplying pressing (Ctrl+F5)
 
 Build the docker image
 
-{% asset_img IMG-15.JPG %}
+{% asset_img image15.JPG %}
 
 Run the docker image
 
-{% asset_img IMG-16.JPG %}
+{% asset_img image16.JPG %}
 
 Tag the docker image and push it to public docker hub registry. You need to run docker login before pushing the image.
 
@@ -258,17 +258,17 @@ Tag the docker image and push it to public docker hub registry. You need to run 
 docker login
 ```
 
-{% asset_img IMG-17.JPG %}
+{% asset_img image17.JPG %}
 
 ### Feature 27: Kubernetes
 
 Deploy to kubernetes cluster
 
-{% asset_img IMG-18.JPG %}
+{% asset_img image18.JPG %}
 
 View the deployments
 
-{% asset_img IMG-19.JPG %}
+{% asset_img image19.JPG %}
 
 ### Feature 28: Short Cuts
 

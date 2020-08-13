@@ -14,7 +14,7 @@ With the latest docker desktop for windows/mac we get a Single Node Kubernetes C
 
 [Docker for Developers](https://www.docker.com/get-started)
 
-{% asset_img IMG-01.JPG %}
+{% asset_img image01.JPG %}
 
 Once kubernetes is running, check kubectl.
 
@@ -54,7 +54,7 @@ Open the dashboar url in a browser
 
 [http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/)
 
-{% asset_img IMG-02.JPG %}
+{% asset_img image02.JPG %}
 
 You need to update your kubectl config file with the token and then sign in. Open power shell terminal and run the commands
 
@@ -65,8 +65,8 @@ PS C:\Users\gitorko> kubectl config set-credentials docker-for-desktop --token="
 
 Now choose the kubeconfig file in the browser and click signin.
 
-{% asset_img IMG-03.JPG %}
+{% asset_img image03.JPG %}
 
 You can also use kitematic which provides graphical dashboard to interact with containers.
 
-{% asset_img IMG-04.JPG %}
+{% asset_img image04.JPG %}

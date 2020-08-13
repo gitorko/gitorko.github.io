@@ -43,7 +43,7 @@ hexo server
 
 Create a github repository
 
-{% asset_img IMG-01.JPG %}
+{% asset_img image01.JPG %}
 
 Install the hexo deploy plugin
 
@@ -101,7 +101,7 @@ Dont forget to commit your changes and push to github often.
 You can embed images with the tag, Images associated with the .md files goto a folder with the same name as filename.
 
 ```html
-{% asset_img IMG-01.JPG %}
+{% asset_img image01.JPG %}
 ```
 
 ## Menu Bar
@@ -178,7 +178,7 @@ To collapse the page enable this tag in the .md file
 
 Your blog page should now be collapsed and comes with a 'Read More' link.
 
-{% asset_img IMG-02.JPG %}
+{% asset_img image02.JPG %}
 
 ## Search within blog
 
@@ -223,15 +223,15 @@ theme_config:
 ```
 This will help you track your website traffic
 
-{% asset_img IMG-03.JPG %}
+{% asset_img image03.JPG %}
 
-{% asset_img IMG-04.JPG %}
+{% asset_img image04.JPG %}
 
 ## Google Search Indexing
 
 By default google search will not hit your blog. 
 
-{% asset_img IMG-05.JPG %}
+{% asset_img image05.JPG %}
 
 To get your site to show up in google search generate the sitemap.xml as stated in the above section.  Create a robots.txt under source folder to inform with web crawlers on what files need to be excluded
 
@@ -255,11 +255,11 @@ Sitemap: https://gitorkouser.github.io/sitemap.xml
 
 Login to google search console [https://search.google.com/search-console](https://search.google.com/search-console) and add your blog
 
-{% asset_img IMG-06.JPG %}
+{% asset_img image06.JPG %}
 
 &nbsp;
 
-{% asset_img IMG-07.JPG %}
+{% asset_img image07.JPG %}
 
 &nbsp;
 
@@ -269,7 +269,7 @@ Login to google search console [https://search.google.com/search-console](https:
 
 Copy the html tag and paste it in gitorkouser/themes/landscape/layout/_partial/head.ejs and deploy the site. After deploy is successful click verify button to complete site verification. Goto sitemap and add the sitemap link to your blog
 
-{% asset_img IMG-08.JPG %}
+{% asset_img image08.JPG %}
 
 It will take an hour for the site to be indexed and show up on search results.
 
