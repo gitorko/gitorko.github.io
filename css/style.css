@@ -603,7 +603,7 @@ a.article-title:hover {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: auto;
+  margin: left;
 }
 .article-entry iframe {
   border: none;
