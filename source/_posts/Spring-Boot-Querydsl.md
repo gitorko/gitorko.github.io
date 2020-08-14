@@ -2,6 +2,9 @@
 title: Spring Boot Querydsl
 date: 2020-08-07 00:00:00
 tags:
+- spring query dsl
+categories:
+- [Query DSL]
 ---
 
 Spring Boot Querydsl lets you query the database using domain specific language similar to SQL.

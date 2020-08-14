@@ -1,7 +1,10 @@
 ---
 title: Spring Boot & Drools
 date: 2019-03-29 00:00:00
-tags: drools,spring boot,spring
+tags: 
+- drools
+categories:
+- [Drools]
 ---
 
 A Spring boot application integration with Drools. Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.

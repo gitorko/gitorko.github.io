@@ -1,7 +1,11 @@
 ---
 title: Java Development in VSCode
 date: 2018-07-22 00:00:00
-tags: vscode, java
+tags: 
+- vscode
+- java
+categories:
+- [VSCode]
 ---
 
 VSCode is free, open source IDE and with support for Java & Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration with maven, gradle, checkstyle, code coverage, lombok etc. Here we look at some of the tips and tricks to work with VSCode as IDE.
@@ -14,9 +18,7 @@ Github: [https://github.com/gitorko/project61](https://github.com/gitorko/projec
 
 ## VSCode
 
-&nbsp;
 {% asset_img vscode.PNG %}
-&nbsp;
 
 ### Feature 1: Use Git Clone & Spring Init in command Pallette
 

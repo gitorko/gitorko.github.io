@@ -1,7 +1,18 @@
 ---
 title: Spring Webflux & Clarity UI
 date: 2018-07-18 00:00:00
-tags: Reactive Web,Spring Webflux,Clarity UI,Angular,Docker,Reactive Mongo, Spring Boot
+tags: 
+- webflux
+- clarity
+- angular
+- docker
+- reactive mongo
+- spring boot
+categories:
+- [Web]
+- [Clarity]
+- [Angular]
+- [SpringBoot]
 ---
 
 We will develop a full stack web application with a backend rest service written in spring webflux & reactive mongo libraries and then develop a angular front end with Clarity UI.We will link both together and deploy the application as single uber jar and as a docker container.

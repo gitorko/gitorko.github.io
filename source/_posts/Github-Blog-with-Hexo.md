@@ -1,7 +1,11 @@
 ---
 title: Github Blog with Hexo
 date: 2019-03-10 00:00:00
-tags: hexo, github, google search, analytics
+tags: 
+- hexo
+- github
+categories:
+- [Hexo]
 ---
 
 Create a blog in github using Hexo.

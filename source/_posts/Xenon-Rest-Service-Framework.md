@@ -1,7 +1,10 @@
 ---
 title: Xenon Rest Service Framework
 date: 2018-07-21 00:00:00
-tags: xenon, rest service, xenon hello world example
+tags: 
+- xenon
+categories:
+- [Rest]
 ---
 
 We will develop a simple rest service using VMWare Xenon Framework. We will deploy multi-node instance of the rest service and explore the xenon UI.

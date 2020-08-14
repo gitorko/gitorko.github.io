@@ -2,6 +2,9 @@
 title: Spring Application Events
 date: 2020-08-06 00:00:00
 tags:
+- events
+categories:
+- [Spring]
 ---
 
 Spring application events provides functionality for async tasks to communicate with each other.

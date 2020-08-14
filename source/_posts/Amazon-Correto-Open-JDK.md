@@ -1,7 +1,11 @@
 ---
 title: Amazon Correto Open JDK
 date: 2019-04-16 00:00:00
-tags: java8, java11,amazon correto, jnlp, openjdk
+tags: 
+- correto
+- openjdk
+categories:
+- [Java]
 ---
 
 With the introduction of licensing on java JRE, use for embedded devices or use of commercial features may require a license from Oracle. Open JDK provided by Amazon looks like the path forward.

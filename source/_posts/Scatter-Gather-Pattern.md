@@ -2,6 +2,9 @@
 title: Scatter Gather Pattern
 date: 2020-08-11 00:00:00
 tags:
+- scatter gather
+categories:
+- [Design Pattern]
 ---
 
 Scatter Gather enterprise integration pattern is used for scenarios such as “best quote”, where we need to request information from several suppliers and decide which one provides us with the best price for the requested item.

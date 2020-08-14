@@ -2,6 +2,9 @@
 title: Spring Cloud Vault
 date: 2020-08-06 00:00:00
 tags:
+- spring cloud vault
+categories:
+- [SpringBoot]
 ---
 
 HashiCorp vault secures, stores and tightly controls access to tokens, passwords, certificates, API keys and other secrets. Spring cloud vault lets you integrate with vault.

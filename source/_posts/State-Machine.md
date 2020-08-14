@@ -1,7 +1,11 @@
 ---
 title: State Machine
 date: 2020-02-11 00:00:00
-tags:
+tags: 
+- state machine
+categories:
+- [Design Pattern]
+- [Spring]
 ---
 
 State machine lets you move to different states based on the events, you can also have listeners registered that get notified on state change events and carry out certain actions.

@@ -1,7 +1,12 @@
 ---
 title: Spring Webflux & R2DBC
 date: 2019-04-03 00:00:00
-tags: spring, webflux, reactive, r2dbc
+tags: 
+- webflux
+- r2dbc
+categories:
+- [JPA]
+- [SpringBoot]
 ---
 
 A Webflux application integration with reactive R2DBC. R2DBC stands for Reactive Relational Database Connectivity, It provides a reactive driver to connect to relational database. Spring Data R2DBC makes it easy to use R2DBC libraries.

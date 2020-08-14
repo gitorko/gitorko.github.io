@@ -1,7 +1,15 @@
 ---
 title: Spring Boot Micrometer
 date: 2019-04-08 00:00:00
-tags: prometheus, jmx, micrometer, spring boot, grafana
+tags: 
+- prometheus
+- jmx
+- micrometer
+- grafana
+categories:
+- [MicroMeter]
+- [Grafana]
+- [Prometheus]
 ---
 
 A Spring boot application integration with micrometer. Micrometer provides vendor neutral application metrics facade that can integrate with various monitoring systems like Prometheus, Wavefront, Atlas, Datadog, Graphite, Ganglia, Influx, JMX etc. We will look at integrations with prometheus and grafana in this example.

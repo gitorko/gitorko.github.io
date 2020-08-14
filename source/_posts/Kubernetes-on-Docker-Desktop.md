@@ -1,7 +1,11 @@
 ---
 title: Kubernetes on Docker Desktop
 date: 2019-04-10 00:00:00
-tags: docker,kubernetes,minikube,windows
+tags: 
+- docker
+- kubernetes
+categories:
+- [Kubernetes]
 ---
 
 Kubernetes setup now comes bundled with Docker Desktop for windows and mac.

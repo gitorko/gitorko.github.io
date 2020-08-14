@@ -1,7 +1,12 @@
 ---
 title: Spring Webflux & Reactive JDBC
 date: 2019-04-02 00:00:00
-tags: spring, webflux, jdbc, reactive
+tags: 
+- webflux
+- reactive-jdbc
+categories:
+- [JPA]
+- [SpringBoot]
 ---
 
 A Webflux application integration with JDBC to allow non-blocking calls to database. R2DBC is still not production ready hence this approach should help you integrate existing relational database with webflux.

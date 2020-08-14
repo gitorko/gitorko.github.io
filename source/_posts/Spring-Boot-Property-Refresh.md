@@ -2,6 +2,9 @@
 title: Spring Boot Property Refresh
 date: 2020-08-08 00:00:00
 tags:
+- properties
+categories:
+- [Spring]
 ---
 
 HashiCorp vault is useful in centralizing all the properties and passwords. Sometimes you need your running application to detect the changed property value in order to provide a toggle on/off feature.

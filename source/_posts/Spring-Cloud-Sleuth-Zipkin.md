@@ -1,7 +1,12 @@
 ---
 title: Spring Cloud Sleuth & Zipkin
 date: 2020-08-05 00:00:00
-tags: zipkin, sleuth
+tags: 
+- zipkin
+- sleuth
+categories:
+- [Zipkin]
+- [Sleuth]
 ---
 
 Spring cloud sleuth helps you trace a request and zipkin server help you trace in a distributed environment.

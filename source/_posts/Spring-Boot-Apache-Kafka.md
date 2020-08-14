@@ -1,7 +1,12 @@
 ---
 title: Spring Boot & Apache Kafka
 date: 2018-08-06 00:00:00
-tags: kafka,spring,producer,consumer,stream
+tags: 
+- kafka
+- spring
+- kafka stream
+categories:
+- [Kafka]
 ---
 
 Spring boot integration with kafka server to create a producer consumer application.

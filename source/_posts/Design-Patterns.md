@@ -1,7 +1,10 @@
 ---
 title: Design Patterns
 date: 2018-07-29 00:00:00
-tags: java design patterns
+tags: 
+- design pattern
+categories:
+- [Design Pattern]
 ---
 
 Creational, Structural & Behavioral design patterns.
