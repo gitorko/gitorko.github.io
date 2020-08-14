@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2020/03/14/Spring-AMQP/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
     
     <lastmod>2020-08-14</lastmod>
@@ -374,6 +381,20 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-amqp/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/rabbitmq/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   
   <url>
@@ -511,6 +532,13 @@
   
   <url>
     <loc>https://gitorko.github.io/categories/Sleuth/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Messaging/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
