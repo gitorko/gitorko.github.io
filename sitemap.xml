@@ -2,7 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2020/02/11/State-Machine/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/03/Spring-Webflux-R2DBC/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/07/18/Spring-Webflux-Clarity/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/07/Spring-Boot-Querydsl/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/03/29/Spring-Boot-Drools/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/08/06/Spring-Boot-Apache-Kafka/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/06/Spring-Application-Events/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/07/29/Design-Patterns/</loc>
     
     <lastmod>2020-08-14</lastmod>
     
@@ -11,126 +102,35 @@
   <url>
     <loc>https://gitorko.github.io/2020/08/11/Scatter-Gather-Pattern/</loc>
     
-    <lastmod>2020-08-13</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
-    
-    <lastmod>2020-08-13</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/22/Java-Development-In-VSCode/</loc>
-    
-    <lastmod>2020-08-13</lastmod>
+    <lastmod>2020-08-14</lastmod>
     
   </url>
   
   <url>
     <loc>https://gitorko.github.io/2019/04/10/Kubernetes-on-Docker-Desktop/</loc>
     
-    <lastmod>2020-08-13</lastmod>
+    <lastmod>2020-08-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2018/07/22/Java-Development-In-VSCode/</loc>
+    
+    <lastmod>2020-08-14</lastmod>
     
   </url>
   
   <url>
     <loc>https://gitorko.github.io/2019/03/10/Github-Blog-with-Hexo/</loc>
     
-    <lastmod>2020-08-13</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/18/Spring-Webflux-Clarity/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/07/29/Design-Patterns/</loc>
-    
-    <lastmod>2020-08-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/07/Spring-Boot-Querydsl/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2018/08/06/Spring-Boot-Apache-Kafka/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/06/Spring-Application-Events/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/03/29/Spring-Boot-Drools/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/03/Spring-Webflux-R2DBC/</loc>
-    
-    <lastmod>2020-08-07</lastmod>
+    <lastmod>2020-08-14</lastmod>
     
   </url>
   
   <url>
     <loc>https://gitorko.github.io/2019/04/16/Amazon-Correto-Open-JDK/</loc>
     
-    <lastmod>2020-02-19</lastmod>
+    <lastmod>2020-08-14</lastmod>
     
   </url>
   
@@ -144,96 +144,376 @@
 
   
   <url>
-    <loc>https://gitorko.github.io/tags/xenon-rest-service-xenon-hello-world-example/</loc>
+    <loc>https://gitorko.github.io/tags/xenon/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/java8-java11-amazon-correto-jnlp-openjdk/</loc>
+    <loc>https://gitorko.github.io/tags/r2dbc/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/vscode-java/</loc>
+    <loc>https://gitorko.github.io/tags/reactive-jdbc/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/hexo-github-google-search-analytics/</loc>
+    <loc>https://gitorko.github.io/tags/correto/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/docker-kubernetes-minikube-windows/</loc>
+    <loc>https://gitorko.github.io/tags/openjdk/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/drools-spring-boot-spring/</loc>
+    <loc>https://gitorko.github.io/tags/hexo/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/kafka-spring-producer-consumer-stream/</loc>
+    <loc>https://gitorko.github.io/tags/github/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/prometheus-jmx-micrometer-spring-boot-grafana/</loc>
+    <loc>https://gitorko.github.io/tags/design-pattern/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/zipkin-sleuth/</loc>
+    <loc>https://gitorko.github.io/tags/vscode/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/spring-webflux-reactive-r2dbc/</loc>
+    <loc>https://gitorko.github.io/tags/java/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/spring-webflux-jdbc-reactive/</loc>
+    <loc>https://gitorko.github.io/tags/docker/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/java-design-patterns/</loc>
+    <loc>https://gitorko.github.io/tags/kubernetes/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/Reactive-Web-Spring-Webflux-Clarity-UI-Angular-Docker-Reactive-Mongo-Spring-Boot/</loc>
+    <loc>https://gitorko.github.io/tags/scatter-gather/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/events/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/kafka/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/kafka-stream/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/drools/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/prometheus/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/jmx/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/micrometer/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/grafana/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/properties/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-query-dsl/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/zipkin/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/sleuth/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-cloud-vault/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/webflux/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/clarity/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/angular/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/reactive-mongo/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-boot/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/state-machine/</loc>
     <lastmod>2020-08-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
 
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/JPA/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Design-Pattern/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Rest/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Web/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Clarity/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Spring/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Angular/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/SpringBoot/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Java/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Hexo/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/VSCode/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Kubernetes/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Kafka/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Drools/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/MicroMeter/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Grafana/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Prometheus/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Query-DSL/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Zipkin/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/Sleuth/</loc>
+    <lastmod>2020-08-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
 </urlset>
