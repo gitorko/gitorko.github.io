@@ -9,7 +9,7 @@ categories:
 - [Spring]
 ---
 
-
+RabbitMQ is a message broker that implements Advanced Message Queing Protocol(AMQP).
 
 Github: [https://github.com/gitorko/project78](https://github.com/gitorko/project78)
 
@@ -18,6 +18,14 @@ Github: [https://github.com/gitorko/project78](https://github.com/gitorko/projec
 <!-- toc -->
 
 ## RabbitMQ
+
+Exchanges are like post offices or mailboxes and clients publish a message to an AMQP exchange. 
+There are four built-in exchange types
+    1. Direct Exchange – Routes messages to a queue by matching a complete routing key
+    2. Fanout Exchange – Routes messages to all the queues bound to it
+    3. Topic Exchange – Routes messages to multiple queues by matching a routing key to a pattern
+    4. Headers Exchange – Routes messages based on message headers
+Queues are bound to an exchange using a routing key. Messages are sent to an exchange with a routing key.
 
 Run the docker command to start a rabbitmq instance
 
@@ -35,7 +43,7 @@ You can login to the rabbitmq console with username:guest password: guest
 
 The producer will publish the message to the direct exchange with routing key and the consumer consumes this message asynchronously.
 
-ExchangeDemo.java
+TopicExchangeDemo.java
 
 ```java
 package com.demo.project78;
@@ -60,7 +68,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @SpringBootApplication
-public class ExchangeDemo {
+public class TopicExchangeDemo {
 
     static final String topicExchangeName = "exchange1";
 
@@ -95,7 +103,7 @@ public class ExchangeDemo {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        SpringApplication.run(ExchangeDemo.class, args).close();
+        SpringApplication.run(TopicExchangeDemo.class, args).close();
     }
 }
 
@@ -122,7 +130,7 @@ class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(ExchangeDemo.topicExchangeName, "foo.bar.baz", "Hello from RabbitMQ!");
+        rabbitTemplate.convertAndSend(TopicExchangeDemo.topicExchangeName, "foo.bar.baz", "Hello from RabbitMQ!");
         receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
     }
 
@@ -164,7 +172,7 @@ public class QueueDemo implements CommandLineRunner {
 
     @Bean
     public Queue hello() {
-        return new Queue("queue2");
+        return new Queue("queue2", false);
     }
 
 }
@@ -181,7 +189,7 @@ class MessageSender {
     public void send() {
         String message = "Hello World!";
         template.convertAndSend(queue.getName(), message);
-        System.out.println(" [x] Sent '" + message + "'");
+        System.out.println("Sent '" + message + "'");
     }
 }
 
@@ -190,9 +198,17 @@ class MessageReceiver {
 
     @RabbitHandler
     public void receive(String in) {
-        System.out.println(" [x] Received '" + in + "'");
+        System.out.println("Received '" + in + "'");
     }
 }
+```
+
+application.properties
+
+```yaml
+spring:
+  main:
+    web-application-type: none
 ```
 
 build.gradle
