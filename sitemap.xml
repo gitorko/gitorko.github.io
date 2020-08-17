@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://gitorko.github.io/2019/06/10/Spring-JPA-N-1/</loc>
+    <loc>https://gitorko.github.io/2019/12/23/Optimistic-vs-Pessimistic-Locking/</loc>
     
     <lastmod>2020-08-17</lastmod>
     
@@ -11,7 +11,14 @@
   <url>
     <loc>https://gitorko.github.io/2019/09/15/Producer-Consumer/</loc>
     
-    <lastmod>2020-08-15</lastmod>
+    <lastmod>2020-08-17</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/06/10/Spring-JPA-N-1/</loc>
+    
+    <lastmod>2020-08-17</lastmod>
     
   </url>
   
@@ -432,6 +439,27 @@
   
   <url>
     <loc>https://gitorko.github.io/tags/jpa/</loc>
+    <lastmod>2020-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/optimistic-locking/</loc>
+    <lastmod>2020-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/pessimistic-locking/</loc>
+    <lastmod>2020-08-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/ticket-booking/</loc>
     <lastmod>2020-08-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
