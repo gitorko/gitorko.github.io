@@ -47,7 +47,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
@@ -65,7 +64,7 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+    public CommandLineRunner commandLineRunner() {
         return args -> {
             myService.seedData();
             myService.getData();
@@ -127,7 +126,6 @@ class MyService {
     }
 
     public void seedData() {
-        postRepository.deleteAll();
         for (int i = 1; i <= 5; i++) {
             List<PostComment> comments = Arrays.asList(
                     PostComment.builder().comment("Comment 1 for " + i).build(),
@@ -148,7 +146,7 @@ spring:
     web-application-type: none
   jpa:
     hibernate:
-      ddl-auto=none
+      ddl-auto: create-drop
     show-sql: true
 ```
 

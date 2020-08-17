@@ -17,6 +17,8 @@ Producer consumer problem implementation using different approaches
 
 Producer consumer using ArrayBlockingQueue.
 
+ProduceConsumer.java
+
 ```java
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -56,6 +58,8 @@ public class ProduceConsumer {
 ```
 
 Producer consumer using wait notify.
+
+PCWaitNotify.java
 
 ```java
 import java.util.LinkedList;
@@ -120,6 +124,8 @@ class MyBlockingQueue2<E> {
 ```
 
 Producer Consumer using locks
+
+PCLock.java
 
 ```java
 import java.util.LinkedList;
