@@ -171,8 +171,6 @@ public class ScatterGatherInvoke {
 We can also use the CompletableFuture.
 
 ```java
-package com.tutor.designpattern.scattergather.completable;
-
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -244,7 +242,7 @@ public class ScatterGatherCompletable {
 }
 ```
 
-result: 
+Result
 
 ```
 {amazon=2.35, flipkart=2.1}
