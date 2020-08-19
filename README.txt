@@ -30,3 +30,8 @@ Topic:
 14. For Join Pool
 15. Jenkins pipeline
 16. Thread Local
+17. Spring batch
+18. Rate limit
+19. Custom thread pool.
+20. DFS BFS
+21. Loom Java thread
