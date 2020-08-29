@@ -35,3 +35,7 @@ Topic:
 19. Custom thread pool.
 20. DFS BFS
 21. Loom Java thread
+22. Sharding
+23. Resliency4j
+24. Completable future
+25. Priority Queue
