@@ -2,7 +2,7 @@
 title: Freemarker Reports with Spring
 date: 2020-08-28 00:00:00
 tags:
-- freemarker report
+- freemarker
 categories:
 - [Reports]
 ---
