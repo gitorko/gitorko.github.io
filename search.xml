@@ -4,6 +4,45 @@
   
     
     <entry>
+      <title>Spring Boot Web MVC</title>
+      <link href="/2021/05/22/Spring-Boot-Web-MVC/"/>
+      <url>/2021/05/22/Spring-Boot-Web-MVC/</url>
+      
+        <content type="html"><![CDATA[<p>A Spring boot web application with a basic spring security &amp; bootstrap login page and CRUD operations along with chart.js charts</p><p>Github: <a href="https://github.com/gitorko/project79">https://github.com/gitorko/project79</a></p><a id="more"></a><!-- toc --><ul><li><a href="#mvc-web-application">MVC Web Application</a></li><li><a href="#hsql-db-server">HSQL DB server</a></li><li><a href="#references">References</a></li></ul><!-- tocstop --><h2><span id="mvc-web-application">MVC Web Application</span></h2><p>The project provides a template to build more complex web application that would require a basic login logout, it supports chart.js charts that read data from Rest API.<br>Spring dev tools allow seamless reload on any changes to html and java files.</p><ol><li>Supports basic login via spring security</li><li>Bootstrap 5</li><li>Login screen</li><li>CRUD UI for adding and removing customer</li><li>HSQL db</li><li>Spring JPA</li><li>Thymeleaf template</li><li>Chart.js charts for bar,pie,stack charts with data from rest api</li></ol><p>On intellij to allow spring dev tools to reload on change you need to enable ‘Update classes and resources’ as shown below</p><img src="/2021/05/22/Spring-Boot-Web-MVC/image01.png" class><p>Here are some screenshots of the web application</p><img src="/2021/05/22/Spring-Boot-Web-MVC/image02.png" class><img src="/2021/05/22/Spring-Boot-Web-MVC/image03.png" class><img src="/2021/05/22/Spring-Boot-Web-MVC/image04.png" class><h2><span id="hsql-db-server">HSQL DB server</span></h2><p>To start the HSQLDB server</p><ol><li>Download HSQLDB bundle<br><a href="http://hsqldb.org/">http://hsqldb.org/</a><br><a href="https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_6/hsqldb-2.6.0.zip/download">https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_6/hsqldb-2.6.0.zip/download</a></li><li>Run the below command to create the db.<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:data/mydb --dbname.0 mydb</span><br></pre></td></tr></table></figure></li><li>To connect to the DB via HSQL UI<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -cp lib/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing</span><br><span class="line">jdbc:hsqldb:hsql://localhost:9001/mydb</span><br><span class="line">user: SA</span><br><span class="line"><span class="built_in">pwd</span>:</span><br></pre></td></tr></table></figure></li></ol><p>Run the project</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew bootRun</span><br></pre></td></tr></table></figure><h2><span id="references">References</span></h2><p>Bootstarp 5 : <a href="https://getbootstrap.com/">https://getbootstrap.com/</a><br>Chart.js : <a href="https://www.chartjs.org/">https://www.chartjs.org/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Web </category>
+          
+          <category> Spring </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> web mvc </tag>
+            
+            <tag> chart.js </tag>
+            
+            <tag> CRUD &amp; login </tag>
+            
+            <tag> HSQL DB </tag>
+            
+            <tag> Thymeleaf template </tag>
+            
+            <tag> Bootstrap 5 </tag>
+            
+            <tag> Spring security login </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Jasper Reports with Spring</title>
       <link href="/2020/08/29/Jasper-Reports-with-Spring/"/>
       <url>/2020/08/29/Jasper-Reports-with-Spring/</url>
