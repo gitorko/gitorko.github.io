@@ -2,8 +2,9 @@ https://hexo.io/
 
 Blog Generate:
 hexo new "blog name"
-hexo generate
 hexo server -p 5000
+
+hexo generate
 hexo deploy
 
 New Setup:
