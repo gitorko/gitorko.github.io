@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2020/08/28/Freemarker-Reports-with-Spring/</loc>
+    
+    <lastmod>2021-05-25</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/29/Jasper-Reports-with-Spring/</loc>
+    
+    <lastmod>2021-05-25</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2021/05/25/Spring-Boot-Web-ReactJS/</loc>
     
     <lastmod>2021-05-25</lastmod>
@@ -12,20 +26,6 @@
     <loc>https://gitorko.github.io/2021/05/22/Spring-Boot-Web-Thymeleaf/</loc>
     
     <lastmod>2021-05-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/28/Freemarker-Reports-with-Spring/</loc>
-    
-    <lastmod>2020-09-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/29/Jasper-Reports-with-Spring/</loc>
-    
-    <lastmod>2020-08-29</lastmod>
     
   </url>
   
