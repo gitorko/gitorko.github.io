@@ -38,7 +38,7 @@ ga('send', 'pageview');
 <meta property="og:image" content="https://gitorko.github.io/2021/05/25/Spring-Boot-Web-ReactJS/image03.png">
 <meta property="og:image" content="https://gitorko.github.io/2021/05/25/Spring-Boot-Web-ReactJS/image04.png">
 <meta property="article:published_time" content="2021-05-24T18:30:00.000Z">
-<meta property="article:modified_time" content="2021-05-25T16:49:34.480Z">
+<meta property="article:modified_time" content="2021-05-25T17:13:18.094Z">
 <meta property="article:author" content="Arjun Surendra">
 <meta property="article:tag" content="chart.js">
 <meta property="article:tag" content="spring web">
@@ -207,6 +207,11 @@ ga('send', 'pageview');
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> project80-ui</span><br><span class="line">./gradlew yarn_build</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> project80-svc</span><br><span class="line">./gradlew build</span><br><span class="line">java -jar project80-svc-1.0.0.jar</span><br></pre></td></tr></table></figure>
 
 <p><a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080/</a><br>user: admin<br>pwd: admin@123</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl --location --request POST <span class="string">&#x27;http://localhost:8080/api/login&#x27;</span> \</span><br><span class="line">--header <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">--data-raw <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;username&quot;: &quot;admin&quot;,</span></span><br><span class="line"><span class="string">    &quot;password&quot;: &quot;admin@123&quot;</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl --location --request GET <span class="string">&#x27;http://localhost:8080/api/time&#x27;</span> \</span><br><span class="line">--header <span class="string">&#x27;Authorization: Bearer TOKEN&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h2><span id="screenshots">Screenshots</span></h2><p>Here are some screenshots of the web application</p>
 <img src="/2021/05/25/Spring-Boot-Web-ReactJS/image02.png" class>
 
