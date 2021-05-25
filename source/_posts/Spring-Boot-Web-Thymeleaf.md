@@ -2,13 +2,13 @@
 title: Spring Boot Web - Thymeleaf
 date: 2021-05-22 00:00:00
 tags:
-- Spring MVC
-- Thymeleaf
+- spring mvc
+- thymeleaf
 - chart.js
-- Spring JPA
-- HSQL DB
-- Bootstrap 5
-- Spring Security
+- spring jpa
+- hsql db
+- bootstrap 5
+- spring security
 categories:
 - [Web]
 - [Spring]

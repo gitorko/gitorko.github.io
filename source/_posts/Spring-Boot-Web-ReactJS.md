@@ -2,14 +2,14 @@
 title: Spring Boot Web - ReactJS
 date: 2021-05-25 00:00:00
 tags:
-- Spring Web
-- ReactJS
+- spring web
+- reactjs
 - chart.js
-- Spring JPA
-- HSQL DB
-- Bootstrap 5
-- Spring Security
-- JWT
+- spring jpa
+- hsql db
+- bootstrap 5
+- spring security
+- jwt
 categories:
 - [Web]
 - [Spring]
