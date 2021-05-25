@@ -11,7 +11,7 @@ npm install hexo-cli -g
 npm install
 hexo server
 npm i -s hexo-asset-link
-
+npm i -s hexo-tag-github-code
 
 Topic:
 1. JVM Memory analysis
