@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://gitorko.github.io/2021/05/22/Spring-Boot-Web-MVC/</loc>
+    <loc>https://gitorko.github.io/2021/05/22/Spring-Boot-Web-Thymeleaf/</loc>
     
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2021/05/25/Spring-Boot-Web-ReactJS/</loc>
+    
+    <lastmod>2021-05-25</lastmod>
     
   </url>
   
@@ -193,7 +200,7 @@
 
   <url>
     <loc>https://gitorko.github.io/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -201,350 +208,371 @@
   
   <url>
     <loc>https://gitorko.github.io/tags/xenon/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/r2dbc/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/reactive-jdbc/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/correto/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/openjdk/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/hexo/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/github/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/design-pattern/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/vscode/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/java/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/docker/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/kubernetes/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/scatter-gather/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/events/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/kafka/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/spring/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/kafka-stream/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/drools/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/prometheus/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/jmx/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/micrometer/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/grafana/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/properties/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/spring-query-dsl/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/zipkin/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/sleuth/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/spring-cloud-vault/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/webflux/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/clarity/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/angular/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/reactive-mongo/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/spring-boot/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/state-machine/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/spring-amqp/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/rabbitmq/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/rpc/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/n-1-problem/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/jpa/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/optimistic-locking/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/pessimistic-locking/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/ticket-booking/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/jasper-report/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/freemarker/</loc>
-    <lastmod>2021-05-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/tags/web-mvc/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/tags/chart-js/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/CRUD-login/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <loc>https://gitorko.github.io/tags/spring-web/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/HSQL-DB/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <loc>https://gitorko.github.io/tags/reactjs/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/Thymeleaf-template/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <loc>https://gitorko.github.io/tags/spring-jpa/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/Bootstrap-5/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <loc>https://gitorko.github.io/tags/hsql-db/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/tags/Spring-security-login/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <loc>https://gitorko.github.io/tags/bootstrap-5/</loc>
+    <lastmod>2021-05-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-security/</loc>
+    <lastmod>2021-05-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/jwt/</loc>
+    <lastmod>2021-05-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/spring-mvc/</loc>
+    <lastmod>2021-05-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/tags/thymeleaf/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -553,154 +581,161 @@
   
   <url>
     <loc>https://gitorko.github.io/categories/JPA/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Design-Pattern/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Rest/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Web/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Clarity/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Spring/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Angular/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/SpringBoot/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Java/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Hexo/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/VSCode/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Kubernetes/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Kafka/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Drools/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/MicroMeter/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Grafana/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Prometheus/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Query-DSL/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Zipkin/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Sleuth/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Messaging/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://gitorko.github.io/categories/Reports/</loc>
-    <lastmod>2021-05-22</lastmod>
+    <lastmod>2021-05-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/categories/ReactJS/</loc>
+    <lastmod>2021-05-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
