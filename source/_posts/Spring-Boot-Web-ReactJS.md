@@ -141,6 +141,21 @@ java -jar project80-svc-1.0.0.jar
 user: admin
 pwd: admin@123
 
+```bash
+curl --location --request POST 'http://localhost:8080/api/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "admin",
+    "password": "admin@123"
+}'
+```
+
+
+```bash
+curl --location --request GET 'http://localhost:8080/api/time' \
+--header 'Authorization: Bearer TOKEN'
+```
+
 ## Screenshots
 
 Here are some screenshots of the web application
