@@ -48,7 +48,7 @@ On Intellij to allow spring dev tools to reload on change you need to enable 'Up
 The code is split into 2 different projects so that UI and backend can work independently. In the dev environment backend will run via `./gradlew bootRun` and frontend will run via `yarn start`
 Finally you can bundle frontend(reactjs) & backend into a single uber jar that can be deployed.
 
-Rest API return data that is renedered in reactjs frontend.
+Rest API return data that is rendered in reactjs frontend.
 
 {% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-svc/src/main/java/com/demo/project80/controller/HomeController.java 31 34 %}
 
@@ -160,10 +160,13 @@ curl --location --request GET 'http://localhost:8080/api/time' \
 
 Here are some screenshots of the web application
 
+Login page
 {% asset_img image02.png %}
 
+Home page
 {% asset_img image03.png %}
 
+Charts page
 {% asset_img image04.png %}
 
 ## References
