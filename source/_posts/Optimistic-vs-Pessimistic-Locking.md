@@ -12,6 +12,8 @@ categories:
 
 When an app is deployed on more than one server how to you ensure that 2 threads dont modify the same record in db? If the operation was performed on a single JVM you could look at locking but since there are many jvm the locking has to be done at database level.
 
+Github: [https://github.com/gitorko/project67](https://github.com/gitorko/project67)
+
 <!-- more -->
 
 <!-- toc -->
