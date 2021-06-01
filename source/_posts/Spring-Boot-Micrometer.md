@@ -40,167 +40,17 @@ To start the prometheus docker instance run the command.
 docker run --name pormetheus -d -p 9090:9090 -v c:\\project68\\prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 ```
 
-prometheus.yml
-
 Ensure you change the target to an acutall IP address and not use localhost when using docker container.
 
-```yaml
-global:
-  scrape_interval: 10s
-  scrape_timeout: 5s
-  evaluation_interval: 10s
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets: []
-      scheme: http
-      timeout: 10s
-scrape_configs:
-  - job_name: myapp
-    scrape_interval: 10s
-    scrape_timeout: 5s
-    metrics_path: /actuator/prometheus
-    scheme: http
-    static_configs:
-      - targets:
-          - 10.112.68.227:8080
-```
+{% ghcode https://github.com/gitorko/project68/blob/master/prometheus.yml %}
 
 Prometheus [http://localhost:9090](http://localhost:9090)
 
 ## Spring boot
 
-Application.java
+{% ghcode https://github.com/gitorko/project68/blob/master/src/main/java/com/demo/project68/Application.java %}
 
-```java
-package com.demo.project68;
-
-import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Metrics;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
-@SpringBootApplication
-@Slf4j
-public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-
-@RestController
-@RequestMapping("/api")
-@Slf4j
-class AppController {
-
-    @Timed("hello.api.time")
-    @GetMapping("/hello")
-    public String sayHello() throws InterruptedException {
-        RegistryConfig.helloApiCounter.increment();
-        int sleepTime = new Random().nextInt(10);
-        log.info("Sleeping for seconds: {}", sleepTime);
-        TimeUnit.SECONDS.sleep(sleepTime);
-        return "Hello, Sleep for " + sleepTime + " Seconds!";
-    }
-}
-
-@Configuration
-@EnableAspectJAutoProxy
-class RegistryConfig {
-
-    public static Counter helloApiCounter;
-
-    @Bean
-    MeterRegistryCustomizer<MeterRegistry> configurer(@Value("${spring.application.name}") String applicationName) {
-        return registry -> registry.config().commonTags("application", applicationName);
-    }
-
-    @PostConstruct
-    public void postInit() {
-        helloApiCounter = Metrics.counter("hello.api.count", "type", "order");
-    }
-}
-
-```
-
-application.yaml
-
-```yaml
-server:
-  port: 8080
-management:
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-    metrics.enabled: true
-spring:
-  application:
-    name: myapp
-```
-
-
-build.gradle
-
-```groovy
-plugins {
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
-    id 'java'
-}
-
-apply plugin: 'io.spring.dependency-management'
-
-group = 'com.demo'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    compile 'io.micrometer:micrometer-core:1.1.4'
-    compile 'io.micrometer:micrometer-registry-jmx:1.1.4'
-    compile 'io.micrometer:micrometer-registry-prometheus:1.1.4'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
-}
-
-```
+{% ghcode https://github.com/gitorko/project68/blob/master/src/main/resources/application.yaml %}
 
 Run the project
 

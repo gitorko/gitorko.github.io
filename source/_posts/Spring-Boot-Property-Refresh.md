@@ -48,114 +48,11 @@ Now lets access the values from spring boot and then change the value and have t
 
 ## Code
 
-Application.java
+{% ghcode https://github.com/gitorko/project76/blob/master/src/main/java/com/demo/project76/Application.java %}
 
-```java
-package com.demo.project76;
+{% ghcode https://github.com/gitorko/project76/blob/master/src/main/resources/application.yaml %}
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@SpringBootApplication
-public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-}
-
-@RestController
-@RefreshScope
-@Slf4j
-class HomeController{
-
-    @Value("${check.flag}")
-    private Boolean checkFlag;
-
-    @GetMapping(value = "/greet")
-    public String greet() {
-        log.info("checkFlag: {}", checkFlag);
-        return checkFlag ? "Good Morning" : "Good Bye";
-    }
-}
-```
-
-application.yaml
-```json
-spring:
-  application:
-    name: myapp
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
-```
-
-bootstrap.yaml
-
-```json
-spring:
-  cloud:
-    # Configuration for a vault server running in dev mode
-    vault:
-      scheme: http
-      host: localhost
-      port: 8200
-      connection-timeout: 5000
-      read-timeout: 15000
-      authentication: TOKEN
-      token: 00000000-0000-0000-0000-000000000000
-      kv:
-        enabled=true:
-      application-name: myapp
-```
-
-build.gradle
-
-```groovy
-plugins {
-    id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'java'
-}
-
-group = 'com.demo'
-version = '1.0.0'
-sourceCompatibility = '11'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-ext {
-    set('springCloudVersion', "Hoxton.SR7")
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-vault-config'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-```
+{% ghcode https://github.com/gitorko/project76/blob/master/src/main/resources/bootstrap.yaml %}
 
 Run the project
 
