@@ -1,6 +1,6 @@
 ---
 title: Spring Boot Web - Angular
-date: 2021-05-25 00:00:00
+date: 2021-05-26 00:00:00
 tags:
 - spring web
 - angular 11
