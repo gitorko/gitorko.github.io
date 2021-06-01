@@ -2,6 +2,97 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gitorko.github.io/2020/03/15/Spring-AMQP-RPC/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/03/14/Spring-AMQP/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/03/29/Spring-Boot-Drools/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/06/10/Spring-JPA-N-1/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/03/Spring-Webflux-R2DBC/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/12/23/Optimistic-vs-Pessimistic-Locking/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/07/Spring-Boot-Querydsl/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gitorko.github.io/2020/08/06/Spring-Application-Events/</loc>
+    
+    <lastmod>2021-06-01</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gitorko.github.io/2021/05/26/Spring-Boot-Web-Angular/</loc>
     
     <lastmod>2021-06-01</lastmod>
@@ -51,13 +142,6 @@
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/2019/12/23/Optimistic-vs-Pessimistic-Locking/</loc>
-    
-    <lastmod>2020-08-17</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://gitorko.github.io/2019/09/15/Producer-Consumer/</loc>
     
     <lastmod>2020-08-17</lastmod>
@@ -65,42 +149,7 @@
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/2019/06/10/Spring-JPA-N-1/</loc>
-    
-    <lastmod>2020-08-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/03/15/Spring-AMQP-RPC/</loc>
-    
-    <lastmod>2020-08-15</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/03/14/Spring-AMQP/</loc>
-    
-    <lastmod>2020-08-15</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://gitorko.github.io/2018/07/21/Xenon-Rest-Service-Framework/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/02/Spring-Webflux-Reactive-JDBC/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/03/Spring-Webflux-R2DBC/</loc>
     
     <lastmod>2020-08-14</lastmod>
     
@@ -114,56 +163,7 @@
   </url>
   
   <url>
-    <loc>https://gitorko.github.io/2020/08/06/Spring-Cloud-Vault/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/05/Spring-Cloud-Sleuth-Zipkin/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/07/Spring-Boot-Querydsl/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/08/Spring-Boot-Property-Refresh/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/04/08/Spring-Boot-Micrometer/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2019/03/29/Spring-Boot-Drools/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://gitorko.github.io/2018/08/06/Spring-Boot-Apache-Kafka/</loc>
-    
-    <lastmod>2020-08-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gitorko.github.io/2020/08/06/Spring-Application-Events/</loc>
     
     <lastmod>2020-08-14</lastmod>
     
