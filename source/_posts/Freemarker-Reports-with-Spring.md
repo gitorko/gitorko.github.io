@@ -21,11 +21,11 @@ We will generate a single html file report using freemarker template and provide
 
 ## Code
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project69/master/src/main/java/org/gitokro/project69/Application.java 25 75 %}
+{% ghcode https://github.com/gitorko/project69/blob/master/src/main/java/org/gitokro/project69/Application.java 25 75 %}
 
 &nbsp;
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project69/master/src/main/resources/templates/my-report.ftl %}
+{% ghcode https://github.com/gitorko/project69/blob/master/src/main/resources/templates/my-report.ftl %}
 
 Run the project and access the url in a browser to download the report.
 

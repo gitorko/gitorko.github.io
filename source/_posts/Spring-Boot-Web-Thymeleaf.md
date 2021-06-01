@@ -46,11 +46,11 @@ On Intellij to allow spring dev tools to reload on change you need to enable 'Up
 
 Spring MVC controller renders the HTML.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/java/com/demo/project79/controller/HomeController.java 29 35 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/java/com/demo/project79/controller/HomeController.java 29 35 %}
 
 Spring security is configured for BASIC authentication
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/java/com/demo/project79/config/WebSecurityConfig.java 19 34 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/java/com/demo/project79/config/WebSecurityConfig.java 19 34 %}
 
 ## chart.js
 
@@ -58,10 +58,10 @@ Spring security is configured for BASIC authentication
 
 chart.js is a library that provides various charts, the project renders charts and the data is fetched from Rest API.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/resources/templates/charts.html 16 23 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/resources/templates/charts.html 16 23 %}
 
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/resources/static/js/charts.js 23 52 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/resources/static/js/charts.js 23 52 %}
 
 ## Thymeleaf
 
@@ -69,7 +69,7 @@ chart.js is a library that provides various charts, the project renders charts a
 
 We will use thymeleaf fragments to include menu headers.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/resources/templates/home.html 3 9 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/resources/templates/home.html 3 9 %}
 
 ## Bootstrap 5
 
@@ -77,7 +77,7 @@ We will use thymeleaf fragments to include menu headers.
 
 We will use the bootstrap 5 library and use the many components it provides.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project79/master/src/main/resources/templates/login.html 10 38 %}
+{% ghcode https://github.com/gitorko/project79/blob/master/src/main/resources/templates/login.html 10 38 %}
 
 ## HSQL DB
 

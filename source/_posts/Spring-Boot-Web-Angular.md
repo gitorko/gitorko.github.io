@@ -51,15 +51,15 @@ Finally you can bundle frontend(angular) & backend into a single uber jar that c
 
 Rest API return data that is rendered in angular frontend.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-svc/src/main/java/com/demo/project81/controller/HomeController.java 31 34 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-svc/src/main/java/com/demo/project81/controller/HomeController.java 31 34 %}
 
 To ensure that all url request related to UI get redirected to the index.html file of angular app the following controller is created. Only rest api with `/api` get served by the rest controllers. This only matters when you bundle everything into a uber jar where the spring jar serves both the static files and the rest api.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-svc/src/main/java/com/demo/project81/controller/IndexController.java 11 14 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-svc/src/main/java/com/demo/project81/controller/IndexController.java 11 14 %}
 
 Spring security is configured for JWT authentication.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-svc/src/main/java/com/demo/project81/config/WebSecurity.java 26 36 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-svc/src/main/java/com/demo/project81/config/WebSecurity.java 26 36 %}
 
 ## chart.js
 
@@ -67,10 +67,10 @@ Spring security is configured for JWT authentication.
 
 chart.js is a library that provides various charts, the project renders charts and the data is fetched from Rest API.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-ui/src/app/chart/chart.component.ts 119 124 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/chart/chart.component.ts 119 124 %}
 
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-ui/src/app/chart/chart.component.html 3 8 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/chart/chart.component.html 3 8 %}
 
 ## Angular
 
@@ -78,7 +78,7 @@ chart.js is a library that provides various charts, the project renders charts a
 
 We will use Angular framework for the frontend.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-ui/src/app/app-routing.module.ts 8 22 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/app-routing.module.ts 8 22 %}
 
 ## Clarity
 
@@ -86,7 +86,7 @@ We will use Angular framework for the frontend.
 
 We will use the clarity component library for the many components it provides.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project81/master/project81-ui/src/app/home/home.component.html 72 86 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/home/home.component.html 72 86 %}
 
 ## HSQL DB
 

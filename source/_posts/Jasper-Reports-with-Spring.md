@@ -23,11 +23,11 @@ JasperReports is an open source java reporting engine. It can generate different
 
 ## Code
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project70/master/src/main/java/org/gitorko/project70/Application.java 25 65 %}
+{% ghcode https://github.com/gitorko/project70/blob/master/src/main/java/org/gitorko/project70/Application.java 25 65 %}
 
 &nbsp;
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project70/master/src/main/resources/EmployeeReports.jrxml %}
+{% ghcode https://github.com/gitorko/project70/blob/master/src/main/resources/EmployeeReports.jrxml %}
 
 Run the project to generate the EmployeeReports.pdf file.
 

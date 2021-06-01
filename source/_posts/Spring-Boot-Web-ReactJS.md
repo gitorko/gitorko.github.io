@@ -50,15 +50,15 @@ Finally you can bundle frontend(reactjs) & backend into a single uber jar that c
 
 Rest API return data that is rendered in reactjs frontend.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-svc/src/main/java/com/demo/project80/controller/HomeController.java 31 34 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-svc/src/main/java/com/demo/project80/controller/HomeController.java 31 34 %}
 
 To ensure that all url request related to UI get redirected to the index.html file of reactjs the following controller is created. Only rest api with `/api` get served by the rest controllers. This only matters when you bundle everything into a uber jar where the spring jar serves both the static files and the rest api.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-svc/src/main/java/com/demo/project80/controller/IndexController.java 11 14 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-svc/src/main/java/com/demo/project80/controller/IndexController.java 11 14 %}
 
 Spring security is configured for JWT authentication.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-svc/src/main/java/com/demo/project80/config/WebSecurity.java 29 40 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-svc/src/main/java/com/demo/project80/config/WebSecurity.java 29 40 %}
 
 ## chart.js
 
@@ -66,10 +66,10 @@ Spring security is configured for JWT authentication.
 
 chart.js is a library that provides various charts, the project renders charts and the data is fetched from Rest API.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-ui/src/Chart.js 190 197 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-ui/src/Chart.js 190 197 %}
 
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-ui/src/Chart.js 107 119 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-ui/src/Chart.js 107 119 %}
 
 ## ReactJS
 
@@ -77,7 +77,7 @@ chart.js is a library that provides various charts, the project renders charts a
 
 We will use ReactJS for the frontend.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-ui/src/services/RestService.js 26 37 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-ui/src/services/RestService.js 26 37 %}
 
 ## Bootstrap 5
 
@@ -85,7 +85,7 @@ We will use ReactJS for the frontend.
 
 We will use the bootstrap 5 library and use the many components it provides.
 
-{% ghcode https://raw.githubusercontent.com/gitorko/project80/master/project80-ui/src/Login.js 62 77 %}
+{% ghcode https://github.com/gitorko/project80/blob/master/project80-ui/src/Login.js 62 77 %}
 
 ## HSQL DB
 
