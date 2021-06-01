@@ -8,7 +8,7 @@ categories:
 - [VSCode]
 ---
 
-VSCode is free, open source IDE and with support for Java & Angular Development it checks all the boxes needed by an IDE. VSCode provides some great featuers for java development from integration with maven, gradle, checkstyle, code coverage, lombok etc. Here we look at some of the tips and tricks to work with VSCode as IDE.
+VSCode is free, open source IDE. Here we look at some of the tips and tricks to work with VSCode.
 
 Github: [https://github.com/gitorko/project61](https://github.com/gitorko/project61)
 
@@ -20,7 +20,7 @@ Github: [https://github.com/gitorko/project61](https://github.com/gitorko/projec
 
 {% asset_img vscode.PNG %}
 
-### Feature 1: Use Git Clone & Spring Init in command Pallette
+### Feature 1: Use Git Clone & Spring Init command
 
 You can use the command palette (Ctrl+Shift+P) to clone repositories, or create new projects using start.spring.io integration.
 
@@ -337,40 +337,71 @@ Then configure task by 'Ctrl+Shift+P' then 'Tasks: Configure task' and select th
 
 ## Plugins recommended
 
-1. Checkstyle
-2. Coverage Gutters
-3. Debugger for Java
-4. Dependency Analytics
-5. Docker
-6. Drools
-7. ESlint
-8. Git History
-9. GitLens
-10. Go
-11. Gradle Language Support
-12. Java Decompiler
-13. Java Dependency Viewer
-14. Java Extension Pack
-15. Java Test Runner
-16. Kubernetes
-17. Language Support for Java
-18. licenser
-19. Live Share
-20. Lombok
-21. markdownlint
-22. Maven for Java
-23. Python
-24. Spring Boot Dashboard
-25. Spring Boot Tools
-26. Spring Initializer Java Support
-27. SQL Server
-28. Team Chat
-29. TSLint
-30. Visual Studio INtelliCode
-31. vscode-icons
-32. XML Tools
-33. YAML
+```bash
+$code --list-extensions > extensions.list
+cat extensions.list |% { code --install-extension $_}
+```
 
+extensions.list
+
+```json
+42Crunch.vscode-openapi
+CoenraadS.bracket-pair-colorizer-2
+DavidAnson.vscode-markdownlint
+dbaeumer.vscode-eslint
+DotJoshJohnson.xml
+eamodio.gitlens
+GabrielBB.vscode-lombok
+golang.go
+hashicorp.terraform
+humao.rest-client
+jim-moody.drools
+johnpapa.vscode-peacock
+mhutchie.git-graph
+ms-azuretools.vscode-docker
+ms-kubernetes-tools.vscode-kubernetes-tools
+ms-ossdata.vscode-postgresql
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-vscode-remote.remote-containers
+ms-vscode-remote.remote-ssh
+ms-vscode-remote.remote-ssh-edit
+ms-vscode-remote.remote-ssh-explorer
+ms-vscode-remote.remote-wsl
+ms-vscode-remote.vscode-remote-extensionpack
+ms-vscode.js-debug-nightly
+ms-vscode.powershell
+ms-vscode.vscode-typescript-next
+ms-vscode.vscode-typescript-tslint-plugin
+ms-vsliveshare.vsliveshare
+msjsdiag.debugger-for-chrome
+msjsdiag.vscode-react-native
+mtxr.sqltools
+naco-siren.gradle-language
+Pivotal.vscode-spring-boot
+PKief.material-icon-theme
+redhat.java
+redhat.vscode-commons
+redhat.vscode-xml
+redhat.vscode-yaml
+richardwillis.vscode-gradle
+richardwillis.vscode-gradle-extension-pack
+richardwillis.vscode-spotless-gradle
+ryanluker.vscode-coverage-gutters
+shengchen.vscode-checkstyle
+VisualStudioExptTeam.vscodeintellicode
+vscjava.vscode-java-debug
+vscjava.vscode-java-dependency
+vscjava.vscode-java-pack
+vscjava.vscode-java-test
+vscjava.vscode-maven
+vscjava.vscode-spring-boot-dashboard
+vscjava.vscode-spring-initializr
+vscode-icons-team.vscode-icons
+ymotongpoo.licenser
+zhuangtongfa.material-theme
+```
 ## References
 
 [VSCode](https://code.visualstudio.com/)
