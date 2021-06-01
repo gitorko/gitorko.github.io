@@ -24,19 +24,19 @@ Github: [https://github.com/gitorko/project61](https://github.com/gitorko/projec
 
 You can use the command palette (Ctrl+Shift+P) to clone repositories, or create new projects using start.spring.io integration.
 
-{% asset_img image01.JPG %}
+{% asset_img image01.PNG %}
 
 ### Feature 2: Create a new Class using template, you can avoid typing the packagename, class name etc.
 
-{% asset_img image02.JPG %}
+{% asset_img image02.PNG %}
 
 ### Feature 3: Use language support to avoid typing main: 'public static void main' or sysout: 'System.out.println'
 
-{% asset_img image03.JPG %}
+{% asset_img image03.PNG %}
 
 ### Feature 4: Hide files you dont wish to view by editing setting.json
 
-{% asset_img image04.JPG %}
+{% asset_img image04.PNG %}
 
 Add this to settings.json
 
@@ -101,17 +101,15 @@ Add this to settings.json
 
 Use Right click Source Action->Organize Imports or (Alt+Shift+O)
 
-### Feature 8: To enable hot swap of code on save during debugging
-
-Add this to settings.json, Not required if you are using spring dev tools as spring dev tools support auto reload on save.
-
-```json
-"java.debug.settings.enableHotCodeReplace": true,
-```
-
 ### Feature 8: To enable eclipse formatting
 
 [Formatter settings](https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings)
+
+[Formatter xml](https://github.com/gitorko/project61/blob/master/config/formatter/dev_code-style_formatter.xml)
+
+```bash
+    "java.format.settings.url" :"file:///Users/home/dev_code-style_formatter.xml",
+```
 
 Use (Ctrl+Shift+I) to format
 
@@ -126,38 +124,53 @@ Use (Ctrl+Shift+I) to format
 Add this to settings.json
 
 ```json
-"licenser.customHeader": "Copyright (c) 2019 Company, Inc. All Rights Reserved.",
+"licenser.customHeader": "Copyright (c) 2021 Company, Inc. All Rights Reserved.",
 "licenser.customTermsAndConditions": "",
 "licenser.license": "Custom",
 "licenser.useSingleLineStyle": false,
+"licenser.author": "Company",
 ```
 
 Use command palette to insert license
 
-{% asset_img image05.JPG %}
+{% asset_img image05.PNG %}
 
 
-### Feature 16: View libraries using the java dependency
+### Feature 11: View libraries using the java dependency
 
-{% asset_img image06.JPG %}
+{% asset_img image06.PNG %}
 
-### Feature 17: View the git blame feature inline your class file, explore git integration support.
+### Feature 12: View the git blame feature inline your class file, explore git integration support & git graph.
 
-{% asset_img image07.JPG %}
+{% asset_img image07.PNG %}
 
-### Feature 17: Explore unit test support & debug unit tests
+{% asset_img image07-2.PNG %}
 
-{% asset_img image08.JPG %}
+### Feature 13: Explore unit test support & debug unit tests
 
-### Feature 17: Enable checkstyle support & view the inline highlight feature, view the split editor feature
+{% asset_img image08.PNG %}
+
+{% asset_img image08-2.PNG %}
+
+### Feature 14: Enable checkstyle support & view the inline highlight feature, view the split editor feature
 
 Make the settings change in the workspace instead of global file so that this applies only to the specific project.
 
 [Checkstyle for Java](https://marketplace.visualstudio.com/items?itemName=shengchen.vscode-checkstyle)
 
-{% asset_img image09.JPG %}
+```json
+"java.checkstyle.configuration": "${workspaceFolder}/config/checkstyle/checkstyle.xml"
+```
+
+{% asset_img image09.PNG %}
+
+### Feature 15: Enable Coverage Gutters plugin and view code coverage details inline
+
+You need xml report enabled for this to work, check build.gradle
 
 [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters)
+
+[Gradle Extension Pack](https://marketplace.visualstudio.com/items?itemName=richardwillis.vscode-gradle-extension-pack)
 
 If the coverage file name is different then change the settings.json 
 
@@ -165,13 +178,9 @@ If the coverage file name is different then change the settings.json
 "coverage-gutters.xmlname": "jacocoTestReport.xml",
 ```
 
-### Feature 18: Enable Coverage Gutters plugin and view code coverage details inline
+{% asset_img image10.PNG %}
 
-You need xml report enabled for this to work, check build.gradle
-
-{% asset_img image10.JPG %}
-
-### Feature 19: Explore debugging & view the variable values
+### Feature 16: Explore debugging & view the variable values
 
 Dock the debugger tool bar.
 
@@ -179,23 +188,36 @@ Dock the debugger tool bar.
 "debug.toolBarLocation": "docked"
 ```
 
-{% asset_img image11.JPG %}
+```bash
+curl --location --request GET 'http://localhost:9090/api/age/10-10-2020' --header 'Content-Type: application/json'
+```
 
-### Feature 20: Explore spring boot support for run & application.properties file
+{% asset_img image11.PNG %}
+
+To enable hot code replace set the following properties, for spring boot projects with dev tools the reload is automatic, if dev tools is not present in the project then you can use Hot code replacement (HCR), which doesn’t require a restart, is a fast debugging technique in which the Java debugger transmits new class files over the debugging channel to the JVM. Make sure 'java.autobuild.enabled' is enabled.
+
+```json
+"java.debug.settings.hotCodeReplace": "auto",
+"java.autobuild.enabled" : true
+```
+
+{% asset_img image11-2.PNG %}
+
+### Feature 17: Explore spring boot support for run & application.properties file
 
 Start or debug spring boot application
 
-{% asset_img image12.JPG %}
+{% asset_img image12.PNG %}
 
 Get spring property support
 
-{% asset_img image13.JPG %}
+{% asset_img image13.PNG %}
 
-### Feature 21: Create shortcut to key bindings to build project
+### Feature 18: Create shortcut to key bindings to build project
 
 For gradle projects instead of running ./gradlew build each time in terminal you can map it to a task and give a keyboard shortcut.
 
-{% asset_img image14.JPG %}
+{% asset_img image14.PNG %}
 
 Add this to the tasks.json, everytime you run a task called 'run' it will build the project.
 
@@ -225,7 +247,7 @@ Now lets create a shortcut goto "Keyboard Shortcuts" and click on '{}' icon.  Ad
 ]
 ```
 
-### Feature 23: Taking user input
+### Feature 19: Taking user input
 
 To take user input from command line you need to change shell type in launch.json config to integratedTerminal
 
@@ -240,19 +262,15 @@ To take user input from command line you need to change shell type in launch.jso
 }
 ```
 
-### Feature 24: Run a project
-
-Code lens provides support to run a project by simplying pressing (Ctrl+F5)
-
-### Feature 26: Docker
+### Feature 20: Docker
 
 Build the docker image
 
-{% asset_img image15.JPG %}
+{% asset_img image15.PNG %}
 
 Run the docker image
 
-{% asset_img image16.JPG %}
+{% asset_img image16.PNG %}
 
 Tag the docker image and push it to public docker hub registry. You need to run docker login before pushing the image.
 
@@ -260,9 +278,11 @@ Tag the docker image and push it to public docker hub registry. You need to run 
 docker login
 ```
 
+Push the image
+
 {% asset_img image17.JPG %}
 
-### Feature 27: Kubernetes
+### Feature 21: Kubernetes
 
 Deploy to kubernetes cluster
 
@@ -272,16 +292,10 @@ View the deployments
 
 {% asset_img image19.JPG %}
 
-### Feature 28: Short Cuts
+### Feature 22: Short Cuts
 
 Goto Implementation - (Ctrl + F12)
 Goto Terminal       - (Ctrl + ~  )
-
-## Features missing
-
-1. Google Java format plugin
-2. Static Import
-3. Renaming class files
 
 ## Problems
 
