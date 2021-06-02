@@ -117,3 +117,6 @@ feed:
   type: atom
   path: atom.xml
   limit: 20
+
+alias:
+  /2018/07/22/Java-Development-In-VSCode/: 2021/05/01/Java-Development-In-VSCode/
