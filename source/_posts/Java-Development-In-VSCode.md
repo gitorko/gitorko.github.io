@@ -340,7 +340,15 @@ Share your workspace
 
 {% asset_img image25.1.PNG %}
 
-### Feature 26: Shortcuts
+### Feature 26: Explore Open API
+
+Create Open API spec file and test it
+
+{% asset_img image26.1.PNG %}
+
+{% asset_img image26.2.PNG %}
+
+### Feature 27: Shortcuts
 
 Goto Implementation - (Ctrl + F12)
 Goto Terminal       - (Ctrl + ~  )
