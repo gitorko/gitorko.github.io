@@ -36,6 +36,8 @@ Use language support to avoid typing main: 'public static void main' or sysout: 
 
 {% asset_img image2.2.PNG %}
 
+{% asset_img image2.3.PNG %}
+
 ### Feature 3: Explore the Gradle Exentison
 
 View the gradle tasks
