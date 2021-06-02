@@ -1,9 +1,15 @@
 ---
 title: Java Development in VSCode
-date: 2018-07-22 00:00:00
+date: 2021-05-01 00:00:00
 tags: 
 - vscode
 - java
+- checkstyle
+- open api
+- code coverage
+- docker
+- kubernetes
+- hot swap
 categories:
 - [VSCode]
 ---
