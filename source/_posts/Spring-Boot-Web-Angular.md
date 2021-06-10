@@ -67,10 +67,10 @@ Spring security is configured for JWT authentication.
 
 chart.js is a library that provides various charts, the project renders charts and the data is fetched from Rest API.
 
-{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/chart/chart.component.ts 119 124 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/components/chart/chart.component.ts 119 124 %}
 
 
-{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/chart/chart.component.html 3 8 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/components/chart/chart.component.html 3 8 %}
 
 ## Angular
 
@@ -86,7 +86,7 @@ We will use Angular framework for the frontend.
 
 We will use the clarity component library for the many components it provides.
 
-{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/home/home.component.html 72 86 %}
+{% ghcode https://github.com/gitorko/project81/blob/master/project81-ui/src/app/components/home/home.component.html 72 86 %}
 
 ## HSQL DB
 

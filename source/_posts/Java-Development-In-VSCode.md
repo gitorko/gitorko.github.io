@@ -360,6 +360,7 @@ Create Open API spec file and test it
 
 Goto Implementation - (Ctrl + F12)
 Goto Terminal       - (Ctrl + ~  )
+Quick Fix           - (Ctrl + .  )
 
 ## Problems
 
