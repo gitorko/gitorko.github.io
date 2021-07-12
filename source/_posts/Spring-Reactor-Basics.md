@@ -1,10 +1,10 @@
 ---
-title: Spring Reactor
+title: Spring Reactor - Basics
 date: 2021-07-10 00:00:00
 tags:
 - spring reactor
 categories:
-- [SpringReactor]
+- [Spring Reactor]
 ---
 
 Reactive programming samples on how to use spring reactor
