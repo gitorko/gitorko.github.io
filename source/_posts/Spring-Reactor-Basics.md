@@ -19,11 +19,16 @@ Github: [https://github.com/gitorko/project83](https://github.com/gitorko/projec
 
 Methods demonstrating how to use spring reactor
 
-{% ghcode https://github.com/gitorko/project83/blob/master/src/test/java/com/demo/project83/ReactorDemo.java %}
+{% ghcode https://github.com/gitorko/project83/blob/master/src/test/java/com/demo/project83/ReactorDemoTest.java %}
 
 Reactor chaining samples
 
-{% ghcode https://github.com/gitorko/project83/blob/master/src/test/java/com/demo/project83/ReactorChain.java %}
+{% ghcode https://github.com/gitorko/project83/blob/master/src/test/java/com/demo/project83/ReactorChainTest.java %}
+
+Reactor object samples
+
+{% ghcode https://github.com/gitorko/project83/blob/master/src/test/java/com/demo/project83/ReactorObjectTest.java %}
+
 
 ## References
 
