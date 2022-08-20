@@ -43,7 +43,7 @@ git commit -am "Base Commit"
 
 ### Theme
 
-Add  clarity theme
+Add  clarity theme, this will also bring sample templates, that you can delete/modify
 
 ```bash
 hugo mod init myblog
@@ -56,7 +56,7 @@ In the file config/_default/config.toml
 
 Change the theme from 'theme = "hugo-clarity"' to 'theme = ["github.com/chipzoller/hugo-clarity"]'
 
-Run hugo server, this will bring up the server.
+Start the hugo server locally
 
 ```bash
 hugo server
@@ -67,6 +67,7 @@ hugo server
 To update the clarity theme to take any latest changes to themes. Need not be done frequently.
 
 ```bash
+hugo mod clean
 hugo mod get -u github.com/chipzoller/hugo-clarity
 ```
 
@@ -75,12 +76,13 @@ hugo mod get -u github.com/chipzoller/hugo-clarity
 If you want to update all the hugo modules to use the latest version. Need not be done frequently.
 
 ```bash
+hugo mod clean
 hugo mod get -u ./...
 ```
 
 ### Page Bundles
 
-Use will use page bundles feature where the images and post reside in same folder. To enable this add this to params.toml
+We will use page bundles feature where the images and post reside in same folder as its easier to manage. To enable this add this to params.toml
 
 ```bash
 usePageBundles = true
@@ -88,7 +90,7 @@ usePageBundles = true
 
 ### Robots.txt
 
-Enable robots.txt in config.toml for crawler to skip certain files, be sure to put this at the beginning of the file
+Enable robots.txt in config.toml for google crawler to skip certain files, be sure to put this at the beginning of the file
 
 ```bash
 enableRobotsTXT = true
@@ -109,10 +111,11 @@ Disallow: /icons/
 Disallow: /images/
 Disallow: /showcase/
 Disallow: /categories/
-Disallow: /tags/
 Disallow: /post/
 Disallow: /search/
 ```
+
+### Disqus comments
 
 Add disqus username to config.toml to allow comments on the blog
 
@@ -120,7 +123,7 @@ Add disqus username to config.toml to allow comments on the blog
 disqusShortname = "myusername"
 ```
 
-### Menu
+### Menu Bar
 
 To modify the menu edit the menu.en.toml file
 
@@ -199,7 +202,7 @@ To use the tag in the post
 
 {{\< markcode "https://raw.githubusercontent.com/../file.md" \>}}
 
-## Sitemap
+### Sitemap
 
 Hugo generates a sitemap.xml that contains tags, categories and other taxonomies. To exclude them from Google search indexing, create a sitemap.xml under layouts.
 
@@ -239,32 +242,104 @@ Run the server
 hugo server
 ```
 
-![](img02.png)
+![](img01.png)
 
 ### Github
 
-Create 2 Github repository, First one should be USERNAME-github.io, second one will be the same as the blog name.
-The USERNAME-github.io is the repository where the live html files go and the other repo is where the markdown files 
-will be saved.
+Create a Github repository, It should be of the exact format `<GITHUB-USERNAME>-github.io`
 
-![](img01.JPG)
+We will create 2 branches in this repository where one branch will store the markdown content and other branch will store the live html site.
+
+![](img02.png)
 
 Update the base url in config.toml
 
 ```bash
-baseurl = "https://<USERNAME>.github.io/"
+baseurl = "https://<GITHUB-USERNAME>.github.io/"
 ```
 
-### Publish
-
-Add the <USERNAME>.github.io.git repo as a submodule and point it to public folder. public folder is where hugo 
-generates the html files.
+### Blog Commit
 
 ```bash
-git submodule add -b main https://github.com/<USERNAME>/<USERNAME>.github.io.git public
+git remote add origin https://github.com/<GITHUB-USERNAME>/<GITHUB-USERNAME>.github.io.git
+git branch -M blog
+git push -u origin blog
 ```
 
-Generate the HTML file to the public folder
+Now your markdown files will be present on github under the branch `blog`.
+
+### Github Actions
+
+To automatically deploy the site on each commit, first create the github token under the repository 
+
+You need to generate a token if you dont have one already [https://github.com/settings/tokens](https://github.com/settings/tokens)
+
+{{% notice warning "Note!" %}}
+The token must not be shared with anyone or uploaded in any static file or html.
+{{% /notice %}}
+
+![](img03.png)
+
+Create a new workflow action and commit
+
+![](img04.png)
+
+Use the below yaml
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches:
+      - blog
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          # extended: true
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/blog'
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: ./public
+```
+
+By default the actions generate the live site in `gh-pages` branch, so goto github pages and change the branch to `gh-pages` and save.
+
+![](img05.png)
+
+Now when you commit and push and changes to the `blog` branch, github actions automatically builds your site and deploys it.
+
+![](img06.png)
+
+### Legacy Deploy
+
+If you don't want use github actions to deploy the site then you can generate the site and publish it manually
+
+Add a github submodule for the public folder
+
+```bash
+git submodule add -b gh-pages https://github.com/<GITHUB-USERNAME>/<GITHUB-USERNAME>.github.io.git public
+```
+
+Generate the site in the public folder
 
 ```bash
 hugo
@@ -274,34 +349,28 @@ hugo
 Add public to .gitignore file so that public folder is not committed to the blog repo.
 {{% /notice %}}
 
-Commit blog content (Markdown files), double check to make sure public folder and its files are not part of this commit.
+Commit blog content (Markdown files) to the `blog` branch, double check to make sure public folder and its files are not part of this commit.
 
 ```bash
-cd myblog
+cd <GITHUB-USERNAME>
 git status
 git add .
 git commit -am "blog update"
-git push origin main
+git push origin blog
 ```
 
-Commit & push site (HTML files)
+Commit & push site (HTML files) to the `gh-pages` branch
 
 ```bash
-cd myblog/public
+cd <GITHUB-USERNAME>/public
 git add .
 git commit -am "Live HTML"
-git push origin main
+git push origin gh-pages
 ```
 
-You should now be seeing the public html files in your <USERNAME>.github.io.git repostiory. 
+You should now be seeing the public html files in your <USERNAME>.github.io.git repostiory in the `gh-pages` branch.
 
 Open url [https://<USERNAME>.github.io/](https://<USERNAME>.github.io/) and your blog should be up.
-
-## GitHub Actions
-
-You can also use github actions to build the site and deploy it.
-
-[https://gohugo.io/hosting-and-deployment/hosting-on-github/](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
 
 ### Google Analytics
 
@@ -313,15 +382,15 @@ ga_analytics = "<YOUR_VALUE>"
 
 This will help you track your website traffic
 
-![](img03.JPG)
+![](img07.JPG)
 
-![](img04.JPG)
+![](img08.JPG)
 
 ### Google Search Indexing
 
 Google search will not include your blog. 
 
-![](img05.JPG)
+![](img08.JPG)
 
 To get your site to show up in google search ensure there is a sitemap.xml.
 
@@ -329,13 +398,13 @@ To get your site to show up in google search ensure there is a sitemap.xml.
 
 Login to google search console [https://search.google.com/search-console](https://search.google.com/search-console) and add your blog
 
-![](img06.JPG)
+![](img10.JPG)
 
-![](img07.JPG)
+![](img11.JPG)
 
 Copy the hmtl file to static folder for site verification
 
-![](img08.JPG)
+![](img12.JPG)
 
 It will take an hour for the site to be indexed and show up on search results.
 
@@ -348,3 +417,5 @@ Learn markdown syntax [https://github.com/adam-p/markdown-here/wiki/Markdown-Che
 [https://github.com/chipzoller/hugo-clarity](https://github.com/chipzoller/hugo-clarity)
 
 [https://gohugo.io/](https://gohugo.io/)
+
+[https://gohugo.io/hosting-and-deployment/hosting-on-github/](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
