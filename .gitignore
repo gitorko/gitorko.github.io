@@ -1,0 +1,7 @@
+/.idea/
+/public/
+/workspace.xml
+/dataSources/
+/dataSources.local.xml
+/.hugo_build.lock
+/.java-version

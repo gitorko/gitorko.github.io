@@ -1,0 +1,25 @@
+baseurl = "https://gitorko.github.io/"
+title = "GitOrko"
+copyright = ""
+# canonifyurls = true
+paginate = 10
+theme = ["github.com/chipzoller/hugo-clarity"]
+disqusShortname = "gitorko"
+enableRobotsTXT = true
+
+DefaultContentLanguage = "en"
+# [languages]
+# config/_default/languages.toml
+
+# [menus]
+# config/_default/menus/menu.xx.toml
+
+[mediaTypes."application/javascript"]
+suffixes = ["ts","js","jsm","mjs"]
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]

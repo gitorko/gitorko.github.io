@@ -1,0 +1,15 @@
+User-agent: *
+
+Disallow: /css/
+Disallow: /en/
+Disallow: /docs/
+Disallow: /fonts/
+Disallow: /js/
+Disallow: /tags/
+Disallow: /icons/
+Disallow: /images/
+Disallow: /showcase/
+Disallow: /categories/
+Disallow: /post/
+Disallow: /search/
+

@@ -1,0 +1,39 @@
+[[main]]
+  name = "Home"
+  url = ""
+  weight = -110
+
+[[main]]
+  name = "About"
+  url = "https://github.com/gitorko"
+  weight = -107
+
+# social menu links
+
+[[social]]
+  name = "github"
+  type = "social"
+  weight = 1
+  url = "https://github.com/gitorko"
+[[social]]
+  name = "linkedin"
+  weight = 2
+  url = "https://www.linkedin.com/in/arjunsurendra/"
+[[social]]
+  name = "rss"
+  weight = 3
+  url = "index.xml"
+
+# other supported social links
+# name = "youtube"
+# url = "https://www.youtube.com/#"
+# name = "facebook"
+# url = "https://facebook.com/#"
+# name = "instagram"
+# url = "https://instagram.com/#"
+# name = "stackoverflow"
+# url = "https://stackoverflow.com/#"
+# name = "gitlab"
+# url = "https://gitlab.com/#"
+# name = "discord"
+# url = "https://discord.gg/#"
