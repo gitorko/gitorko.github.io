@@ -820,3 +820,6 @@ Create the tables & Seed the test data
 [https://github.com/resumejob/system-design-algorithms](https://github.com/resumejob/system-design-algorithms)
 
 [https://neetcode.io/](https://neetcode.io/)
+
+
+[https://gist.github.com/vasanthk/485d1c25737e8e72759f](https://gist.github.com/vasanthk/485d1c25737e8e72759f)
