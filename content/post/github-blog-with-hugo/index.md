@@ -111,7 +111,6 @@ Disallow: /icons/
 Disallow: /images/
 Disallow: /showcase/
 Disallow: /categories/
-Disallow: /post/
 Disallow: /search/
 ```
 
