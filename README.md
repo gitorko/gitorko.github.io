@@ -30,6 +30,11 @@ git submodule add -b main https://github.com/gitorko/gitorko.github.io.git publi
 git submodule update --init --recursive
 ```
 
+Start server
+```bash
+hugo server
+```
+
 ## Topics
 
 * JVM Memory analysis

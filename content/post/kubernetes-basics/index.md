@@ -418,6 +418,10 @@ kubectl delete -f k8s/Deployment.yaml
 
 You can configure a 'GitHub hook trigger for GITScm polling' to deploy when a commit is pushed to github.
 
+## Resources
+
+{{< markcode "https://raw.githubusercontent.com/gitorko/project61/main/README.md" >}}
+
 ## References
 
 [https://github.com/GoogleContainerTools/jib](https://github.com/GoogleContainerTools/jib)
