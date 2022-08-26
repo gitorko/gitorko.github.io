@@ -12,10 +12,6 @@ toc: true
 
 Oracle JDK requires licensing for use in commercial products. OpenJDK is free, We look at the various distributions of OpenJDK that are available. 
 
-<!-- more -->
-
-<!-- toc -->
-
 ## Distributions
 
 Oracle made JDK 17 free for all again, however if you hold existing Oracle Master Agreement ("OMA") there is still some confusion.

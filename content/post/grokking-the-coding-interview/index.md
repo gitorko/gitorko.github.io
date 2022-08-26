@@ -22,11 +22,11 @@ Github: [https://github.com/gitorko/project01](https://github.com/gitorko/projec
 - Then we will move to concurrency problems, how atomic variable work, how locks work etc.
 - Then we will cover some SQL and database queries.
 - Then we will cover system design aspects. 
-- Each of the problems solved here are concise.A smaller consice code is easier to understand and revise.
+- The problems solved here are concise & small making it easy to understand and revise.
 - All problems solved here are developed with test driven approach, with various test that can be run locally.
 - Each of the solutions follow certain pattern. Eg: if you learn back-tracking solution in one problem the pattern is similar when you solve it in other problem. This is very important when it comes to the learning aspect.
-
-Some problems will be easy to solve once and never forget, others will take time and will require you to visit them again and again.
+- Some problems will be easy to solve once and never forget, others will take time and will require you to visit them again and again.
+- Most problems have a parent problem, Once you solve this parent problem you can solve various subset or variation of this problem. Such problems are grouped as similar in the solutions.
 
 ## Approach To Solve
 
@@ -37,17 +37,16 @@ Given a problem here are some questions that should help you figure out the gene
 3. How do I break the problem into smaller units, is there a problem within a problem, can i write a decision tree?
 4. Does this problem look similar to other problems you have solved?
 5. Will sorting make the problem easier to solve?
-6. Can I use any algorithmic techniques, like bfs, dfs, two pointer.
+6. Can I use any algorithmic techniques, like bfs, dfs, two pointer etc.
 7. Do any design patterns apply that could make it easier to maintain, like observer pattern?
 8. What is the time & space complexity? Best case, worst case time complexity? Average case is usually difficult to derive.
 
-Most problems have a parent problem, Once you solve this parent problem you can solve various subset or variation of this problem. Such problems are grouped as similar in the solutions.
 
-The NeetCode youtube channel is highly recommended, the explanation of concepts is just awesome!
+The NeetCode youtube channel is highly recommended, the explanation of the problem & concepts is just awesome!
 
 [NeetCode](https://www.youtube.com/c/NeetCode)
 
-The Tushar Roy - Coding Made Simple is also highly recommended to understand some of the concepts
+The Tushar Roy - Coding Made Simple is also highly recommended
 
 [Tushar Roy - Coding Made Simple](https://www.youtube.com/channel/UCZLJf_R2sWyUtXSKiKlyvAw)
 
@@ -78,9 +77,9 @@ The Tushar Roy - Coding Made Simple is also highly recommended to understand som
 
 ## Big-O
 
-![](img03.png)
+![](big-o-algo.png)
 
-![](img02.png)
+![](big-o-sorting.png)
 
 ```
 log(n) < √(n) < n < nlog(n) < n^2 < n^3 < 2^n < n!
@@ -568,7 +567,6 @@ log(n) < √(n) < n < nlog(n) < n^2 < n^3 < 2^n < n!
 |29|Implement Custom Semaphore|[Solution](https://github.com/gitorko/project01/tree/main/src/test/java/com/demo/basics/concurrency/_22_semaphore/CustomSemaphore.java)|MEDIUM|
 |30|Parallel Stream|[Solution](https://github.com/gitorko/project01/tree/main/src/test/java/com/demo/basics/concurrency/_23_parallelstream/ParallelStreamPool.java)|MEDIUM|
 
-
 ## Java Concurrency
 
 ### LinkedBlockingQueue (unbounded)
@@ -579,14 +577,14 @@ log(n) < √(n) < n < nlog(n) < n^2 < n^3 < 2^n < n!
 
 ### Thread Pool Size
 
-Fixed thread pool number - cores
-- cpu intensive = num of cores
-- io intensive = time it takes for IO to complete.
-- ideal thread pool size = cores * (1 + (wait time/cpu time))
+1. cpu intensive = num of cores
+2. io intensive = time it takes for IO to complete.
+3. ideal thread pool size = cores * (1 + (wait time/cpu time))
 
-{{< youtube ErNre5varF8 >}}
+[https://youtu.be/ErNre5varF8](https://youtu.be/ErNre5varF8)
 
 ### Types of ExecutorService
+
 1. ExecutorService uses BlockingQueue by default
 2. newFixedThreadPool - LinkedBlockingQueue
 3. newSingleThreadExecutor
@@ -602,11 +600,13 @@ Fixed thread pool number - cores
 
 ### Mutex vs Semaphore
 
-A mutex (or Mutual Exclusion Semaphores) is a locking mechanism used to synchronize access to a resource. Only one task (can be a thread or process based on OS abstraction) can acquire the mutex. It means there will be ownership associated with mutex, and only the owner can release the lock (mutex).
-Semaphore (or Binary Semaphore) is signaling mechanism (“I am done, you can carry on” kind of signal). For example, if you are listening songs (assume it as one task) on your mobile and at the same time your friend called you, an interrupt will be triggered upon which an interrupt service routine (ISR) will signal the call processing task to wakeup. A binary semaphore is NOT protecting a resource from access. Semaphores are more suitable for some synchronization problems like producer-consumer.
+1. Mutex (or Mutual Exclusion Semaphores) is a locking mechanism used to synchronize access to a resource. Only one task can acquire the mutex. It means there will be ownership associated with mutex, and only the owner can release the lock (mutex).
+2. Semaphore (or Binary Semaphore) is signaling mechanism (“I am done, you can carry on” kind of signal). A binary semaphore is NOT protecting a resource from access. Semaphores are more suitable for some synchronization problems like producer-consumer.
+
 Short version:
-A mutex can be released only by the thread that had acquired it.
-A binary semaphore can be signaled by any thread (or process).
+
+1. Mutex can be released only by the thread that had acquired it.
+2. Binary Semaphore can be signaled by any thread (or process).
 
 ### Read vs Write lock
 
@@ -615,7 +615,7 @@ Write Lock – if no threads are reading or writing then only one thread can acq
 
 ### Bulkhead pattern
 
-{{< youtube R2FT5edyKOg >}}
+[https://youtu.be/R2FT5edyKOg](https://youtu.be/R2FT5edyKOg)
 
 ###  Concurrency
 
@@ -661,111 +661,150 @@ Create the tables & Seed the test data
 
 ## System Design
 
-1. Capacity planning
-2. Functional & Non-functional requirement.
-3. LRU + Caching
-4. Read vs write db, replication
-5. HDFS
-6. Http2, Websocket, long polling, short polling
-7. Consistent Hashing
-8. Zookeeper leader election quorum
-9. Chunking file
-10. CDN
-11. CAP
-12. ACID
-13. Distributed transaction, Saga
-14. Two phase (prepare & commit) & Three phase commit (prepare, pre-commit & commit)
-15. Isolation level - READ_UNCOMMITED, READ_COMMITED, READ_REPEATABLE, READ_SERIALIZABLE
-16. Horizontal partition, Vertical Partition
-17. Sharding
-18. Kafka, consumer group
-19. NoSQL
-20. Gateway
-21. Proxy vs Reverse Proxy
-22. Distributed tracing - Zipkin
-23. Observability - wavefront, prometheus, nagios
-24. Leader follower
-25. Eventual consistency vs Strong consistency
-26. Spatial cache, temporal cache, distributed cache.
-27. Locking
-28. Write around vs Write Through Cache vs Write Back Cache
-29. Horizontal vs Vertical scaling
-30. Authentication vs authorization
-31. TTL
-32. HTTPS, TLS Internal
-33. Loadbalancer
-34. Map Reduce
-35. CAS - compare and swap
-36. Client side load balancing
-37. Canary vs Rolling vs Blue Green deployment
-38. GitOps
-39. Telemetry
-40. Bloom filter - member of set, no false negative, less memory, probability
-41. Comp Min Sketch - frequency of event, less memory, probability
-42. Paxos - Consensus over distribute system, leader election
-43. Pub Sub vs Queue
-44. Gossip protocol
-45. Dirty Read vs Non-Repeatable Read vs Phantom Read
-46. FAAS
-47. Service discovery (Eureka)
-48. Service Mesh
-49. JVM, Garbage collectors
-50. Fork Join - work stealing
-51. Block chain - distributed ledger
-52. Indexing - Btree, B+tree, BitMap
-53. Concurrent HashMap Internals
-54. Rate limiting - token bucket, leaky bucket,fixed window, sliding log
-55. DDOS attack
-56. Race conditions
-57. Sticky Session
-58. Disaster recovery
-59. Multi-tenancy
-60. Auto scaling
-61. Batch vs Stream data processing vs Micro Batch
-62. RabbitMQ - fanout, direct, topic, header, default
+* Capacity planning
+* Functional & Non-functional requirement.
+* LRU + Caching
+* Read vs write db, replication
+* HDFS
+* Zookeeper leader election quorum
+* Chunking file
+* CDN & Edge Servers
+* Two phase (prepare & commit) & Three phase commit (prepare, pre-commit & commit)
+* Horizontal partition, Vertical Partition
+* Kafka, consumer group
+* NoSQL
+* Gateway
+* Proxy vs Reverse Proxy
+* Distributed tracing - Zipkin
+* Observability - wavefront, prometheus, nagios
+* Leader follower
+* Locking
+* TTL
+* HTTPS, TLS Internal
+* Map Reduce
+* CAS - compare and swap
+* Client side load balancing
+* Canary vs Rolling vs Blue Green deployment
+* GitOps
+* Telemetry
+* Pub Sub vs Queue
+* Dirty Read vs Non-Repeatable Read vs Phantom Read
+* FAAS
+* Service Mesh
+* Block chain - distributed ledger
+* Indexing - Btree, B+tree, BitMap
+* Concurrent HashMap Internals
+* DDOS attack
+* Race conditions
+* Sticky Session
+* Disaster recovery
+* Auto scaling
+* Batch vs Stream data processing vs Micro Batch
+* RabbitMQ - fanout, direct, topic, header, default
+* Star vs Snow flake schema
+* Inverted indexing
+* Time Series Database
+* Hyperlog
 
-### Distributed Transaction
+### Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket vs HTTP/2
 
-{{< youtube jGJT1FRYGcY >}}
+| Websocket                 | Http/2                   | Server Send Event        | Long-Poll                  |
+|---------------------------|--------------------------|--------------------------|----------------------------|
+| Full-duplex               | Half-duplex              | Half-duplex              | Half-duplex                |
+| Bidirectional             | Unidirectional           | Unidirectional           | Unidirectional             |
+| Text + Binary             | Text + Binary            | Text                     | Text + Binary              |
+| 1024 parallel connections | 6-8 parallel connections | 6-8 parallel connections | Based on threads available |
 
-{{< youtube S4FnmSeRpAY >}}
+### Fork Join
 
-### Paxos
+1. Fork/Join framework uses work-stealing algorithm. 
+2. Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads.
 
-{{< youtube WX4gjowx45E >}}
+### Distributed Transaction & Saga
 
-{{< youtube s8JqcZtvnsM >}}
+[https://youtu.be/jGJT1FRYGcY](https://youtu.be/jGJT1FRYGcY)
+
+[https://youtu.be/S4FnmSeRpAY](https://youtu.be/S4FnmSeRpAY)
+
+### Isolation Levels
+
+| ISOLATION-LEVEL   | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
+|-------------------|------------|---------------------|--------------|
+| READ_UNCOMMITED   | YES        | YES                 | YES          |
+| READ_COMMITED     | NO         | YES                 | YES          |
+| READ_REPEATABLE   | NO         | NO                  | YES          |
+| READ_SERIALIZABLE | NO         | NO                  | NO           |
 
 ### Indexing
 
-{{< youtube -qNSXK7s7_w >}}
+[https://youtu.be/-qNSXK7s7_w](https://youtu.be/-qNSXK7s7_w)
+
+![](clustered_noncluster_index.png)
+
+### Vertical Scaling vs Horizontal Scaling
+
+![](scaling.png)
+
+### Datacenter
+
+![](datacenter.png)
+
+### Loadbalancer Types
+
+1. Software based
+2. Hardware based
+
+### Database Scaling
+
+1. Read scaling - All writes goto one db node, which gets replicated to all read node db.
+2. Write scaling - Sharding
 
 ### Caching
 
-![](caching.png)
+Different places to cache
+
+1. Client side caching
+2. Server side caching
+3. Proxy/Gateway side caching
+
+### Types of Cache
+
+1. Spatial cache
+2. Temporal cache
+3. Distributed cache
+
+### Cache Eviction Algorithms
+
+1. LRU (Least Recently Used) - replaces element that has not been used for long time.
+2. FIFO (First in First Out) 
+3. LFU (Least Frequently Used) - replaces least frequently used page.
+
+### Caching Strategy
+
+![](cache-strategy.png)
 
 ### Message Broadcast
 
-![](broadcast.png)
+![](message-broadcast.png)
 
 ### Kafka
 
-{{< youtube Cie5v59mrTg >}}
+[https://youtu.be/Cie5v59mrTg](https://youtu.be/Cie5v59mrTg)
 
 ### Rabbit MQ
 
 ![](rabbitmq1.png)
+
 ![](rabbitmq2.png)
 
-{{< youtube Cie5v59mrTg >}}
-
-{{< youtube O1PgqUqZKTA >}}
+[https://youtu.be/O1PgqUqZKTA](https://youtu.be/O1PgqUqZKTA)
 
 ### Rabbit MQ vs Kafka
 
 ![](rabbit-vs-kafka.png)
 
 [https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case](https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case)
+
 [https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/](https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/)
 
 ### Rabbit MQ Streams
@@ -774,13 +813,143 @@ Create the tables & Seed the test data
 
 ### Long polling vs Short polling vs Websocket
 
-{{< youtube ZBM28ZPlin8 >}} 
+[https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
+
+![](polling-sse-websocket.png)
+
+### JVM Memory & Garbage collectors
+
+1. Minor GC
+2. Major GC
+
+![](jvm-memory.png)
+
+### Proxy vs Reverse-Proxy
+
+![](proxy.png) 
+
+### Load Balancer
+
+1. L3 - IP Based
+2. L4 - DNS Based
+3. L7 - Application Based
+
+### NoSQL vs Relational DB
+
+| NoSQL                                                          | RDBMS                                     |
+|----------------------------------------------------------------|-------------------------------------------|
+| Non-Relational DB                                              | Relational DB                             |
+| No predefined schema, handles un-structured data               | Require a schema, handles structured data |
+| Can scale across machines                                      | Cant scale across machines easily         |
+| BASE Principle of eventual consistency                         | Honor ACID properties                     |
+| Structure can be Key-Value pairs, Document, Graph, Wide column | Stricture is Table based                  |
+
+### CQRS - Command and Query Responsibility Segregation
+
+Pattern that separates read and update operations for a data store.
+Implementing CQRS in your application can maximize its performance, scalability, and security
+
+![](cqrs.png)
+
+### HTTP1.1 & HTTP/2 Protocol
+
+![](protocol-http.png)
+
+### HTTPS
+
+Asymmetric encryption vs symmetric encryption
+
+![](working-https.png)
+
+### Thundering Herd Problem
+
+![](thundering-herd.png)
+
+### Tsunami Traffic
+
+1. Scaling up services takes time, Keep few services on standby if you anticipate heavy traffic.
+2. Configure auto-scaling based on key parameters.
+3. Scale on concurrent requests & not on CPU or memory usage.
+4. Design for scale down models as well along with scale up.
+5. Identify breaking point for each system.
+6. Plan for service denial via circuit breakers for new customers instead system wide outage for all customers.
+
+### Serverless / FAAS (Function As A Service)
+
+1. Function is exposed as a service.
+2. Cost optimal, pay for only what you use.
+
+### Bloom filter 
+
+1. To determine 'Member of set'
+2. No false negative but can give false positive
+3. Less memory used
+4. Probabilistic algorithm
+
+### Comp_Min Sketch
+
+1. Count frequency of events
+2. Uses less memory
+3. Probabilistic algorithm
+
+### BitMap 
+
+1. Bit Array, Uses less memory
+2. Each bit holds value
+3. Using AND / OR operation can merge many bitmaps
+
+### Contention
+
+1. Avoid locks if you want to scale, as they cause contention around shared resources
+2. Do pre-work instead of on-demand if it avoids contention. Eg: Issue 1 Billion tickets, instead of updating a row in DB with locks/syncronization, load a queue with all 1 Billion tickets and users can pick from queue.  
+
+### Paxos
+
+1. Consensus over distribute system
+2. Leader election
+
+[https://youtu.be/WX4gjowx45E](https://youtu.be/WX4gjowx45E)
+
+[https://youtu.be/s8JqcZtvnsM](https://youtu.be/s8JqcZtvnsM)
 
 ### CAP Theorem
 
 ![](cap-theorem.png)
 
-{{< youtube KmGy3sU6Xw8 >}}
+[https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
+
+### Distributed System
+
+Things to consider while designing distributed system
+
+1. Fault Tolerance & Retry - Always assume that things will fail and plan for it. Eg: Network failures, Disk failures
+2. Circuit Breaker Pattern - Instead of throwing error page handle service down gracefully.
+3. Service Discovery - All services register themselves.
+4. Observability - System is actively monitored.
+5. Fail-Over - Stand up server go live when primary servers dies.
+6. Throughput - The number of requests the system can process.
+7. Latency - Time taken to process the requests.
+8. Rate Limit - Restrict overuse of services by single or many users.
+9. Caching - Caching speeds up lookup however can bring in-consistency among caches.
+10. Bulk head pattern - Failure in one system should not bring down the whole system.
+11. Timeout - Ensure proper connection timeouts are set so that slow downstream service cant impact upstream service.
+12. Fail-fast - Prefer to fail fast than deal with slow latency, as it can cascade the effect in upstream services.
+13. Chaos Monkey - Randomly turn off systems to ensure system is fault tolerant.
+
+### ACID
+
+1. Atomicity - All changes to data are performed as if they are a single operation
+2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
+3. Isolation - The intermediate state of a transaction is not visible to other transactions.
+4. Durability - Data persisted survives even if system restarted.
+
+### Partition vs Sharding
+
+
+
+### Consistent Hashing
+
+![](consistent-hashing.png)
 
 ### Rate limit
 
@@ -795,9 +964,44 @@ Create the tables & Seed the test data
 
 ![](rate-limit-distributed.png)
 
-{{< youtube 9CIjoWPwAhU >}}
+[https://youtu.be/9CIjoWPwAhU](https://youtu.be/9CIjoWPwAhU)
 
-{{< youtube FU4WlwfS3G0 >}}
+[https://youtu.be/FU4WlwfS3G0](https://youtu.be/FU4WlwfS3G0)
+
+### Push vs Pull
+
+1. RabbitMQ is push based, Kafka is pull based
+2. Push is expensive & real-time
+3. Pull is cheap but not real-time
+
+### NIO
+
+1. Non-Blocking IO helps systems scale with fewer resources.
+2. The complete source to destination flow has to be non-blocking.
+
+### Multi-Tenancy
+
+1. Multiple customers share same resource but customer are not aware of each other and instances are isolated.
+2. Kubernetes namespaces
+
+### Authorization vs Authentication
+
+1. Authentication - Is the user allowed to use the system?
+2. Authorization - Does the user have the right role to execute that operation?
+
+## Tips & Tricks
+
+### Design a shopping application where users can browser products and buy them.
+
+* If the products are rendered on a web page for each request, then the system won't scale.
+* Browsing products is more frequent than buying something.
+* Generate a static website and upload to CDN, only the buy calls the actual server API.
+* Home pages or landing pages which are frequently hit perform better if they are static sites and on the CDN. 
+* Even for customized home pages like Netflix etc, generate static sites and avoid actual rest calls to servers as much as possible.
+
+### Design a URL shortener service
+
+### Design a Build Management service
 
 ## References
 
@@ -820,6 +1024,3 @@ Create the tables & Seed the test data
 [https://github.com/resumejob/system-design-algorithms](https://github.com/resumejob/system-design-algorithms)
 
 [https://neetcode.io/](https://neetcode.io/)
-
-
-[https://gist.github.com/vasanthk/485d1c25737e8e72759f](https://gist.github.com/vasanthk/485d1c25737e8e72759f)

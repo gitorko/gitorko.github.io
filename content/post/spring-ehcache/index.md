@@ -32,7 +32,7 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 
 ### Types of caching
 
-![](img02.png)
+![](cache-strategy.png)
 
 1. Cache-aside - application consults with the cache. If the data is found, it returns the data directly. In the opposite scenario, it fetches the data from the SoR, stores it into the cache, and then returns
 2. Cache-as-SoR (system-of-record) - cache-as-SoR pattern represents SoR reading and writing operations to the cache. It reduces the responsibility of the application. It uses the combination of read and write pattern that includes read-through, write-through, and write-behind. It reduces the difficulty of the application. It allows the cache to solve the thundering-herd problem
