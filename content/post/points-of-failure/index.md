@@ -6,7 +6,7 @@ date: '2022-08-28'
 aliases: [/points-of-failure/]
 author: 'Arjun Surendra'
 categories: [Distributed-System]
-tags: [failure]
+tags: [failure, resilience4j]
 toc: true
 ---
 
