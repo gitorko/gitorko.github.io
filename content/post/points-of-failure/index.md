@@ -223,6 +223,7 @@ Once you expand the distributed system there can be various other points of fail
 6. Service nodes can go down
 7. Cache invalidation/eviction failure
 8. Load Balancer failures
+9. Datacenter failure for one region
 
 ## Code
 
