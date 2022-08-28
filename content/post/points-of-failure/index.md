@@ -1,7 +1,7 @@
 ---
 title: 'Points Of Failure in Distributed System'
 description: 'Points Of Failure in Distributed System'
-summary: 'Points Of Failure in System'
+summary: 'Points Of Failure in Distributed System'
 date: '2022-08-28'
 aliases: [/points-of-failure/]
 author: 'Arjun Surendra'
