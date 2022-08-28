@@ -16,11 +16,12 @@ We will deliberately fail the application at these points to determine what the 
 ## HTTP Connections
 
 {{% notice tip "Problem" %}}
-A hacker is establishing tcp connections that dont do anything, valid users are getting Denial-of-Service. What do you do?
+A bad downstream client is making bad tcp connections that dont do anything, valid users are getting Denial-of-Service. What do you do?
 {{% /notice %}}
 
-Your server is receiving a lot of bad TCP connections. To test this make the thread count to 1 and change the connection timeout to 10 milli seconds.
-Now issue a telnet command to connect to the running port, It will connect but since no data is sent the TCP connection is closed in 10 milli seconds.
+Your server is receiving a lot of bad TCP connections. To test this make the thread count to 1 and change the connection timeout to 10 ms.
+Now issue a telnet command to connect to the running port, It will connect but since no data is sent the TCP connection is closed in 10 ms. 
+Introduce a bigger timeout and try to hit the rest api when telnet is blocking the single connection, your rest api will wait till the TCP connection is free.
 
 ```bash
 server.tomcat.threads.max=1
