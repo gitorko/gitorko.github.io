@@ -391,9 +391,9 @@ Things to consider while designing distributed system
 
 * If the products are rendered on a web page for each request, then the system won't scale.
 * Browsing products is more frequent than buying something.
-* Generate a static website and upload to CDN, only the buy calls the actual server API.
+* Generate a static website and upload to CDN, only the buy rest api calls hit the backend server.
 * Home pages or landing pages which are frequently hit perform better if they are static sites and on the CDN.
-* Even for user tailored home pages like Netflix etc, generate static sites and avoid actual rest calls to servers as much as possible.
+* Even for user tailored home pages like Netflix, Hotstar etc, generate static sites per user and avoid actual backend calls as much as possible.
 
 {{% notice tip "Tip" %}}
 If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge Server, Cache etc.
