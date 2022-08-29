@@ -411,7 +411,7 @@ If you can design a system where the calls never have to hit your backend servic
 Look at client side caching as well if it means avoiding that backend call.
 {{% /notice %}}
 
-### Design a URL shortener service
+### Design a URL shortener service (Tiny URL)
 
 * If you generate a short url with UUID there can be collision if the key is same. More **collisions** more time is spent in returning a response degrading your service. The system will not scale.
 * If the pre-created short url are stored in a RDBMS database there is contention at the db when all the threads ask for the next free key.
@@ -426,6 +426,7 @@ Look at client side caching as well if it means avoiding that backend call.
 * The put operation first fetches a key from the queue, since there are multiple queues there is no contention to get a new key. It then writes the key & value to the RDBMS.
 * If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to and read from.
 * Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation task that runs nightly to recover any lost keys.
+* The service doesn't need to be aware of ranges hence we dont need any Zookeeper or consensus manager.
 
 {{% notice tip "Tip" %}}
 Avoid collisions, on a new environment there will be less collisions but as your data grows collisions will increase. 
