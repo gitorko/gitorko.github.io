@@ -34,11 +34,11 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 
 ![](cache-strategy.png)
 
-1. Cache-aside - application consults with the cache. If the data is found, it returns the data directly. In the opposite scenario, it fetches the data from the SoR, stores it into the cache, and then returns
-2. Cache-as-SoR (system-of-record) - cache-as-SoR pattern represents SoR reading and writing operations to the cache. It reduces the responsibility of the application. It uses the combination of read and write pattern that includes read-through, write-through, and write-behind. It reduces the difficulty of the application. It allows the cache to solve the thundering-herd problem
-3. Read-through - read-through pattern also copies the cache-aside pattern while reading data from the cache
-4. Write-through - write-through pattern also copies the cache-aside pattern while writing data in the cache
-5. Write-behind / Write-Back - write-back pattern is different form the other three patterns. It modifies the cache entries after a configurable delay. The delay may in seconds, minutes, a day, a week, or for a long time
+1. Read-Cache-aside - Application queries the cache. If the data is found, it returns the data directly. If not it fetches the data from the SoR, stores it into the cache, and then returns.
+2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and returns.
+3. Write-Around - Application writes to db and to the cache.
+4. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
+5. Write-through - Application writes to cache, cache service immediately writes to SoR.
 
 ## Code
 

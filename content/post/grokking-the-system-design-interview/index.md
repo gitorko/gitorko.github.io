@@ -141,6 +141,12 @@ Different places to cache
 
 ### Caching Strategy
 
+1. Read-Cache-aside - Application queries the cache. If the data is found, it returns the data directly. If not it fetches the data from the SoR, stores it into the cache, and then returns.
+2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and returns.
+3. Write-Around - Application writes to db and to the cache.
+4. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
+5. Write-through - Application writes to cache, cache service immediately writes to SoR.
+
 ![](cache-strategy.png)
 
 ### Message Broadcast
@@ -436,6 +442,7 @@ Look at client side caching as well if it means avoiding that backend call.
 * If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to and read from.
 * Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation task that runs nightly to recover any lost keys.
 * The service doesn't need to be aware of ranges hence we dont need any Zookeeper or consensus manager.
+* You can use a LRU cache to improve the get responses. Use one of the Caching Strategy discussed above.
 
 {{% notice tip "Tip" %}}
 Avoid collisions, on a new environment there will be less collisions but as your data grows collisions will increase. 
@@ -449,7 +456,7 @@ Avoid contention for resources, contentions grow exponentially as system scales.
 Don't hesitate to recommend RDBMS for high scale systems. Given a key find the record, RDBMS does this job very well. Remember Youtube uses RDBMS.
 {{% /notice %}}
 
-### 3. Design a like button service
+### 3. Design a Youtube / Facebook like button service
 
 * A single counter that needs to be updated by many threads always creates contention.
 * Addition to counter needs to be atomic making it difficult to scale.
