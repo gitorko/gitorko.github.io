@@ -159,9 +159,7 @@ Different places to cache
 
 ### Rabbit MQ
 
-![](rabbitmq1.png)
-
-![](rabbitmq2.png)
+![](rabbit-mq.png)
 
 [https://youtu.be/O1PgqUqZKTA](https://youtu.be/O1PgqUqZKTA)
 
@@ -461,7 +459,7 @@ Don't hesitate to recommend RDBMS for high scale systems. Given a key find the r
 * A single counter that needs to be updated by many threads always creates contention.
 * Addition operation needs to be atomic making it difficult to scale.
 * If you treat the counter as a row in the DB and use optimistic locking with retry logic to increment with exponential backoff you avoid locking the resource but there are multiple attempts to update the counter which causes scale issues. Hence DB is out of picture.
-* You can read more about 'Dynamic Striping' & Long Adder & Long Accumulator to get an idea how java does addition operation on scale.
+* You can read more about 'Dynamic Striping' & Long Adder & Long Accumulator to get an idea how java does addition operation on scale. However this is restricted to a single instance.
 
 ### Design a Build Management service
 
