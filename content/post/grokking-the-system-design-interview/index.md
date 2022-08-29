@@ -393,7 +393,11 @@ Things to consider while designing distributed system
 * Browsing products is more frequent than buying something.
 * Generate a static website and upload to CDN, only the buy calls the actual server API.
 * Home pages or landing pages which are frequently hit perform better if they are static sites and on the CDN.
-* Even for customized home pages like Netflix etc, generate static sites and avoid actual rest calls to servers as much as possible.
+* Even for user tailored home pages like Netflix etc, generate static sites and avoid actual rest calls to servers as much as possible.
+
+{{% notice tip "Tip" %}}
+If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge Server, Cache etc.
+{{% /notice %}}
 
 ### Design a URL shortener service
 

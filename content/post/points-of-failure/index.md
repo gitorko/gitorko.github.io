@@ -15,7 +15,7 @@ We will deliberately fail the application at these points to determine what the 
 
 ## HTTP Connections
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 A bad downstream client is making bad tcp connections that dont do anything, valid users are getting Denial-of-Service. What do you do?
 {{% /notice %}}
 
@@ -43,7 +43,7 @@ It only closes connection if the client doesnt send anything for 'N' seconds.
 
 ## TimeLimiter
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 A new team member has updated a function and introduced a bug and the function is very slow or never returns a response. What do you do?
 {{% /notice %}}
 
@@ -57,7 +57,7 @@ Always assume the functions within your service will take forever and may never 
 
 ## Request Thread Pool & Connections
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 Users are reporting slow connection / timeout when connecting to your server? How many concurrent requests can your server handle?
 {{% /notice %}}
 
@@ -90,7 +90,7 @@ If you have 200 threads (BIO) and all request response on average take 1 second 
 
 ## Keep-Alive
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 Network admin calls you to tell that many TCP connections are being created to the same clients. What do you do?
 {{% /notice %}}
 
@@ -106,7 +106,7 @@ server.tomcat.keep-alive-timeout =  10
 
 ## Rest Client Connection Timeout
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 You are invoking rest calls to an external service which has degraded and has become very slow there by causing your service to slow down. What do you do?
 {{% /notice %}}
 
@@ -127,7 +127,7 @@ Always assume that all external API calls never return and design accordingly.
 
 ## Database Connection Pool
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 Users are reporting slowness in api that fetch relatively small data. What do you do?
 {{% /notice %}}
 
@@ -157,7 +157,7 @@ Always assume that you will run out of database connections due to a run away or
 
 ## Slow Query
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 Users are reporting slowness in a db fetch api that fetches data from multiple tables via join. Your DBA also confirms that query is too slow. What do you do?
 {{% /notice %}}
 
@@ -178,7 +178,7 @@ You can further look at optimizing the query with help of indexes however here w
 
 ## Memory Leak & CPU Spike
 
-{{% notice tip "Problem" %}}
+{{% notice note "Problem" %}}
 You have developed your service on your laptop, you tested with a big heap memory setting. 
 However your kubernetes admin calls you to inform that kubernetes is a shared resource and you can't consume so much memory. What do you do?
 {{% /notice %}}
