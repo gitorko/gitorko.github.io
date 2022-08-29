@@ -185,13 +185,13 @@ System is able to match & process 5,000 unique orders per ticker in 2 mins that 
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project100/main/src/main/java/com/demo/project100/service/CombinationSum.java" >}}
 
-## Rest API
-
-Postman collection is provided
-
-[https://github.com/gitorko/project100/blob/main/postman/Project100.postman_collection.json](https://github.com/gitorko/project100/blob/main/postman/Project100.postman_collection.json)
+## Postman
 
 ![](img02.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://github.com/gitorko/project100/blob/main/postman/Project100.postman_collection.json)
 
 ## Setup
 

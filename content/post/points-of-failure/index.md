@@ -242,7 +242,9 @@ Once you expand the distributed system there can be various other points of fail
 
 ![](postman.png)
 
-[https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json](https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json)
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json)
 
 ## JMeter
 

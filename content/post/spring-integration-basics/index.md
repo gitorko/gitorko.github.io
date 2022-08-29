@@ -75,11 +75,11 @@ Spring integration provides different ways to configure:
 
 {{< markcode "https://raw.githubusercontent.com/gitorko/project97/main/README.md" >}}
 
-## Testing
+## Postman
 
-To test the function use the postman collection
+Import the postman collection to postman
 
-[https://raw.githubusercontent.com/gitorko/project97/main/postman/Project97.postman_collection.json](https://raw.githubusercontent.com/gitorko/project97/main/postman/Project97.postman_collection.json)
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project97/main/postman/Project97.postman_collection.json)
 
 ## References
 

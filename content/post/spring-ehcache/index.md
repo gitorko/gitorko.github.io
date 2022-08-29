@@ -53,6 +53,12 @@ Notice the SQL is printed each time a db call happens, if the data is cached no 
 
 {{< markcode "https://raw.githubusercontent.com/gitorko/project98/main/README.md" >}}
 
+## Postman
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project98/main/postman/Project98.postman_collection.json)
+
 ## References
 
 [https://www.ehcache.org/documentation/3.0](https://www.ehcache.org/documentation/3.0)

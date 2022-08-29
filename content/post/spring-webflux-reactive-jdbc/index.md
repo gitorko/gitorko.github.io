@@ -35,11 +35,13 @@ Github: [https://github.com/gitorko/project64](https://github.com/gitorko/projec
 
 {{< markcode "https://raw.githubusercontent.com/gitorko/project64/main/README.md" >}}
 
-## Testing
-
-Postman collection [https://raw.githubusercontent.com/gitorko/project64/main/postman/Project64.postman_collection.json](https://raw.githubusercontent.com/gitorko/project64/main/postman/Project64.postman_collection.json)
+## Postman
 
 ![](img01.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project64/main/postman/Project64.postman_collection.json)
 
 ## References
 

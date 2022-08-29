@@ -41,11 +41,13 @@ The following databases are supported via r2dbc libraries
 
 {{< markcode "https://raw.githubusercontent.com/gitorko/project65/main/README.md" >}}
 
-## Testing
-
-Postman collection [https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json](https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json)
+## Postman
 
 ![](img01.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json)
 
 ## Errors
 
