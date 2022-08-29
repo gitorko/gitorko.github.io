@@ -36,14 +36,14 @@ You start by understanding the problem statement
 
 #### Functional requirements
 
-* What is the end result?
+* What is the start & end result/state?
 * Is this is a **live** service or a **background** service?
 * Does this need stream processing or batch processing?
 * How **many users**?
 * Does the data need to be **persisted**?
 * Does the data need to be **consistent** or can it be eventually consistent?
 * Does the service need external **API** 
-    
+
 #### Non-Functional requirements
 
 * What is the **latency** expected?
@@ -51,6 +51,7 @@ You start by understanding the problem statement
 * What **observability** & **monitoring** is needed by the system?
 * What is the uptime & **availability** SLA?
 * What **security** aspects need to be addressed?
+* Does it need auditing?
 
 ## Fundamentals
 
