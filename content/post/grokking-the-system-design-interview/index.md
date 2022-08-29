@@ -398,7 +398,7 @@ Things to consider while designing distributed system
 
 ## Scenarios
 
-### Design a shopping application where users can browser products and buy them.
+### Design a shopping application where users can browse products and buy them.
 
 * If the products are rendered on a web page for each request, then the system won't scale.
 * Browsing products is more frequent than buying something.
@@ -413,8 +413,31 @@ Look at client side caching as well if it means avoiding that backend call.
 
 ### Design a URL shortener service
 
-* If you try to generate the short url at runtime, the system will not scale.
-* If the pre-created short url are kept in a single database there is contention at the db when all the threads ask it for the record.
+* If you generate a short url with UUID there can be collision if the key is same. More **collisions** more time is spent in returning a response degrading your service. The system will not scale.
+* If the pre-created short url are stored in a RDBMS database there is contention at the db when all the threads ask for the next free key.
+* Ensure that pre-created short url are not sequential so that someone should not guess what the next key can be simply by incrementing one character.
+
+![](url-shortner.png)
+
+* Given a key find the URL - We will use and RDMBS database for this. RDBMS handles the fetch very well and scales well. We dont use a NO-SQL db as we want consistency (CAP).
+* We will use 2 table, first one where primary key is the short url and value is the actual url. The second table where primary key is the actual url and the value is the short url.
+* A Generate key service will populate the queue with the existing short-url generated. Generate key service will ensure that duplicate keys are not loaded by generating short urls in range eg: A-F, G-N ranges.
+* A consistent hashing service will handle the situation where we add more queues to the group.
+* The put operation first fetches a key from the queue, since there are multiple queues there is no contention to get a new key. It then writes the key & value to the RDBMS.
+* If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to and read from.
+* Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation task that runs nightly to recover any lost keys.
+
+{{% notice tip "Tip" %}}
+Avoid collisions, on a new environment there will be less collisions but as your data grows collisions will increase. 
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+Avoid contention for resources, contentions grow exponentially as system scales. The simple act of asking the DB for the next free record among a set, incrementing a particular row value are examples where contention can occur.
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+Don't hesitate to recommend RDBMS for high scale systems. Given a key find the record, RDBMS does this job very well. Remember Youtube uses RDBMS.
+{{% /notice %}}
 
 ### Design a like button service
 
