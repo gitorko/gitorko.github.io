@@ -313,7 +313,16 @@ Things to consider while designing distributed system
 
 ### Consistent Hashing
 
+Nodes keep dying in a distributed system. To scale new nodes can be added as well. Consistent hashing lets you distribute traffic among the nodes uniformly.
+
+Why not use round robin to distribute traffic?
+Services often cache some data, so it makes for a better design if the same client request is sent to the server which has all the data already cached. If you send the same client request randomly to random servers each time then cache is not utilized.
+
+Consistent hashing also prevents DOS attacks to some extent. If a spam client send random requests and round robin distributes it across all nodes then the outage is large scale. However with consitent hashing only certain node will be impacted.
+
 ![](consistent-hashing.png)
+
+Eg: if there are 60K user requests and there are 6 servers each server can distribute and handle 10K. Do note that if one node goes down then all the requests flood the next node causing it to go down thus causing a full outage. Hence always consider buffers or active-active standby servers.
 
 ### Rate limit
 
@@ -398,7 +407,7 @@ Things to consider while designing distributed system
 
 ## Scenarios
 
-### Design a shopping application where users can browse products and buy them.
+### 1. Design a shopping application where users can browse products and buy them.
 
 * If the products are rendered on a web page for each request, then the system won't scale.
 * Browsing products is more frequent than buying something.
@@ -411,7 +420,7 @@ If you can design a system where the calls never have to hit your backend servic
 Look at client side caching as well if it means avoiding that backend call.
 {{% /notice %}}
 
-### Design a URL shortener service (Tiny URL)
+### 2. Design a URL shortener service (Tiny URL)
 
 * If you generate a short url with UUID there can be collision if the key is same. More **collisions** more time is spent in returning a response degrading your service. The system will not scale.
 * If the pre-created short url are stored in a RDBMS database there is contention at the db when all the threads ask for the next free key.
@@ -440,7 +449,7 @@ Avoid contention for resources, contentions grow exponentially as system scales.
 Don't hesitate to recommend RDBMS for high scale systems. Given a key find the record, RDBMS does this job very well. Remember Youtube uses RDBMS.
 {{% /notice %}}
 
-### Design a like button service
+### 3. Design a like button service
 
 * A single counter that needs to be updated by many threads always creates contention.
 * Addition to counter needs to be atomic making it difficult to scale.
