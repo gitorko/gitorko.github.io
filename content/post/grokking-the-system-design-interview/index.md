@@ -459,7 +459,7 @@ Don't hesitate to recommend RDBMS for high scale systems. Given a key find the r
 ### 3. Design a Youtube / Facebook like button service
 
 * A single counter that needs to be updated by many threads always creates contention.
-* Addition to counter needs to be atomic making it difficult to scale.
+* Addition operation needs to be atomic making it difficult to scale.
 
 ### Design a Build Management service
 
