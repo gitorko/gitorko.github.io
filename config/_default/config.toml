@@ -7,6 +7,8 @@ theme = ["github.com/chipzoller/hugo-clarity"]
 disqusShortname = "gitorko"
 enableRobotsTXT = true
 
+enableEmoji = true
+
 DefaultContentLanguage = "en"
 # [languages]
 # config/_default/languages.toml

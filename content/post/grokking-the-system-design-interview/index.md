@@ -10,9 +10,49 @@ tags: [interview, system-design]
 toc: true
 ---
 
-## System Design Fundamentals
+## System Design
 
 We will understand the fundamentals of system design and look at real world implementations 
+
+System design interview discussions are of two types
+
+### Wide design (HLD - High Level Design)
+
+Wide design/HLD often is very open ended and broad without any specifics.  
+
+Eg: Design Food Delivery App, Design Uber, Design Twitter.
+
+You often end up explaining various components, class diagrams, sequence diagrams etc. 
+There is literally no end to the amount of components/class diagrams/use case you can create as long as you can keep pulling a :rabbit: (idea) out of your :tophat: (head).
+If the candidate is asked to design `management system for a particle accelerator` there will be no :rabbit: in their :tophat:, hence these discussions dont add value for a technical system design. They are more suited if the position is that of a Product Manager.
+
+### Deep design (LLD - Low Level Design)
+
+Deep design/LLD often starts with a specific module with a clear outcome that is expected, and provides you more details about the problem statement
+
+Eg: Design a build system that builds when code is commited, design a tiny url service etc.
+
+You start by understanding the problem statement
+
+#### Functional requirements
+
+* What is the end result?
+* Is this is a **live** service or a **background** service?
+* Does this need stream processing or batch processing?
+* How **many users**?
+* Does the data need to be **persisted**?
+* Does the data need to be **consistent** or can it be eventually consistent?
+* Does the service need external **API** 
+    
+#### Non-Functional requirements
+
+* What is the **latency** expected?
+* What is **load** the system needs to handle and **scale** requirements?
+* What **observability** & **monitoring** is needed by the system?
+* What is the uptime & **availability** SLA?
+* What **security** aspects need to be addressed?
+
+## Fundamentals
 
 * Capacity planning
 * Functional & Non-functional requirement.
