@@ -14,7 +14,7 @@ Learn morse code in under 10 mins with pictures
 
 ## Reference Sheet
 
-![](MorseCode.png)
+![](morse-code.png)
 
 ## Story
 

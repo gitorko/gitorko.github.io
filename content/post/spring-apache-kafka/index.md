@@ -23,7 +23,7 @@ Kafka is a distributed & fault-tolerant,high throughput, scalable stream process
 3. Kafka as stream processing system that reacts to event in realtime.
 4. Kafka as a store for data.
 
-![](img01.png)
+![](kafka-architecture.png)
 
 Kafka stores streams of records (messages) in topics. Topics are partitioned and replicated across multiple nodes thus kafka can scale and be a distributed system.
 Producers publish data to the topics. Consumer groups can subscribe to topics.
@@ -40,7 +40,7 @@ Producers publish data to the topics. Consumer groups can subscribe to topics.
 10. Adapters - Provides adapters that can be used to write data to db and other endpoints
 11. Stream - Provides stream processing capabilities 
 
-![](img02.png)
+![](kafka-partition.png)
 
 Similar to spring rest template or jdbc template which abstracts the rest/jdbc calls spring provides kafka template which provides high level abstraction to interact with kafka. 
 There is an even higher level of abstraction provided by spring cloud stream which lets we integrate with kafka or rabbitmq and other messaging systems. So when the messaging systems changes you dont need to make code changes in producer or consumer.
