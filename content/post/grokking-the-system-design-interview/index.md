@@ -155,6 +155,9 @@ You start by understanding the problem statement
 
 ### Caching
 
+Caching though solves the problem of avoiding an expensive call, it does come with problems of its own like stale data, thundering herd etc.
+In a distributed system a distributed cache (read-write) comes with problems of its own, dont look at cache as a silver bullet to all problems.
+
 Different places to cache
 
 1. Client side caching
@@ -385,7 +388,7 @@ Things to consider while designing distributed system
 1. Authentication - Is the user allowed to use the system?
 2. Authorization - Does the user have the right role to execute that operation?
 
-## System Design Scenarios
+## Scenarios
 
 ### Design a shopping application where users can browser products and buy them.
 
@@ -397,9 +400,18 @@ Things to consider while designing distributed system
 
 {{% notice tip "Tip" %}}
 If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge Server, Cache etc.
+Look at client side caching as well if it means avoiding that backend call.
 {{% /notice %}}
 
 ### Design a URL shortener service
+
+* If you try to generate the short url at runtime, the system will not scale.
+* If the pre-created short url are kept in a single database there is contention at the db when all the threads ask it for the record.
+
+### Design a like button service
+
+* A single counter that needs to be updated by many threads always creates contention.
+* Addition to counter needs to be atomic making it difficult to scale.
 
 ### Design a Build Management service
 
