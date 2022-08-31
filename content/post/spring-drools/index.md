@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - Drools'
-description: 'Spring Boot - Drools'
-summary: 'Spring boot integration with Drools.'
+title: 'Spring - Drools'
+description: 'Spring - Drools'
+summary: 'Spring Boot integration with Drools.'
 date: '2019-03-30'
-aliases: [/spring-boot-drools/]
+aliases: [/spring-boot-drools/,/spring-drools/]
 author: 'Arjun Surendra'
 categories: [Drools]
-tags: [spring, drools]
+tags: [spring, spring-boot, drools]
 toc: true
 ---
 

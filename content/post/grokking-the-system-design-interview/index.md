@@ -460,6 +460,7 @@ Don't hesitate to recommend RDBMS for high scale systems. Given a key find the r
 * Addition operation needs to be atomic making it difficult to scale.
 * If you treat the counter as a row in the DB and use optimistic locking with retry logic to increment with exponential backoff you avoid locking the resource but there are multiple attempts to update the counter which causes scale issues. Hence DB is out of picture.
 * You can read more about 'Dynamic Striping' & Long Adder & Long Accumulator to get an idea how java does addition operation on scale. However this is restricted to a single instance.
+* If you consider each like as a new row you avoid contention of an update but more time is spent in summing up the total like count by counting all rows.
 
 ### Design a Build Management service
 

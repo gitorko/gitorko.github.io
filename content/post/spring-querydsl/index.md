@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - QueryDSL'
-description: 'Spring Boot - QueryDSL'
+title: 'Spring - QueryDSL'
+description: 'Spring - QueryDSL'
 summary: 'Spring Boot QueryDSL lets you query the database using domain specific language similar to SQL.'
 date: '2020-08-08'
-aliases: [/spring-boot-querydsl/]
+aliases: [/spring-boot-querydsl/,/spring-querydsl/]
 author: 'Arjun Surendra'
 categories: [Spring]
-tags: [spring, querydsl]
+tags: [spring, spring-boot, querydsl]
 toc: true
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - Angular'
-description: 'Spring Boot - Angular'
-summary: 'Spring boot web application with angular and JWT authentication support, uses clarity for UI components and chart.js for rendering charts.'
+title: 'Spring - Angular'
+description: 'Spring - Angular'
+summary: 'Spring Boot web application with angular and JWT authentication support, uses clarity for UI components and chart.js for rendering charts.'
 date: '2021-05-27'
-aliases: [/spring-boot-angular/]
+aliases: [/spring-boot-angular/,/spring-angular/]
 author: 'Arjun Surendra'
 categories: [Spring, Angular, Clarity]
-tags: [spring, angular, chart.js, jpa, clarity, jwt]
+tags: [spring, spring-boot, angular, chart.js, jpa, clarity, jwt]
 toc: true
 ---
 

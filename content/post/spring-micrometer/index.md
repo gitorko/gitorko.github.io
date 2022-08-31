@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - Micrometer'
-description: 'Spring Boot - Micrometer'
+title: 'Spring - Micrometer'
+description: 'Spring - Micrometer'
 summary: 'Spring Boot with Micrometer & Integration with Prometheus & Grafana.'
 date: '2019-04-09'
-aliases: [/spring-boot-micrometer/]
+aliases: [/spring-boot-micrometer/, /spring-micrometer/]
 author: 'Arjun Surendra'
 categories: [MicroMeter, Grafana, Prometheus]
-tags: [prometheus, grafana, jmx, micrometer]
+tags: [spring, spring-boot, prometheus, grafana, jmx, micrometer]
 toc: true
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - ReactJS'
-description: 'Spring Boot - ReactJS'
+title: 'Spring - ReactJS'
+description: 'Spring - ReactJS'
 summary: 'Spring Boot web application with reactjs and JWT authentication support, uses bootstrap and google chart.'
 date: '2021-11-15'
-aliases: [/spring-boot-reactjs/]
+aliases: [/spring-boot-reactjs/,/spring-reactjs/]
 author: 'Arjun Surendra'
 categories: [Spring, ReactJS]
-tags: [spring, jwt, reactjs, google-chart, bootstrap, spring-security]
+tags: [spring, spring-boot, jwt, reactjs, google-chart, bootstrap, spring-security]
 toc: true
 ---
 

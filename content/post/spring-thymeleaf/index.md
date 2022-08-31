@@ -1,16 +1,16 @@
 ---
-title: 'Spring Boot - Thymeleaf'
-description: 'Spring Boot - Thymeleaf'
-summary: 'Spring MVC application with Thymeleaf template & basic spring security support, uses bootstrap for CSS and chart.js for rendering charts.'
+title: 'Spring - Thymeleaf'
+description: 'Spring - Thymeleaf'
+summary: 'Spring Boot MVC application with Thymeleaf template & basic spring security support, uses bootstrap for CSS and chart.js for rendering charts.'
 date: '2021-05-23'
-aliases: [/spring-boot-thymeleaf/]
+aliases: [/spring-boot-thymeleaf/,/spring-thymeleaf/]
 author: 'Arjun Surendra'
 categories: [Spring, Web]
-tags: [spring-security, bootstrap, hsqldb, JPA, chart.js, thymeleaf]
+tags: [spring-boot, spring-security, bootstrap, hsqldb, JPA, chart.js, thymeleaf]
 toc: true
 ---
 
-Spring MVC application with Thymeleaf template & basic spring security support, uses bootstrap for CSS and chart.js for rendering charts. 
+Spring Boot MVC application with Thymeleaf template & basic spring security support, uses bootstrap for CSS and chart.js for rendering charts. 
 Creates uber jar to deploy.
 
 Github: [https://github.com/gitorko/project79](https://github.com/gitorko/project79)

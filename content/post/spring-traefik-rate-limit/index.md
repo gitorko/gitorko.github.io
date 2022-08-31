@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - Traefik (Rate Limit)'
-description: 'Spring Boot - Traefik (Rate Limit)'
+title: 'Spring - Traefik (Rate Limit)'
+description: 'Spring - Traefik (Rate Limit)'
 summary: 'Spring Boot application deployed on kubernetes, configured with Traefik ingress controller to rate limit.'
 date: '2022-04-23'
-aliases: [/spring-boot-traefik-rate-limit/]
+aliases: [/spring-boot-traefik-rate-limit/,/spring-traefik-rate-limit/]
 author: 'Arjun Surendra'
 categories: [Spring, Traefik, Kubernetes]
-tags: [spring, traefik, rate-limit]
+tags: [spring, spring-boot, traefik, rate-limit]
 toc: true
 ---
 
