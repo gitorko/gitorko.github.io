@@ -433,6 +433,8 @@ Look at client side caching as well if it means avoiding that backend call.
 
 ### 2. Design a URL shortener service (Tiny URL)
 
+Users will provide a long url, your service needs to return a short url. If the users give you the same short url you need to return the actual url.
+
 * If you generate a short url with UUID there can be collision if the key is same. More **collisions** more time is spent in returning a response degrading your service. The system will not scale.
 * If the pre-created short url are stored in a RDBMS database there is contention at the db when all the threads ask for the next free key.
 * Ensure that pre-created short url are not sequential so that someone should not guess what the next key can be simply by incrementing one character.
@@ -464,6 +466,8 @@ Don't hesitate to recommend RDBMS for high scale systems. Given a key find the r
 
 ### 3. Design a Youtube / Facebook like counter service
 
+Users can like a post/video and submit their likes, the service needs to count how many likes a post/video has.
+
 * A single counter that needs to be updated by many threads always creates contention.
 * Addition operation needs to be atomic making it difficult to scale.
 * If you treat the counter as a row in the DB and use optimistic locking with retry logic to increment with exponential backoff you avoid locking the resource but there are multiple attempts to update the counter which causes scale issues. Hence DB is out of picture.
@@ -484,6 +488,29 @@ Avoid updating DB rows in most cases, updates don't scale. Always prefer using i
 
 {{% notice tip "Tip" %}}
 To prevent race conditions optimistic or pessimistic locking need to be used and they dont scale. Use redis for atomic increment & decrement as they guarantee atomicity.
+{{% /notice %}}
+
+### 4. Design an Advertisement Impression Service tied to a budget
+
+For a give budget, ads of a particular type are served. Once the budget is exhausted the ads should not be served. 
+For the type shoes, Nike has a budget of 1000$ and Adidas has a budget of 500$. When a website wants to display an ad it calls your service which randomly returns an ad, ensuring that the budget is not exceeded.
+If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 500 impression of Adidas.
+
+* It looks similar to the like counter service, where we can (atomic) decrement the budget based on the number of Ads being served. An incoming request randomly picks an Ad and decrements the budget for that Ad till it reaches 0. However such a design will still run into contention when scaled.
+* The contention occurs when we want to decrement the budget, since we cant distribute the budget value across multiple nodes, the decrement operation still needs to happen on one node and in atomic fashion.
+* Assume there is only 1 Nike brand with a budget of 1M. Now when there is huge load since there is only 1 brand and the budget needs to be decremented as an atomic operation, even though redis can do atomic decrement operations, it will still slow down the system since all the threads are waiting to decrement the single budget entity.
+
+![](ad-impression.png)
+
+* A token seeder pre-populates dedicated queues with a single token. Based on the budget, an equal number of tokens are populated. Nike Queue will have 1000 token, Adidas Queue will have 500 tokens.
+* When the request comes in for a shoe type Ad. A random queue is picked and a token dequeued. Based on that token the associated ad is served. 
+* Once the Queue is out of tokens no Ads are served for that brand.
+* The Ad fetcher service needs to be aware of which queue to deque, it needs to be aware of how many queues are associated with the given brand.
+* If a queue goes down the token seeder can identify and recreate a new queue based on the transactional log that is held by each service to identify how many tokens were already served.
+* If there is a new brand that wants to join, just create the tokens and seed a queue and add it to the group. The next round-robin should pick it up.
+
+{{% notice tip "Tip" %}}
+Instead of incrementing/decrementing a counter, check if its possible to create tokens ahead of time. With a bunch of tokens in a queue/bucket its easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
 ### Design a Build Management service
