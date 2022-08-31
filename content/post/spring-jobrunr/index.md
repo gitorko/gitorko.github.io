@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - JobRunr'
-description: 'Spring Boot - JobRunr'
+title: 'Spring - JobRunr'
+description: 'Spring - JobRunr'
 summary: 'Spring boot integration with JobRunr'
 date: '2022-06-02'
 aliases: [/spring-jobrunr/]
 author: 'Arjun Surendra'
 categories: [JobRunr]
-tags: [jobrunr]
+tags: [spring, spring-boot, jobrunr]
 toc: true
 ---
 
@@ -29,6 +29,7 @@ Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java appli
 ## Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/HomeController.java" >}}
+
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/AppService.java" >}}
 
 Open dashboard: [http://localhost:8000/dashboard/](http://localhost:8000/dashboard/)

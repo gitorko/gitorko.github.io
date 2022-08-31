@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - EhCache'
-description: 'Spring Boot - EhCache'
+title: 'Spring - EhCache'
+description: 'Spring - EhCache'
 summary: 'Spring Boot integration with EhCache 3'
 date: '2022-08-04'
 aliases: [/spring-ehcache/]
 author: 'Arjun Surendra'
 categories: [Caching]
-tags: [ehcache]
+tags: [spring, spring-boot, ehcache]
 toc: true
 ---
 

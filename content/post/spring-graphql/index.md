@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot - GraphQL'
-description: 'Spring Boot - GraphQL'
+title: 'Spring - GraphQL'
+description: 'Spring - GraphQL'
 summary: 'Spring Boot integration with GraphQL'
 date: '2022-07-20'
 aliases: [/spring-graphql/]
 author: 'Arjun Surendra'
 categories: [GraphQL]
-tags: [graphql, pagination]
+tags: [spring, spring-boot, graphql, pagination]
 toc: true
 ---
 

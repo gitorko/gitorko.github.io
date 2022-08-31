@@ -439,7 +439,7 @@ Look at client side caching as well if it means avoiding that backend call.
 * The put operation first fetches a key from the queue, since there are multiple queues there is no contention to get a new key. It then writes the key & value to the RDBMS.
 * If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to and read from.
 * Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation task that runs nightly to recover any lost keys.
-* The service doesn't need to be aware of ranges hence we dont need any Zookeeper or consensus manager.
+* The service doesn't need to be aware of ranges hence we dont need any Zookeeper or consensus manager. If the short url has to be generated on fly then you can use DB to know the ranges each nodes is handling, overhead of zookeeper doesn't justify the benefits.
 * You can use a LRU cache to improve the get responses. Use one of the Caching Strategy discussed above.
 
 {{% notice tip "Tip" %}}

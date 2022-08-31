@@ -1,12 +1,12 @@
 ---
-title: 'Spring Boot & Apache Kafka'
-description: 'Spring & Apache Kafka'
+title: 'Spring - Apache Kafka'
+description: 'Spring - Apache Kafka'
 summary: 'Spring Boot integration with kafka & kafka streams'
 date: '2022-01-19'
 aliases: [/spring-apache-kafka/]
 author: 'Arjun Surendra'
 categories: [Messaging, Kafka]
-tags: [kafka, kafka-stream]
+tags: [spring, spring-boot, kafka, kafka-stream]
 toc: true
 ---
 

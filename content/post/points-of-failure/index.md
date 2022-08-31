@@ -238,7 +238,7 @@ Once you expand the distributed system there can be various other points of fail
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project57/main/src/main/resources/application.yaml" >}}
 
-## Postman Collection
+## Postman
 
 ![](postman.png)
 

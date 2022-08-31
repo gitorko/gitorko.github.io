@@ -1,12 +1,12 @@
 ---
-title: 'Spring AMQP'
-description: 'Spring AMQP'
-summary: 'Spring with RabbitMQ message broker that implements Advanced Message Queuing Protocol(AMQP)'
+title: 'Spring - RabbitMQ'
+description: 'Spring - RabbitMQ'
+summary: 'Spring Boot with RabbitMQ message broker that implements Advanced Message Queuing Protocol(AMQP)'
 date: '2020-03-15'
 aliases: [/spring-amqp/]
 author: 'Arjun Surendra'
-categories: [Messaging, RabbitMQ]
-tags: [rabbitmq, amqp, rpc]
+categories: [Messaging, RabbitMQ, Spring]
+tags: [spring, spring-boot, rabbitmq, amqp, rpc]
 toc: true
 ---
 
