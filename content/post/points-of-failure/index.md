@@ -13,6 +13,10 @@ toc: true
 We will look at the different points at which an application can fail in a distributed system and how to address failures.
 We will deliberately fail the application at these points to determine what the error looks like and how to handle it. To know how to build a good distributed system you need to understand where it can fail.
 
+## Generic System
+
+![](point-of-failure.png)
+
 ## HTTP Connections
 
 {{% notice note "Problem" %}}

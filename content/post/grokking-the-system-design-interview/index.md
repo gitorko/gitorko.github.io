@@ -215,9 +215,16 @@ Implementing CQRS in your application can maximize its performance, scalability,
 
 ![](cqrs.png)
 
-### HTTP1.1 & HTTP/2 Protocol
+### HTTP1 vs HTTP1.1 vs HTTP2 vs HTTP3 Protocol
 
-![](protocol-http.png)
+1. HTTP1 - one tcp connection per request
+2. HTTP1.1 - one tcp connection per request, keep alive connection so connection is not closed immediately.
+3. HTTP2 - one tcp connection for all requests. Multiplex all requests on one TCP. Server Push where the server proactively pushes css,js all on one TCP when the server requests the html file.
+4. HTTP3 - Uses QUIC protocol (based on UDP). Eg: Mobile that is changing cell towers, UDP continues to stream data without a new TCP handshake with the new tower.
+
+![](protocols-http.png)
+
+[https://youtu.be/a-sBfyiXysI](https://youtu.be/a-sBfyiXysI)
 
 ### HTTPS
 
@@ -436,6 +443,7 @@ Look at client side caching as well if it means avoiding that backend call.
 * We will use 2 table, first one where primary key is the short url and value is the actual url. The second table where primary key is the actual url and the value is the short url.
 * A Generate key service will populate the queue with the existing short-url generated. Generate key service will ensure that duplicate keys are not loaded by generating short urls in range eg: A-F, G-N ranges.
 * A consistent hashing service will handle the situation where we add more queues to the group.
+* The queue represented here is redis poll queue and not a listener based or a pub-sub queue.
 * The put operation first fetches a key from the queue, since there are multiple queues there is no contention to get a new key. It then writes the key & value to the RDBMS.
 * If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to and read from.
 * Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation task that runs nightly to recover any lost keys.
@@ -454,13 +462,29 @@ Avoid contention for resources, contentions grow exponentially as system scales.
 Don't hesitate to recommend RDBMS for high scale systems. Given a key find the record, RDBMS does this job very well. Remember Youtube uses RDBMS.
 {{% /notice %}}
 
-### 3. Design a Youtube / Facebook like button service
+### 3. Design a Youtube / Facebook like counter service
 
 * A single counter that needs to be updated by many threads always creates contention.
 * Addition operation needs to be atomic making it difficult to scale.
 * If you treat the counter as a row in the DB and use optimistic locking with retry logic to increment with exponential backoff you avoid locking the resource but there are multiple attempts to update the counter which causes scale issues. Hence DB is out of picture.
 * You can read more about 'Dynamic Striping' & Long Adder & Long Accumulator to get an idea how java does addition operation on scale. However this is restricted to a single instance.
-* If you consider each like as a new row you avoid contention of an update but more time is spent in summing up the total like count by counting all rows.
+* If you consider each like counter as a new row you avoid contention of an update but more time is spent in summing up the total by counting all rows.
+
+![](like-service.png)
+
+* Redis provides **atomic** operations of increment. We dont want to keep a single video like counter on one node as it can overload it if there are more likes for that video compared to others.
+* By using **Round Robin** we can scale our service as by adding more redis nodes.
+* We use a **Pub-Sub** event model to let the count aggregator service to sum the counts across all redis nodes and save that to a DB.
+* The get count will always read the DB for latest count. There will be a slight delay from the time we submit the like till we see the count, however this is **eventual consistency**.
+* The event queue payload can carry information about nodes that got updated, this way the aggregator service need not iterate over all redis nodes.
+
+{{% notice tip "Tip" %}}
+Avoid updating DB rows in most cases, updates don't scale. Always prefer using inserts over updates.
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+To prevent race conditions optimistic or pessimistic locking need to be used and they dont scale. Use redis for atomic increment & decrement as they guarantee atomicity.
+{{% /notice %}}
 
 ### Design a Build Management service
 
