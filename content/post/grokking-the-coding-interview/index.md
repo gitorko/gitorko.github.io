@@ -40,14 +40,6 @@ Given a problem here are some questions that should help you figure out the gene
 7. Do any design patterns apply that could make it easier to maintain, like observer pattern?
 8. What is the time & space complexity? Best case, worst case time complexity? Average case is usually difficult to derive.
 
-The NeetCode youtube channel is highly recommended, the explanation of the problem & concepts is just awesome!
-
-[NeetCode](https://www.youtube.com/c/NeetCode)
-
-The Tushar Roy - Coding Made Simple is also highly recommended
-
-[Tushar Roy - Coding Made Simple](https://www.youtube.com/channel/UCZLJf_R2sWyUtXSKiKlyvAw)
-
 ## Algo Techniques
 
 * Sorting
@@ -652,6 +644,12 @@ Create the tables & Seed the test data
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/src/test/java/com/demo/sql/setup/setup.sql" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/src/test/java/com/demo/sql/queries/employee-queries.sql" >}}
+
+## Youtube Channels
+
+[NeetCode](https://www.youtube.com/c/NeetCode)
+
+[Tushar Roy - Coding Made Simple](https://www.youtube.com/channel/UCZLJf_R2sWyUtXSKiKlyvAw)
 
 ## References
 

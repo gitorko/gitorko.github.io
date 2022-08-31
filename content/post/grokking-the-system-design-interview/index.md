@@ -488,6 +488,12 @@ To prevent race conditions optimistic or pessimistic locking need to be used and
 
 ### Design a Build Management service
 
+## Youtube Channels
+
+[ByteByteGo](https://www.youtube.com/c/ByteByteGo)
+
+[Hussein Nasser](https://www.youtube.com/c/HusseinNasser-software-engineering)
+
 ## References
 
 [https://github.com/resumejob/system-design-algorithms](https://github.com/resumejob/system-design-algorithms)
