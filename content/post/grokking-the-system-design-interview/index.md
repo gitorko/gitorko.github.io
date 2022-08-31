@@ -510,7 +510,7 @@ If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 5
 * If there is a new brand that wants to join, just create the tokens and seed a queue and add it to the group. The next round-robin should pick it up.
 
 {{% notice tip "Tip" %}}
-Instead of incrementing/decrementing a counter, check if its possible to create tokens ahead of time. With a bunch of tokens in a queue/bucket its easier to scale than trying to update a single counter in atomic fashion.
+Instead of incrementing/decrementing a counter, check if it's possible to create tokens ahead of time. With a bunch of tokens in a queue/bucket it's easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
 ### Design a Build Management service
