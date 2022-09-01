@@ -232,6 +232,9 @@ Always create health check url that can determine if node is healthy or not, bas
 2. L4 - DNS Based
 3. L7 - Application Based
 
+Sticky sessions - Will assign the same user request to the same node in order to maintain the session state on the node. 
+Ideally sticky session should be avoided, if the node goes down few users will experience outage. However in some cases sticky session will be easy to configure and setup.
+
 ### Load Balancer Routing Algorithms
 
 1. Round-robin - traffic distributed in round-robin fashion.
@@ -556,6 +559,15 @@ Instead of incrementing/decrementing a counter, check if it's possible to create
 {{% /notice %}}
 
 ### 4. Design a Build Management service
+
+
+## What not to ask in system design rounds?
+
+These are some questions that need existing product knowledge or awareness in the area.
+If candidate has worked on the internals of these then probably justifies the questions, otherwise there is no value it brings.
+
+1. Explain the internals of how load balancer works.
+2. Explain the internals of how database engine works.
 
 ## Youtube Channels
 
