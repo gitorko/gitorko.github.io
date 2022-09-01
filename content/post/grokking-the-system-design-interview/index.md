@@ -449,10 +449,7 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * HDFS
 * Zookeeper leader election quorum
 * Chunking file
-* Kafka, consumer group
-* NoSQL
 * Gateway
-* Proxy vs Reverse Proxy
 * Distributed tracing - Zipkin
 * Observability - wavefront, prometheus, nagios
 * Leader follower
@@ -466,7 +463,6 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * GitOps
 * Telemetry
 * Pub Sub vs Queue
-* Dirty Read vs Non-Repeatable Read vs Phantom Read
 * FAAS
 * Service Mesh
 * Block chain - distributed ledger
@@ -474,11 +470,9 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * Concurrent HashMap Internals
 * DDOS attack
 * Race conditions
-* Sticky Session
 * Disaster recovery
 * Auto scaling
 * Batch vs Stream data processing vs Micro Batch
-* RabbitMQ - fanout, direct, topic, header, default
 * Star vs Snow flake schema
 * Inverted indexing
 * Time Series Database
