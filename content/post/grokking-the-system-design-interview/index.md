@@ -80,6 +80,13 @@ You start by understanding the problem statement
 
 ### Distributed Transaction & Saga
 
+The best thing to do is completely avoid distributed transactions. As it makes the system complex to manage. However, if that is not possible.
+
+1. Two phase (prepare & commit) 
+2. Three phase commit (prepare, pre-commit & commit)
+
+![](distributed-transaction.png)
+
 [https://youtu.be/jGJT1FRYGcY](https://youtu.be/jGJT1FRYGcY)
 
 [https://youtu.be/S4FnmSeRpAY](https://youtu.be/S4FnmSeRpAY)
@@ -425,7 +432,6 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * HDFS
 * Zookeeper leader election quorum
 * Chunking file
-* Two phase (prepare & commit) & Three phase commit (prepare, pre-commit & commit)
 * Kafka, consumer group
 * NoSQL
 * Gateway
