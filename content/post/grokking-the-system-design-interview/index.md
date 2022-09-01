@@ -561,14 +561,6 @@ Instead of incrementing/decrementing a counter, check if it's possible to create
 ### 4. Design a Build Management service
 
 
-## What not to ask in system design rounds?
-
-These are some questions that need existing product knowledge or awareness in the area.
-If candidate has worked on the internals of these then probably justifies the questions, otherwise there is no value it brings.
-
-1. Explain the internals of how load balancer works.
-2. Explain the internals of how database engine works.
-
 ## Youtube Channels
 
 [ByteByteGo](https://www.youtube.com/c/ByteByteGo)
