@@ -165,12 +165,12 @@ Different places to cache
 
 ![](cache-strategy.png)
 
-## High Availability Deployment
+### High Availability Deployment
 
 1. Active-Active - Two nodes of the service running in parallel, loadbalancer will route traffic to both.
 2. Active-Passive - The primary and secondary service running in parallel, with primary serving all the requests. If primary fails loadbalancer will route traffic to secondary and designate it as primary.
 
-## CDN & Edge Servers
+### CDN & Edge Servers
 
 Content Delivery Network (CDN) reduce latency by keeping static content closer to the customer regions.
 Always remember to version your static content like css, images etc to help CDN differentiate between versions.
@@ -225,9 +225,21 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 
 ### Load Balancer
 
+Load balancer distributes traffic across multiple nodes ensuring high availability. 
+Always create health check url that can determine if node is healthy or not, based on this the load balancer decides if the node is up or down.
+
 1. L3 - IP Based
 2. L4 - DNS Based
 3. L7 - Application Based
+
+### Load Balancer Routing Algorithms
+
+1. Round-robin - traffic distributed in round-robin fashion.
+2. Weighted Round-robin - traffic distributed by weight, some servers may be able to process more load hence their weight is more compared to smaller configuration machines.
+3. Least Connections - traffic is sent to server with the fewest current connections to clients.
+4. Least Response Time - traffic is sent to server with the fastest response time.
+5. Least Bandwidth -  traffic is sent to server with the least Mbps of traffic.
+6. Hashing - traffic is sent to server based on a hash key. eg: client IP address hash, request URL hash.
 
 ### NoSQL vs Relational DB
 
