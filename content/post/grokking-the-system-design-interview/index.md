@@ -119,14 +119,17 @@ You start by understanding the problem statement
 
 ### Caching
 
-Caching though solves the problem of avoiding an expensive call, it does come with problems of its own like stale data, thundering herd etc.
-In a distributed system a distributed cache (read-write) comes with problems of its own, dont look at cache as a silver bullet to all problems.
+Caching improves performance your application, reduces latency, reduces load on the DB, reduces network cost, increases read throughput. 
+However, it does come with cost/problems of its own like cache invalidation, stale data, high churn if TTL is set wrong, thundering herd etc.
+In a distributed system a distributed cache (read-write) comes with problems of its own like consistency, node affinity etc. 
+Hence don't look at cache as a silver bullet to solve all problems.
 
 Different places to cache
 
-1. Client side caching
-2. Server side caching
-3. Proxy/Gateway side caching
+1. Client side caching - When the client or browser can cache some data to avoid the external call.
+2. Server side caching - Each server can cache some data locally.
+3. Global/Distributed caching - A centralized server/service to cache data.
+4. Proxy/Gateway side caching - Proxy or gateway servers cache some data so the request can be returned immediately without reachout to backend.
 
 ### Types of Cache
 
