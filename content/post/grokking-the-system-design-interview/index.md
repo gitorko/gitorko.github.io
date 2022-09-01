@@ -33,7 +33,7 @@ Deep design/LLD often starts with a specific module with a clear outcome that is
 
 Eg: Design a build system that builds the artifact when code is submitted, design a tiny url service etc.
 
-You start by understanding the problem statement
+The outcome of a design should be such that if handed to another developer, he should be able to implement it.
 
 ### 1. Functional requirements
 
