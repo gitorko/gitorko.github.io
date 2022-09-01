@@ -165,6 +165,21 @@ Different places to cache
 
 ![](cache-strategy.png)
 
+## High Availability Deployment
+
+1. Active-Active - Two nodes of the service running in parallel, loadbalancer will route traffic to both.
+2. Active-Passive - The primary and secondary service running in parallel, with primary serving all the requests. If primary fails loadbalancer will route traffic to secondary and designate it as primary.
+
+## CDN & Edge Servers
+
+Content Delivery Network (CDN) reduce latency by keeping static content closer to the customer regions.
+Always remember to version your static content like css, images etc to help CDN differentiate between versions.
+
+1. Push CDN - Developer pushes the static content to CDN
+2. Pull CDN - First request pulls the static content to the CDN
+
+Edge Servers run compute operations closer to the customer region, eg: Streaming, Gaming etc. 
+
 ### Message Broadcast
 
 ![](message-broadcast.png)
@@ -395,7 +410,6 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * HDFS
 * Zookeeper leader election quorum
 * Chunking file
-* CDN & Edge Servers
 * Two phase (prepare & commit) & Three phase commit (prepare, pre-commit & commit)
 * Kafka, consumer group
 * NoSQL
