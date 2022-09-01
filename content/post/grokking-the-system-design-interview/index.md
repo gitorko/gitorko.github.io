@@ -477,6 +477,8 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * Home pages or landing pages which are frequently hit perform better if they are static sites and on the CDN.
 * Even for user tailored home pages like Netflix, Hotstar etc, generate static sites per user and avoid actual backend calls as much as possible.
 
+![](shopping-application.png)
+
 {{% notice tip "Tip" %}}
 If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge Server, Cache etc.
 Look at client side caching as well if it means avoiding that backend call.
