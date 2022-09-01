@@ -220,7 +220,14 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 
 ### Rabbit MQ vs Kafka
 
-![](rabbit-vs-kafka.png)
+| RabbitMQ                             | Kafka                              |
+|--------------------------------------|------------------------------------|
+| Consumed event deleted, Less storage | All events stored, More storage    |
+| Queues are single threaded           | Can scale based on consumer groups |
+| Complex with more brokers            | Scales with more brokers           |
+| No events replay                     | Events can be read from any point  |
+| Ordering guaranteed                  | Ordering per partition             |
+| Push model                           | Push & Pull model                  |
 
 [https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case](https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case)
 
