@@ -133,11 +133,14 @@ Different places to cache
 2. Temporal cache
 3. Distributed cache
 
-### Cache Eviction Algorithms
+### Cache Eviction Policies
 
-1. LRU (Least Recently Used) - replaces element that has not been used for long time.
-2. FIFO (First in First Out)
-3. LFU (Least Frequently Used) - replaces least frequently used page.
+1. FIFO (First In First Out) - replaces first element that was added to the cache.
+2. LIFO (Last In First Out) - replaces the last element that was added to the cache.
+3. LRU (Least Recently Used) - replaces element that has not been used for long time.
+4. MRU (Most Recently Used)- replaces most recently used elements.
+5. LFU (Least Frequently Used) - replaces least frequently used elements based on count.
+6. RR (Random Replacement) - replaces elements randomly.
 
 ### Caching Strategy
 
