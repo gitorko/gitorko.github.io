@@ -82,8 +82,8 @@ You start by understanding the problem statement
 
 The best thing to do is completely avoid distributed transactions. As it makes the system complex to manage. However, if that is not possible.
 
-1. Two phase (prepare & commit) 
-2. Three phase commit (prepare, pre-commit & commit)
+1. Two phase (prepare & commit) - Blocking protocol as it waits for the prepare-ack for prepare phase.
+2. Three phase commit (prepare, pre-commit & commit) - Non-Blocking protocol as first phase gathers votes and only the second phase blocks with timeout.
 
 
 ![](distributed-transaction.png)
