@@ -30,6 +30,7 @@ You often end up explaining the following
 4. Decision Trees
 5. Use-cases
 6. Database Schema & ER diagrams
+7. API
 
 Prior knowledge of the product is required to some extent. If the candidate is asked to design `management system for a particle accelerator` without knowledge of the system it becomes very difficult.
 
@@ -146,6 +147,11 @@ Problems with saga
 
 1. Read scaling - All writes goto one db node, which gets replicated to all read node db.
 2. Write scaling - Sharding
+
+### Read vs Writes
+
+How you store and retrieve data often depends on system, if its read heavy or write heavy.
+Read heavy is easy to scale via replication.
 
 ### Caching
 
@@ -463,7 +469,6 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 ### Others
 
-* Read vs write db, replication
 * HDFS
 * Zookeeper leader election quorum
 * Chunking file
