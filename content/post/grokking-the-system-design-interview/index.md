@@ -18,14 +18,20 @@ System design interview discussions are of two types
 
 ## Wide design (HLD - High Level Design)
 
-Wide design/HLD often is very open ended and broad without any specifics.  
+Wide design/HLD often is very open-ended and broad without any specifics.  
 
 Eg: Design Food Delivery App, Design Uber, Design Twitter.
 
-You often end up explaining various components, class diagrams, sequence diagrams etc. 
-There is literally no end to the amount of components/class diagrams/use case you can create as long as you can keep pulling a :rabbit: (idea) out of your :tophat: (head).
-If the candidate is asked to design `management system for a particle accelerator` without knowledge of the system it becomes very difficult, hence these discussions dont add value for a technical system design. They are more suited if the position is that of a Product Manager.
-What often happens is discussions start at a high level and then dive into a particular feature within the high level design.
+You often end up explaining the following
+
+1. Component diagrams
+2. Class diagrams
+3. Sequence diagrams & Flow Diagrams
+4. Decision Trees
+5. Use-cases
+6. Database Schema & ER diagrams
+
+Prior knowledge of the product is required to some extent. If the candidate is asked to design `management system for a particle accelerator` without knowledge of the system it becomes very difficult.
 
 ## Deep design (LLD - Low Level Design)
 
