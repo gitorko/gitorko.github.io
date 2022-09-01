@@ -25,6 +25,7 @@ Eg: Design Food Delivery App, Design Uber, Design Twitter.
 You often end up explaining various components, class diagrams, sequence diagrams etc. 
 There is literally no end to the amount of components/class diagrams/use case you can create as long as you can keep pulling a :rabbit: (idea) out of your :tophat: (head).
 If the candidate is asked to design `management system for a particle accelerator` there will be no :rabbit: in their :tophat:, hence these discussions dont add value for a technical system design. They are more suited if the position is that of a Product Manager.
+What often happens is discussions start at a high level and then narrow down into a particular feature within the design.
 
 ## Deep design (LLD - Low Level Design)
 
@@ -132,6 +133,15 @@ Different places to cache
 1. Spatial cache
 2. Temporal cache
 3. Distributed cache
+
+### Cache Store
+
+![](cache-store.png)
+
+1. On-Heap Store - stores cache entries in Java heap memory
+2. Off-Heap Store -  primary memory (RAM) to store cache entries, cache entries will be moved to the on-heap memory automatically before they can be used.
+3. Disk Store - uses a hard disk to store cache entries. SSD type disk would perform better.
+4. Clustered Store - stores cache entries on the remote server
 
 ### Cache Eviction Policies
 
@@ -516,7 +526,7 @@ If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 5
 Instead of incrementing/decrementing a counter, check if it's possible to create tokens ahead of time. With a bunch of tokens in a queue/bucket it's easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
-### Design a Build Management service
+### 4. Design a Build Management service
 
 ## Youtube Channels
 

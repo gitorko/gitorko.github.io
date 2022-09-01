@@ -23,7 +23,7 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 
 ### Types of store
 
-![](img01.png)
+![](cache-store.png)
 
 1. On-Heap Store - stores cache entries in Java heap memory
 2. Off-Heap Store -  primary memory (RAM) to store cache entries, cache entries will be moved to the on-heap memory automatically before they can be used.
