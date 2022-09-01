@@ -78,18 +78,35 @@ You start by understanding the problem statement
 1. Fork/Join framework uses work-stealing algorithm.
 2. Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads.
 
-### Distributed Transaction & Saga
+### Distributed Transaction
 
 The best thing to do is completely avoid distributed transactions. As it makes the system complex to manage. However, if that is not possible.
 
 1. Two phase (prepare & commit) 
 2. Three phase commit (prepare, pre-commit & commit)
 
+
 ![](distributed-transaction.png)
 
 [https://youtu.be/jGJT1FRYGcY](https://youtu.be/jGJT1FRYGcY)
 
 [https://youtu.be/S4FnmSeRpAY](https://youtu.be/S4FnmSeRpAY)
+
+### Saga
+
+A saga is a sequence of local transactions.
+Each local transaction updates the database and publishes a message or event to trigger the next local transaction in the saga.
+If a local transaction fails because it violates a business rule then the saga executes a series of compensating transactions that undo the changes that were made by the preceding local transactions.
+
+The 2 approaches
+
+1. Choreography - Each local transaction publishes domain events that trigger local transactions in other services.
+2. Orchestration - An orchestrator tells the participants what local transactions to execute.
+
+Problems with saga
+
+1. Hard to debug & test.
+2. Risk of cyclic dependency between saga participants.
 
 ### Isolation Levels
 
