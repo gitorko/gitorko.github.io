@@ -71,23 +71,28 @@ The outcome of a design should be such that if handed to another developer, he s
 
 ## Fundamentals
 
-### Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket
+### 1. Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket
 
-| Websocket                 | Server Send Event        | Long-Poll                  |
-|---------------------------|--------------------------|----------------------------|
-| Full-duplex               | Half-duplex              | Half-duplex                |
-| Bidirectional             | Unidirectional           | Unidirectional             |
-| Text + Binary             | Text                     | Text + Binary              |
-| 1024 parallel connections | 6-8 parallel connections | Based on threads available |
+1. Short-Polling - Client continuously asks the server for new data.
+2. Long-Polling - Client continuously asks the server for new data, but server waits for a few seconds and if data becomes available by then it will return the data.
+3. Websocket - HTTP connection is upgraded to bidirectional connection.
+4. Server Sent Events - HTTP connection is kept open by the server and data is pushed to client continuously over it.
+
+| Websocket                 | Server Sent Event          | Long-Poll                  |
+|---------------------------|----------------------------|----------------------------|
+| Full-duplex,Bidirectional | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
+| Server Push & Client Send | Server Push                | Client Pull                |
+| Text + Binary             | Text                       | Text + Binary              |
+| 1024 connections          | 6-8 parallel per domain    | Based on threads available |
 
 [https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
-### Fork Join
+### 2. Fork Join
 
 1. Fork/Join framework uses work-stealing algorithm.
 2. Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads.
 
-### Distributed Transaction
+### 3. Distributed Transaction
 
 The best thing to do is completely avoid distributed transactions. As it makes the system complex to manage. However, if that is not possible.
 
@@ -101,7 +106,7 @@ The best thing to do is completely avoid distributed transactions. As it makes t
 
 [https://youtu.be/S4FnmSeRpAY](https://youtu.be/S4FnmSeRpAY)
 
-### Saga
+### 4. Saga
 
 A saga is a sequence of local transactions.
 Each local transaction updates the database and publishes a message or event to trigger the next local transaction in the saga.
@@ -117,7 +122,7 @@ Problems with saga
 1. Hard to debug & test.
 2. Risk of cyclic dependency between saga participants.
 
-### Isolation Levels
+### 5. Isolation Levels
 
 | ISOLATION-LEVEL   | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
 |-------------------|------------|---------------------|--------------|
@@ -126,36 +131,40 @@ Problems with saga
 | READ_REPEATABLE   | NO         | NO                  | YES          |
 | READ_SERIALIZABLE | NO         | NO                  | NO           |
 
-### Indexing
+### 6. Indexing
+
+1. Clustered index - A special type of index that reorders the way records in the table are physically stored. Therefore, table can have only one clustered index. The leaf nodes of a clustered index contain the data pages. eg: primary key
+2. Non-clustered index - A special type of index in which the logical order of the index does not match the physical stored order of the rows on disk. The leaf node of a non-clustered index does not consist of the data pages. Instead, the leaf nodes contain index rows. eg: unique constraints
+
+| Clustered Index                         | Non-Clustered Index                         |
+|-----------------------------------------|---------------------------------------------|
+| Faster                                  | Slower                                      |
+| Requires less memory                    | Requires more memory                        |
+| Index leaf node is the main data        | Index leaf node is pointer to  data         |
+| Table can have only one clustered index | Table can have multiple non-clustered index |
+
+Each new index will increase the time it takes to write new records.
+
 
 [https://youtu.be/-qNSXK7s7_w](https://youtu.be/-qNSXK7s7_w)
 
-![](clustered_noncluster_index.png)
-
-### Vertical Scaling vs Horizontal Scaling
+### 7. Vertical Scaling vs Horizontal Scaling
 
 ![](scaling.png)
 
-### Datacenter
+### 8. Datacenter
 
 ![](datacenter.png)
 
-### Loadbalancer Types
-
-1. Software based
-2. Hardware based
-
-### Database Scaling
+### 9. Database Scaling
 
 1. Read scaling - All writes goto one db node, which gets replicated to all read node db.
 2. Write scaling - Sharding
 
-### Read vs Writes
-
 How you store and retrieve data often depends on system, if its read heavy or write heavy.
 Read heavy is easy to scale via replication.
 
-### Caching
+### 10. Caching
 
 Caching improves performance your application, reduces latency, reduces load on the DB, reduces network cost, increases read throughput. 
 However, it does come with cost/problems of its own like cache invalidation, stale data, high churn if TTL is set wrong, thundering herd etc.
@@ -169,13 +178,13 @@ Different places to cache
 3. Global/Distributed caching - A centralized server/service to cache data.
 4. Proxy/Gateway side caching - Proxy or gateway servers cache some data so the request can be returned immediately without reachout to backend.
 
-### Types of Cache
+### 11. Types of Cache
 
 1. Spatial cache
 2. Temporal cache
 3. Distributed cache
 
-### Cache Store
+### 12. Cache Store
 
 ![](cache-store.png)
 
@@ -184,7 +193,7 @@ Different places to cache
 3. Disk Store - uses a hard disk to store cache entries. SSD type disk would perform better.
 4. Clustered Store - stores cache entries on the remote server
 
-### Cache Eviction Policies
+### 13. Cache Eviction Policies
 
 1. FIFO (First In First Out) - replaces first element that was added to the cache.
 2. LIFO (Last In First Out) - replaces the last element that was added to the cache.
@@ -193,7 +202,7 @@ Different places to cache
 5. LFU (Least Frequently Used) - replaces least frequently used elements based on count.
 6. RR (Random Replacement) - replaces elements randomly.
 
-### Caching Strategy
+### 14. Caching Strategy
 
 1. Read-Cache-aside - Application queries the cache. If the data is found, it returns the data directly. If not it fetches the data from the SoR, stores it into the cache, and then returns.
 2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and returns.
@@ -203,12 +212,12 @@ Different places to cache
 
 ![](cache-strategy.png)
 
-### High Availability Deployment
+### 15. High Availability Deployment
 
 1. Active-Active - Two nodes of the service running in parallel, loadbalancer will route traffic to both.
 2. Active-Passive - The primary and secondary service running in parallel, with primary serving all the requests. If primary fails loadbalancer will route traffic to secondary and designate it as primary.
 
-### CDN & Edge Servers
+### 16. CDN & Edge Servers
 
 Content Delivery Network (CDN) reduce latency by keeping static content closer to the customer regions.
 Always remember to version your static content like css, images etc to help CDN differentiate between versions.
@@ -218,21 +227,21 @@ Always remember to version your static content like css, images etc to help CDN 
 
 Edge Servers run compute operations closer to the customer region, eg: Streaming, Gaming etc. 
 
-### Message Broadcast
+### 17. Message Broadcast
 
 ![](message-broadcast.png)
 
-### Kafka
+### 18. Kafka
 
 [https://youtu.be/Cie5v59mrTg](https://youtu.be/Cie5v59mrTg)
 
-### Rabbit MQ
+### 19. Rabbit MQ
 
 ![](rabbit-mq.png)
 
 [https://youtu.be/O1PgqUqZKTA](https://youtu.be/O1PgqUqZKTA)
 
-### Rabbit MQ vs Kafka
+### 20. Rabbit MQ vs Kafka
 
 | RabbitMQ                             | Kafka                              |
 |--------------------------------------|------------------------------------|
@@ -247,22 +256,25 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 
 [https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/](https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/)
 
-### Rabbit MQ Streams
+### 21. Rabbit MQ Streams
 
 [https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview](https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview)
 
-### JVM Memory & Garbage collectors
+### 22. JVM Memory & Garbage collectors
 
 1. Minor GC
 2. Major GC
 
 ![](jvm-memory.png)
 
-### Proxy vs Reverse-Proxy
+### 23. Proxy vs Reverse-Proxy
 
 ![](proxy.png)
 
-### Load Balancer
+### 24. Load Balancer
+
+1. Software based
+2. Hardware based
 
 Load balancer distributes traffic across multiple nodes ensuring high availability. 
 Always create health check url that can determine if node is healthy or not, based on this the load balancer decides if the node is up or down.
@@ -274,7 +286,7 @@ Always create health check url that can determine if node is healthy or not, bas
 Sticky sessions - Will assign the same user request to the same node in order to maintain the session state on the node. 
 Ideally sticky session should be avoided, if the node goes down few users will experience outage. However in some cases sticky session will be easy to configure and setup.
 
-### Load Balancer Routing Algorithms
+### 25. Load Balancer Routing Algorithms
 
 1. Round-robin - traffic distributed in round-robin fashion.
 2. Weighted Round-robin - traffic distributed by weight, some servers may be able to process more load hence their weight is more compared to smaller configuration machines.
@@ -283,7 +295,7 @@ Ideally sticky session should be avoided, if the node goes down few users will e
 5. Least Bandwidth -  traffic is sent to server with the least Mbps of traffic.
 6. Hashing - traffic is sent to server based on a hash key. eg: client IP address hash, request URL hash.
 
-### NoSQL vs Relational DB
+### 26. NoSQL vs Relational DB
 
 | NoSQL                                                          | RDBMS                                     |
 |----------------------------------------------------------------|-------------------------------------------|
@@ -293,14 +305,14 @@ Ideally sticky session should be avoided, if the node goes down few users will e
 | BASE Principle of eventual consistency                         | Honor ACID properties                     |
 | Structure can be Key-Value pairs, Document, Graph, Wide column | Stricture is Table based                  |
 
-### CQRS - Command and Query Responsibility Segregation
+### 27. CQRS - Command and Query Responsibility Segregation
 
 Pattern that separates read and update operations for a data store.
 Implementing CQRS in your application can maximize its performance, scalability, and security
 
 ![](cqrs.png)
 
-### HTTP1 vs HTTP1.1 vs HTTP2 vs HTTP3 Protocol
+### 28. HTTP1 vs HTTP1.1 vs HTTP2 vs HTTP3 Protocol
 
 1. HTTP1 - one tcp connection per request
 2. HTTP1.1 - one tcp connection per request, keep alive connection so connection is not closed immediately.
@@ -311,17 +323,17 @@ Implementing CQRS in your application can maximize its performance, scalability,
 
 [https://youtu.be/a-sBfyiXysI](https://youtu.be/a-sBfyiXysI)
 
-### HTTPS
+### 29. HTTPS
 
 Asymmetric encryption vs symmetric encryption
 
 ![](working-https.png)
 
-### Thundering Herd Problem
+### 30. Thundering Herd Problem
 
 ![](thundering-herd.png)
 
-### Tsunami Traffic
+### 31. Tsunami Traffic
 
 1. Scaling up services takes time, Keep few services on standby if you anticipate heavy traffic.
 2. Configure auto-scaling based on key parameters.
@@ -330,36 +342,41 @@ Asymmetric encryption vs symmetric encryption
 5. Identify breaking point for each system.
 6. Plan for service denial via circuit breakers for new customers instead system wide outage for all customers.
 
-### Serverless / FAAS (Function As A Service)
+### 32. Serverless / FAAS (Function As A Service)
 
 1. Function is exposed as a service.
 2. Cost optimal, pay for only what you use.
 
-### Bloom filter
+### 33. Bloom filter
 
 1. To determine 'Member of set'
 2. No false negative but can give false positive
 3. Less memory used
 4. Probabilistic algorithm
 
-### Comp_Min Sketch
+### 34. Count Min Sketch
 
-1. Count frequency of events
-2. Uses less memory
-3. Probabilistic algorithm
+Count frequency of event in streaming data, uses multiple hash to map frequency on to a matrix. Uses less space.
+Is some cases it can over count due to hash collision but never under-count the events.
 
-### BitMap
+1. Count frequency of events, range query, total, percentile.
+2. Uses less memory.
+3. Probabilistic algorithm.
+
+[https://youtu.be/ibxXO-b14j4](https://youtu.be/ibxXO-b14j4)
+
+### 35. BitMap
 
 1. Bit Array, Uses less memory
 2. Each bit holds value
 3. Using AND / OR operation can merge many bitmaps
 
-### Contention
+### 36. Contention
 
 1. Avoid locks if you want to scale, as they cause contention around shared resources
 2. Do pre-work instead of on-demand if it avoids contention. Eg: Issue 1 Billion tickets, instead of updating a row in DB with locks/syncronization, load a queue with all 1 Billion tickets and users can pick from queue.
 
-### Paxos
+### 37. Paxos
 
 1. Consensus over distribute system
 2. Leader election
@@ -368,13 +385,13 @@ Asymmetric encryption vs symmetric encryption
 
 [https://youtu.be/s8JqcZtvnsM](https://youtu.be/s8JqcZtvnsM)
 
-### CAP Theorem
+### 38. CAP Theorem
 
 ![](cap-theorem.png)
 
 [https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
 
-### Distributed System
+### 39. Distributed System
 
 Things to consider while designing distributed system
 
@@ -392,22 +409,22 @@ Things to consider while designing distributed system
 12. Fail-fast - Prefer to fail fast than deal with slow latency, as it can cascade the effect in upstream services.
 13. Chaos Monkey - Randomly turn off systems to ensure system is fault tolerant.
 
-### ACID
+### 40. ACID
 
 1. Atomicity - All changes to data are performed as if they are a single operation
 2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
 3. Isolation - The intermediate state of a transaction is not visible to other transactions.
 4. Durability - Data persisted survives even if system restarted.
 
-### Partition vs Sharding
+### 41. Partition vs Sharding
 
-### Horizontal vs Vertical Partition
+### 42. Horizontal vs Vertical Partition
 
-### Bulkhead pattern
+### 43. Bulkhead pattern
 
 [https://youtu.be/R2FT5edyKOg](https://youtu.be/R2FT5edyKOg)
 
-### Consistent Hashing
+### 44. Consistent Hashing
 
 Nodes keep dying in a distributed system. To scale new nodes can be added as well. Consistent hashing lets you distribute traffic among the nodes uniformly.
 
@@ -425,7 +442,7 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 [https://youtu.be/UF9Iqmg94tk](https://youtu.be/UF9Iqmg94tk)
 
-### Rate limit
+### 45. Rate limit
 
 1. Token Bucket - Burst - Fixed token are added to bucket, bucket is always kept in full state. Can lead to burst of traffic.
 2. Token Bucket - Sustain - Constant token are added to bucket only if previous token are consumed. Smooth traffic.
@@ -442,28 +459,28 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 [https://youtu.be/FU4WlwfS3G0](https://youtu.be/FU4WlwfS3G0)
 
-### Push vs Pull
+### 46. Push vs Pull
 
 1. RabbitMQ is push based, Kafka is pull based
 2. Push is expensive & real-time
 3. Pull is cheap but not real-time
 
-### NIO
+### 47. NIO
 
 1. Non-Blocking IO helps systems scale with fewer resources.
 2. The complete source to destination flow has to be non-blocking.
 
-### Multi-Tenancy
+### 48. Multi-Tenancy
 
 1. Multiple customers share same resource but customer are not aware of each other and instances are isolated.
 2. Kubernetes namespaces
 
-### Authorization vs Authentication
+### 49. Authorization vs Authentication
 
 1. Authentication - Is the user allowed to use the system?
 2. Authorization - Does the user have the right role to execute that operation?
 
-### Others
+### 50. Others
 
 * HDFS
 * Zookeeper leader election quorum
@@ -508,6 +525,9 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * Even for user tailored home pages like Netflix, Hotstar etc, generate static sites per user and avoid actual backend calls as much as possible.
 
 ![](shopping-application.png)
+
+* There are 2 services hence to we use a queue to rollback the transaction in case of any failures. i.e. Saga pattern
+* We use a DB to store the state in case the service go down they can recover from that point.
 
 {{% notice tip "Tip" %}}
 If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge Server, Cache etc.
