@@ -71,14 +71,16 @@ The outcome of a design should be such that if handed to another developer, he s
 
 ## Fundamentals
 
-### Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket vs HTTP/2
+### Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket
 
-| Websocket                 | Http/2                   | Server Send Event        | Long-Poll                  |
-|---------------------------|--------------------------|--------------------------|----------------------------|
-| Full-duplex               | Half-duplex              | Half-duplex              | Half-duplex                |
-| Bidirectional             | Unidirectional           | Unidirectional           | Unidirectional             |
-| Text + Binary             | Text + Binary            | Text                     | Text + Binary              |
-| 1024 parallel connections | 6-8 parallel connections | 6-8 parallel connections | Based on threads available |
+| Websocket                 | Server Send Event        | Long-Poll                  |
+|---------------------------|--------------------------|----------------------------|
+| Full-duplex               | Half-duplex              | Half-duplex                |
+| Bidirectional             | Unidirectional           | Unidirectional             |
+| Text + Binary             | Text                     | Text + Binary              |
+| 1024 parallel connections | 6-8 parallel connections | Based on threads available |
+
+[https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
 ### Fork Join
 
@@ -248,12 +250,6 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 ### Rabbit MQ Streams
 
 [https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview](https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview)
-
-### Long polling vs Short polling vs Websocket
-
-[https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
-
-![](polling-sse-websocket.png)
 
 ### JVM Memory & Garbage collectors
 
