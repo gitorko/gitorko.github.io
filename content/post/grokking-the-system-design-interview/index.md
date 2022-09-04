@@ -349,10 +349,17 @@ Asymmetric encryption vs symmetric encryption
 
 ### 33. Bloom filter
 
+Determines if given element is present in a set or not (member of set). In some cases it can give false positive, but will never give a false negative. 
+More hash functions you use lesser the collisions, wider the bit array lesser the collisions.
+
 1. To determine 'Member of set'
 2. No false negative but can give false positive
-3. Less memory used
+3. Less memory used, entire bloom filter result can be sent over wire.
 4. Probabilistic algorithm
+
+![](bloom-filter.png)
+
+[https://youtu.be/Bay3X9PAX5k](https://youtu.be/Bay3X9PAX5k)
 
 ### 34. Count Min Sketch
 
