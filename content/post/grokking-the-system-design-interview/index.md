@@ -514,7 +514,19 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 1. Authentication - Is the user allowed to use the system?
 2. Authorization - Does the user have the right role to execute that operation?
 
-### 51. Others
+### 51. Service Mesh
+
+1. Service Discovery
+2. Load Balancing
+3. Fault Tolerance
+4. Distributed Tracing
+5. Telemetry
+6. Security
+
+Service-to-service communication is essential in a distributed application but routing this communication, both within and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables managed, observable, and secure communication between individual services. It works with a service discovery protocol to detect services. Istio and envoy are some of the most commonly used service mesh technologies.
+
+
+### 52. Others
 
 * HDFS
 * Zookeeper leader election quorum
@@ -534,7 +546,6 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 * Telemetry
 * Pub Sub vs Queue
 * FAAS
-* Service Mesh
 * Block chain - distributed ledger
 * Indexing - Btree, B+tree, BitMap
 * Concurrent HashMap Internals
@@ -650,8 +661,24 @@ If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 5
 Instead of incrementing/decrementing a counter, check if it's possible to create tokens ahead of time. With a bunch of tokens in a queue/bucket it's easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
-### 4. Design a Build Management service
+### 4. Design a Code Deployment System
 
+Build the code when someone commits code to a branch and deploy it to a machine.
+
+* Builds can take long time to complete hence split the task into 2, build and deploy.
+* Writing the records to DB would take more time compared to pushing to queue and polling the DB would need retry mechanism without wasting cpu cycles, hence using RabbitMQ solves these problems.
+* Builds can take time, so we dont want the manager service constantly polling workers. Once the worker completes it will push an event that will be consumed by manager service to continue the deployment flow.
+* If workers die during the build then heartbeat will not be updated and a scheduler can restart the job.
+
+![](code-deployment.png)
+
+{{% notice tip "Tip" %}}
+Split the tasks into sub-tasks so that they can be restarted in case of failure.
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+Asynchronous jobs can be queued and processed. 
+{{% /notice %}}
 
 ## Youtube Channels
 
