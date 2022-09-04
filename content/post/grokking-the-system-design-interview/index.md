@@ -436,7 +436,11 @@ Things to consider while designing distributed system
 
 [https://youtu.be/R2FT5edyKOg](https://youtu.be/R2FT5edyKOg)
 
-### 44. Consistent Hashing
+### 44. Circuit Breaker
+
+[https://youtu.be/ADHcBxEXvFA](https://youtu.be/ADHcBxEXvFA)
+
+### 45. Consistent Hashing
 
 Nodes keep dying in a distributed system. To scale new nodes can be added as well. Consistent hashing lets you distribute traffic among the nodes uniformly.
 
@@ -454,7 +458,7 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 [https://youtu.be/UF9Iqmg94tk](https://youtu.be/UF9Iqmg94tk)
 
-### 45. Rate limit
+### 46. Rate limit
 
 1. Token Bucket - Burst - Fixed token are added to bucket, bucket is always kept in full state. Can lead to burst of traffic.
 2. Token Bucket - Sustain - Constant token are added to bucket only if previous token are consumed. Smooth traffic.
@@ -471,28 +475,28 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 [https://youtu.be/FU4WlwfS3G0](https://youtu.be/FU4WlwfS3G0)
 
-### 46. Push vs Pull
+### 47. Push vs Pull
 
 1. RabbitMQ is push based, Kafka is pull based
 2. Push is expensive & real-time
 3. Pull is cheap but not real-time
 
-### 47. NIO
+### 48. NIO
 
 1. Non-Blocking IO helps systems scale with fewer resources.
 2. The complete source to destination flow has to be non-blocking.
 
-### 48. Multi-Tenancy
+### 49. Multi-Tenancy
 
 1. Multiple customers share same resource but customer are not aware of each other and instances are isolated.
 2. Kubernetes namespaces
 
-### 49. Authorization vs Authentication
+### 50. Authorization vs Authentication
 
 1. Authentication - Is the user allowed to use the system?
 2. Authorization - Does the user have the right role to execute that operation?
 
-### 50. Others
+### 51. Others
 
 * HDFS
 * Zookeeper leader election quorum
