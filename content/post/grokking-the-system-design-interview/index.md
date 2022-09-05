@@ -525,7 +525,7 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 Service-to-service communication is essential in a distributed application but routing this communication, both within and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables managed, observable, and secure communication between individual services. It works with a service discovery protocol to detect services. Istio and envoy are some of the most commonly used service mesh technologies.
 
-### 52. Deployment types
+### 52. Deployment Strategy
 
 Ensure that database schema works with both new version and old version of the service.
 Provide health check url to determine if node is healthy.
