@@ -535,7 +535,7 @@ Always ensure that database schema works with both new version and old version o
 
 ![](deployment-model.png)
 
-### 52. Others
+### Others
 
 * HDFS
 * Zookeeper leader election quorum
