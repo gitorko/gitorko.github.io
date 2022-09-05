@@ -525,6 +525,15 @@ Eg: if there are 60K user requests and there are 6 servers each server can distr
 
 Service-to-service communication is essential in a distributed application but routing this communication, both within and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables managed, observable, and secure communication between individual services. It works with a service discovery protocol to detect services. Istio and envoy are some of the most commonly used service mesh technologies.
 
+### 52. Deployment types
+
+Always ensure that database schema works with both new version and old version of the service.
+
+1. Rolling - Services are upgraded one after the other.
+2. Blue Green - Few services are upgraded and test teams validate and signoff before all services are upgraded.
+3. Canary - Few services are upgraded and part of the traffic hits these new instances.
+
+![](deployment-model.png)
 
 ### 52. Others
 
@@ -541,7 +550,6 @@ Service-to-service communication is essential in a distributed application but r
 * Map Reduce
 * CAS - compare and swap
 * Client side load balancing
-* Canary vs Rolling vs Blue Green deployment
 * GitOps
 * Telemetry
 * Pub Sub vs Queue
