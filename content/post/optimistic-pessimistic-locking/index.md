@@ -20,8 +20,8 @@ Lets say we have a ticket booking service with a table holding all the free tick
 
 Hibernate provides two approaches to handle concurrency at database level:
 
-1. Pessimistic Approach - The lock is now applied by the database at row level or table level. If the lock is a WRITE lock it prevents other threads from modifying the data. 
-2. Optimistic Approach - A version field is introduced to the database table, The JPA ensures that version check is done before saving data. Scalability is high with this approach.
+1. Pessimistic Locking - The lock is now applied by the database at row level or table level. If the lock is a WRITE lock it prevents other threads from modifying the data. eg: SELECT * from TABLE where id = 1 for update;
+2. Optimistic Locking - A version field is introduced to the database table, The JPA ensures that version check is done before saving data, if the version has changed the update will throw Error. Scalability is high with this approach.
 
 ### Pessimistic locking
 

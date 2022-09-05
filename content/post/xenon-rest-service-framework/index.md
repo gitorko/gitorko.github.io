@@ -197,7 +197,7 @@ public class BookStoreService extends StatefulService {
 
 Add this line to the App.java start method & Run the program
 
-```java
+```
 super.startFactory(new BookStoreService());
 ```
 
@@ -235,7 +235,9 @@ Response:
   "documentExpirationTimeMicros": 0,
   "documentOwner": "host:e413831a-3247-4dfb-aecf-24d319591a84"
 }
+```
 
+```json
 {
   "bookName": "book1",
   "bookPrice": 2.0,
@@ -263,20 +265,20 @@ What we wrote above is a stateful rest service. A stateful service invovles data
 The replication factor tells xenon how many nodes the stateful service needs to be replicated over. Default is all. Quroum tells xenon on how many nodes the persist operation should be successful before considering something as persisted. If you have defined quorum of 3 nodes and 1 node fails then all future write requests to will fail as there arent enough members to validate the quorum. Default is majority quorum [n/2+1] where n is replication factor. On a 3 node with replication factor all, quorum is [3/2+1] = 2 which means 2 nodes have to agree for a write to be committed.
 
 
-|ServiceOption                    | Description                                                                           |
-|---------------------------------|---------------------------------------------------------------------------------------|
-|PERSISTENCE                      | persists data                                                                         |
-|REPLICATION                      | replicates data across nodes                                                          |
-|INSTRUMENTATION                  | provides stats about service                                                          |
-|OWNER_SELECTION                  | takes ownership of storing data                                                       |
+| ServiceOption                    | Description                                                                            |
+|:---------------------------------|:---------------------------------------------------------------------------------------|
+| PERSISTENCE                      | persists data                                                                          |
+| REPLICATION                      | replicates data across nodes                                                           |
+| INSTRUMENTATION                  | provides stats about service                                                           |
+| OWNER_SELECTION                  | takes ownership of storing data                                                        |
 
-|PropertyUsageOption Annotation   | Description                                                                           |
-|---------------------------------|---------------------------------------------------------------------------------------|
-|ID                               | id field                                                                              |
-|AUTO_MERGE_IF_NOT_NULL           | helper method will merge current state with state supplied in body in case of updates |
-|OPTIONAL                         | not optional                                                                          |
-|REQUIRED                         | mandatory field                                                                       |
-|SERVICE_USE                      | used internally                                                                       |
+| PropertyUsageOption Annotation   | Description                                                                            |
+|:---------------------------------|:---------------------------------------------------------------------------------------|
+| ID                               | id field                                                                               |
+| AUTO_MERGE_IF_NOT_NULL           | helper method will merge current state with state supplied in body in case of updates  |
+| OPTIONAL                         | not optional                                                                           |
+| REQUIRED                         | mandatory field                                                                        |
+| SERVICE_USE                      | used internally                                                                        |
 
 
 Now let us deploy our service in a distributed environment. Delete the test folder as we wont be covering it here. Run the command

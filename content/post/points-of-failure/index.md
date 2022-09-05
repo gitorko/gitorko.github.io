@@ -53,6 +53,10 @@ A new team member has updated a function and introduced a bug and the function i
 
 If a function takes too long to complete it will block the tomcat thread which will further degrade the system performance. Use Resilience4j to explicitly timeout long running jobs, this way runaway functions cant impact your entire system.
 
+```
+@TimeLimiter(name = "service1-tl")
+```
+
 Spring also provides `spring.mvc.async.request-timeout` that you can explore to accomplish the same.
 
 {{% notice info "Note" %}}

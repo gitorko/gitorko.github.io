@@ -34,7 +34,7 @@ Realtime data fetch from server via bidirectional communication is one of the ke
 4. Server Sent Events - HTTP connection is kept open by the server and data is pushed to client continuously over it.
 
 | Websocket                 | Server Sent Event          | Long-Poll                  |
-|---------------------------|----------------------------|----------------------------|
+|:--------------------------|:---------------------------|:---------------------------|
 | Full-duplex,Bidirectional | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
 | Server Push & Client Send | Server Push                | Client Pull                |
 | Text + Binary             | Text                       | Text + Binary              |

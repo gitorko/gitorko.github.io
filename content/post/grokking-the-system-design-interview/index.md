@@ -79,7 +79,7 @@ The outcome of a design should be such that if handed to another developer, he s
 4. Server Sent Events - HTTP connection is kept open by the server and data is pushed to client continuously over it.
 
 | Websocket                 | Server Sent Event          | Long-Poll                  |
-|---------------------------|----------------------------|----------------------------|
+|:--------------------------|:---------------------------|:---------------------------|
 | Full-duplex,Bidirectional | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
 | Server Push & Client Send | Server Push                | Client Pull                |
 | Text + Binary             | Text                       | Text + Binary              |
@@ -87,10 +87,33 @@ The outcome of a design should be such that if handed to another developer, he s
 
 [https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
-### 2. Fork Join
+### 2. Fork Join Pool
 
-1. Fork/Join framework uses work-stealing algorithm.
-2. Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads.
+Fork Join is suited for tasks that create sub-tasks. Fork/Join framework uses work-stealing algorithm.
+Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads.
+Uses a deque (double ended queue), main thread picks task from the front of the queue, other threads steal tasks from the back of the queue.
+
+```java
+@RequiredArgsConstructor
+ class FibForkJoin extends RecursiveTask<Integer> {
+     final int n;
+
+     @Override
+     protected Integer compute() {
+         System.out.println("Current Thread: " + Thread.currentThread().getName() + " n = " + n);
+         if (n <= 1) {
+             return n;
+         }
+         FibForkJoin f1 = new FibForkJoin(n - 1);
+         f1.fork();
+         FibForkJoin f2 = new FibForkJoin(n - 2);
+         f2.fork();
+         return f1.join() + f2.join();
+     }
+ }
+```
+
+[https://youtu.be/5wgZYyvIVJk](https://youtu.be/5wgZYyvIVJk)
 
 ### 3. Distributed Transaction
 
@@ -98,7 +121,6 @@ The best thing to do is completely avoid distributed transactions. As it makes t
 
 1. Two phase (prepare & commit) - Blocking protocol as it waits for the prepare-ack for prepare phase.
 2. Three phase commit (prepare, pre-commit & commit) - Non-Blocking protocol as first phase gathers votes and only the second phase blocks with timeout.
-
 
 ![](distributed-transaction.png)
 
@@ -124,8 +146,54 @@ Problems with saga
 
 ### 5. Isolation Levels
 
+1. Dirty reads: read UNCOMMITED data from another transaction.
+2. Non-repeatable reads: read COMMITTED data from an UPDATE query from another transaction.
+3. Phantom reads: read COMMITTED data from an INSERT or DELETE query from another transaction.
+
+Dirty Read
+
+| NAME  | AGE |
+|:------|:----|
+| Bob   | 35  |
+
+| TRANSACTION T1                                 | TRANSACTION T2                                |
+|:-----------------------------------------------|:----------------------------------------------|
+| select age from table where name = 'Bob'; (35) |                                               |
+|                                                | update table set age = 40 where name = 'Bob'; |
+| select age from table where name = 'Bob'; (40) |                                               |
+|                                                | commit;                                       |
+
+Non-Repeatable Read
+
+| NAME  | AGE |
+|:------|:----|
+| Bob   | 35  |
+
+| TRANSACTION T1                                 | TRANSACTION T2                                |
+|:-----------------------------------------------|:----------------------------------------------|
+| select age from table where name = 'Bob'; (35) |                                               |
+|                                                | update table set age = 40 where name = 'Bob'; |
+|                                                | commit;                                       |
+| select age from table where name = 'Bob'; (40) |                                               |
+
+
+Phantom Read
+
+| NAME  | AGE  |
+|:------|:-----|
+| Bob   | 35   |
+
+| TRANSACTION T1                                 | TRANSACTION T2                         |
+|:-----------------------------------------------|:---------------------------------------|
+| select count(*) from table where age = 35; (1) |                                        |
+|                                                | insert into table values ('jack', 35); |
+|                                                | commit;                                |
+| select count(*) from table where age = 35; (2) |                                        |
+
+To prevent the following read issues, isolation levels are provided
+
 | ISOLATION-LEVEL   | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
-|-------------------|------------|---------------------|--------------|
+|:------------------|:-----------|:--------------------|:-------------|
 | READ_UNCOMMITED   | YES        | YES                 | YES          |
 | READ_COMMITED     | NO         | YES                 | YES          |
 | READ_REPEATABLE   | NO         | NO                  | YES          |
@@ -137,14 +205,26 @@ Problems with saga
 2. Non-clustered index - A special type of index in which the logical order of the index does not match the physical stored order of the rows on disk. The leaf node of a non-clustered index does not consist of the data pages. Instead, the leaf nodes contain index rows. eg: unique constraints
 
 | Clustered Index                         | Non-Clustered Index                         |
-|-----------------------------------------|---------------------------------------------|
+|:----------------------------------------|:--------------------------------------------|
 | Faster                                  | Slower                                      |
 | Requires less memory                    | Requires more memory                        |
 | Index leaf node is the main data        | Index leaf node is pointer to  data         |
 | Table can have only one clustered index | Table can have multiple non-clustered index |
 
-Each new index will increase the time it takes to write new records.
+1. Each new index will increase the time it takes to write new records.
+2. The where clause should have columns which are indexed for the right index to be used.
+3. like clause doesnt use index column because it's a match query.
+4. hints - If you know that a query needs to be use a particular index you can provide hints, the db can choose to use it or not.
 
+Will explain the plan
+```
+EXPLAIN SELECT * FROM table;
+```
+
+Will execute and explain the plan
+```
+EXPLAIN ANALYZE * FROM table;
+```
 
 [https://youtu.be/-qNSXK7s7_w](https://youtu.be/-qNSXK7s7_w)
 
@@ -156,13 +236,23 @@ Each new index will increase the time it takes to write new records.
 
 ![](datacenter.png)
 
-### 9. Database Scaling
+### 9. Distributed System
 
-1. Read scaling - All writes goto one db node, which gets replicated to all read node db.
-2. Write scaling - Sharding
+Things to consider while designing distributed system
 
-How you store and retrieve data often depends on system, if its read heavy or write heavy.
-Read heavy is easy to scale via replication.
+1. Fault Tolerance & Retry - Always assume that things will fail and plan for it. Eg: Network failures, Disk failures
+2. Circuit Breaker Pattern - Instead of throwing error page handle service down gracefully.
+3. Service Discovery - All services register themselves.
+4. Observability - System is actively monitored.
+5. Fail-Over - Stand up server go live when primary servers dies.
+6. Throughput - The number of requests the system can process.
+7. Latency - Time taken to process the requests.
+8. Rate Limit - Restrict overuse of services by single or many users.
+9. Caching - Caching speeds up lookup however can bring in-consistency among caches.
+10. Bulk head pattern - Failure in one system should not bring down the whole system.
+11. Timeout - Ensure proper connection timeouts are set so that slow downstream service cant impact upstream service.
+12. Fail-fast - Prefer to fail fast than deal with slow latency, as it can cascade the effect in upstream services.
+13. Chaos Monkey - Randomly turn off systems to ensure system is fault-tolerant.
 
 ### 10. Caching
 
@@ -233,7 +323,27 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 
 ### 18. Kafka
 
+Kafka is a distributed & fault-tolerant,high throughput, scalable stream processing & messaging system.
+
+1. Kafka as publisher-subscriber messaging system.
+2. Kafka as queue (point-point) messaging system.
+3. Kafka as stream processing system that reacts to event in realtime.
+4. Kafka as a store for data.
+
+![](kafka-architecture.png)
+
+![](kafka-partition.png)
+
+Kafka provides high throughput because of the following
+
+1. Kafka scales because it works on append only mode, sequential disk write is faster than random access file write
+2. Kafka copies data from disk to network by ready with zero copy. OS buffer directly copies to NIC buffer.
+
+[https://gitorko.github.io/post/spring-apache-kafka/](https://gitorko.github.io/post/spring-apache-kafka/)
+
 [https://youtu.be/Cie5v59mrTg](https://youtu.be/Cie5v59mrTg)
+
+[https://youtu.be/UNUz1-msbOM](https://youtu.be/UNUz1-msbOM)
 
 ### 19. Rabbit MQ
 
@@ -244,7 +354,7 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 ### 20. Rabbit MQ vs Kafka
 
 | RabbitMQ                             | Kafka                              |
-|--------------------------------------|------------------------------------|
+|:-------------------------------------|:-----------------------------------|
 | Consumed event deleted, Less storage | All events stored, More storage    |
 | Queues are single threaded           | Can scale based on consumer groups |
 | Complex with more brokers            | Scales with more brokers           |
@@ -298,11 +408,11 @@ Ideally sticky session should be avoided, if the node goes down few users will e
 ### 26. NoSQL vs Relational DB
 
 | NoSQL                                                          | RDBMS                                     |
-|----------------------------------------------------------------|-------------------------------------------|
+|:---------------------------------------------------------------|:------------------------------------------|
 | Non-Relational DB                                              | Relational DB                             |
 | No predefined schema, handles un-structured data               | Require a schema, handles structured data |
 | Can scale across machines                                      | Cant scale across machines easily         |
-| BASE Principle of eventual consistency                         | Honor ACID properties                     |
+| BASE Principle of eventual consistency                         | ACID properties                           |
 | Structure can be Key-Value pairs, Document, Graph, Wide column | Stricture is Table based                  |
 
 ### 27. CQRS - Command and Query Responsibility Segregation
@@ -359,7 +469,15 @@ More hash functions you use lesser the collisions, wider the bit array lesser th
 
 ![](bloom-filter.png)
 
+Real world uses
+
+1. Malicious url detection via bloom filter.
+2. CDN cache url, cache page only if 2nd request.
+3. Weak password detection.
+4. Username already taken.
+
 [https://youtu.be/Bay3X9PAX5k](https://youtu.be/Bay3X9PAX5k)
+[https://youtu.be/V3pzxngeLqw](https://youtu.be/V3pzxngeLqw)
 
 ### 34. Count Min Sketch
 
@@ -383,6 +501,8 @@ In the example below hash generates numbers 0-6. Lesser hash functions will resu
 2. Each bit holds value
 3. Using AND / OR operation can merge many bitmaps
 
+Eg: Daily site visitor count.
+
 ### 36. Contention
 
 1. Avoid locks if you want to scale, as they cause contention around shared resources
@@ -403,34 +523,105 @@ In the example below hash generates numbers 0-6. Lesser hash functions will resu
 
 [https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
 
-### 39. Distributed System
-
-Things to consider while designing distributed system
-
-1. Fault Tolerance & Retry - Always assume that things will fail and plan for it. Eg: Network failures, Disk failures
-2. Circuit Breaker Pattern - Instead of throwing error page handle service down gracefully.
-3. Service Discovery - All services register themselves.
-4. Observability - System is actively monitored.
-5. Fail-Over - Stand up server go live when primary servers dies.
-6. Throughput - The number of requests the system can process.
-7. Latency - Time taken to process the requests.
-8. Rate Limit - Restrict overuse of services by single or many users.
-9. Caching - Caching speeds up lookup however can bring in-consistency among caches.
-10. Bulk head pattern - Failure in one system should not bring down the whole system.
-11. Timeout - Ensure proper connection timeouts are set so that slow downstream service cant impact upstream service.
-12. Fail-fast - Prefer to fail fast than deal with slow latency, as it can cascade the effect in upstream services.
-13. Chaos Monkey - Randomly turn off systems to ensure system is fault tolerant.
-
-### 40. ACID
+### 39. ACID
 
 1. Atomicity - All changes to data are performed as if they are a single operation
 2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
 3. Isolation - The intermediate state of a transaction is not visible to other transactions.
 4. Durability - Data persisted survives even if system restarted.
 
+### 40. Database Scaling
+
+1. Read scaling - Replication, All writes goto one db node, which gets replicated to all read node db. (eventual consistency)
+2. Write scaling - Sharding
+
+![](db-scaling.png)
+
 ### 41. Partition vs Sharding
 
-### 42. Horizontal vs Vertical Partition
+1. Partitioning - Breaks up data into many smaller blocks within the same database server. Client need not be aware of partitions. 
+   a. Horizontal partition - Based on key the data is split. eg: All records for 2021 get written to partition_2021, all 2022 records get written to partition_2022
+   b. Vertical partition - Based on some column the data is split. eg: All the image blob of a profile are stored in a different table.
+2. Sharding - Breaks up data into many smaller blocks in different database servers. Client must be aware of shards. Cant do transactions or joins across shards. If data distribution is not uniform then will have to re-balance shards.
+   eg: All customer records A-H go to database server1, all records I-Z go to database server2.
+
+
+When to Partition?
+1. When the table is too big for even indexes to search. Partition bring in improvement in query performance.
+2. When you need to purge old records as part of data management. Easier to drop partition than delete rows.
+3. Bulk loads and data deletion can be done much faster, as these operations can be performed on individual partitions.
+
+When to Shard?
+1. To scale out horizontally.
+2. When there are too many writes.
+3. When data is transaction isolated, and you don't need to join across shards.
+4. If data is uniformly distributed among shards then query load is also equally distributed.
+
+Sharding on postgres using postgres_fdw extension.
+
+```sql
+CREATE TABLE customer (
+ id BIGSERIAL NOT NULL,
+ name VARCHAR(255) NOT NULL,
+ city_id INT NOT NULL,
+ created_on TIMESTAMP NOT NULL,
+);
+
+CREATE EXTENSION postgres_fdw;
+GRANT USAGE ON FOREIGN DATA WRAPPER postgres_fdw to app_user;
+CREATE SERVER shard02 FOREIGN DATA WRAPPER postgres_fdw
+    OPTIONS (dbname 'postgres', host 'shard02', port '5432');
+CREATE USER MAPPING for app_user SERVER shard02 OPTIONS (user 'app_username', password 'app_password');
+    
+CREATE FOREIGN TABLE customer_2021 PARTITION OF customer
+    FOR VALUES FROM ('2021-01-01') TO ('2021-12-31')
+    SERVER remoteserver01;
+```
+
+### 42. Partition Criteria
+
+1. Hash Based
+2. List Based
+3. Range Based
+4. Composite - multiple partitions under a partition
+
+Hash Partition
+
+```sql
+CREATE TABLE customer (
+  id BIGSERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  city_id INT NOT NULL,
+  created_on TIMESTAMP NOT NULL,
+) PARTITION BY HASH (id);
+CREATE TABLE customer_even PARTITION OF customer FOR VALUES WITH (MODULUS 2,REMAINDER 0);
+CREATE TABLE customer_odd PARTITION OF customer FOR VALUES WITH (MODULUS 2,REMAINDER 0);
+```
+
+Range Partition
+
+```sql
+CREATE TABLE customer (
+  id BIGSERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  city_id INT NOT NULL,
+  created_on TIMESTAMP NOT NULL,
+) PARTITION BY RANGE (created_on);
+CREATE TABLE customer_2021 PARTITION OF customer FOR VALUES FROM ('2021-01-01') TO ('2021-12-31');
+CREATE TABLE customer_2022 PARTITION OF customer FOR VALUES FROM ('2022-01-01') TO ('2022-12-31');
+```
+
+List Partition
+```sql
+CREATE TABLE customer (
+  id BIGSERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  city_id INT NOT NULL,
+  created_on TIMESTAMP NOT NULL,
+) PARTITION BY LIST (EXTRACT(YEAR FROM created_on));
+CREATE TABLE customer_2021 PARTITION OF customer FOR VALUES IN('2021');
+CREATE TABLE customer_2022 PARTITION OF customer FOR VALUES IN('2022');
+```
 
 ### 43. Bulkhead pattern
 
@@ -536,28 +727,96 @@ Provide health check url to determine if node is healthy.
 
 ![](deployment-model.png)
 
+### 53. GeoHashing & Quadtree
+
+Geohashing is a geocoding method used to encode geographic coordinates such as latitude and longitude into short alphanumeric strings.
+Coordinates lat 40.730610, long -73.935242. can be represented in geohash as `af3bdmcef`.
+By comparing strings we can tell if the 2 locations are closer to each other, depending on how many chars in string match.
+
+eg: Geohashes `af3bdmcef` and `af3bdmcfg` are spatially closer as they share the prefix `af3bdm`.
+
+1. Easier to store in DB.
+2. Easier to share in URL.
+3. Easier to find nearest neighbour based on string match.
+
+![](geo-hashing.png)
+
+A quadtree is an in-memory tree data structure that is commonly used to partition a two-dimensional space by recursively subdividing it into four quadrants (grids) until the contents of the grids meet certain criteria.
+Internal node has exactly four children, only the leaf nodes store the actual value. Quadtrees enable us to search points within a two-dimensional range.
+
+Eg: Identify all restaurants/cabs in the 1.5 miles/km range from given point. If there are no restaurants/cabs in the grid/node then add neighbouring grids/nodes.
+
+![](quad-tree.png)
+
+### 54. Optimistic vs Pessimistic Locking
+
+Locking is required to prevent the row from being updated by 2 threads concurrently there by corrupting the data.
+
+1. Pessimistic Locking - The lock is now applied by the database at row level or table level. If the lock is a WRITE lock it prevents other threads from modifying the data. eg: SELECT * from TABLE where id = 1 for update;
+2. Optimistic Locking - A version field is introduced to the database table, The JPA ensures that version check is done before saving data, if the version has changed the update will throw Error. Scalability is high with this approach.
+
+### 55. Event sourcing
+
+Instead of storing the update to an object/record, change the db to append only. Every change to the object/record is stored as a new entry in append fashion.
+
+Eg: A customer record, each time address of customer changes instead of updating existing column, just insert new row with the new address. 
+A materialized view can be generated from this data to get the latest customer record. Combining all the records gives latest customer record.
+
+![](event-sourcing.png)
+
+1. Updates can come from multiple sources, there is no contention to update.
+2. Consistency for transactional data based on the time the event was processed.
+3. Maintain full audit trails and history.
+4. Slower to generate the materialized view.
+
+### 56. Attack surfaces
+
+To avoid security issues, the objective of all systems must be to reduce the number of attack surfaces. More the components in your system, more the attack surfaces that need to be hardened.
+
+1. Network packet spoofing / eavesdropping - Someone on the same network can look at http packets using tools like wireshark, http packets are un-encrypted. Use https to prevent this attack
+2. Man-in-the-middle attack - Someone pretending to be the actual client, Use SSL authentication with symmetric encryption.
+3. Denial-Of-Service - Someone can overload your server and keep it busy so valid requests won't be processed. use rate limiting, IP blacklisting.
+4. Bot attack - Millions of bots can be made to looks like real traffic is hitting your service. Use re-captcha to identify real users.
+5. Storing CVV, passwords in DB - Avoid storing plain text passwords in DB. Always use salt (piece of random data added to a password before it is hashed and stored)
+6. Reading Passwords - Avoid assigning passwords to Strings, instead assign them to char array. String use string pool in java so the password are not garbage collected immediately and may show up in heap dumps.
+7. Open ports - Enable security groups to open ports that are required. The process is called hardening of servers.
+8. Token expiry - Always set short expiry (TTL) for tokens, if compromised then the token will expire soon.
+9. Roles - Always provide only needed roles to users, so that even if password is compromised permissions restrict them from doing more damage.
+10. DMZ - Demilitarized zone, restrict backend servers from having direct access to internet. If backend servers need internet configure a forward proxy.
+11. SSH Tunneling - SSH to a primary server and then open a tunnel to the actual server. 
+12. Auditing - Always ensure proper auditing and logging is available to trace any breaches.
+13. Backup & Checkpoint - Always ensure proper backups are available in case data needs reconciliation. Checkpoint run at short interval capturing the snapshot of the current system.
+
+### 57. Kubernetes
+
+[https://gitorko.github.io/post/kubernetes-basics/](https://gitorko.github.io/post/kubernetes-basics/)
+
+### 58. Indexing - Btree, B+tree, BitMap
+
+1. BitMap index - Use less memory.
+2. Btree
+3. B+tree
+
+[https://youtu.be/5-JYVeM3IQg](https://youtu.be/5-JYVeM3IQg)
+
+### 59. Race conditions
+
+
 ### Others
 
-* HDFS
+* HDFS - Distributed filesystem
 * Zookeeper leader election quorum
-* Chunking file
 * Gateway
 * Distributed tracing - Zipkin
 * Observability - wavefront, prometheus, nagios
-* Leader follower
-* Locking
-* TTL
-* HTTPS, TLS Internal
-* Map Reduce
+* Hadoop - Map Reduce
 * CAS - compare and swap
 * Client side load balancing
 * GitOps
 * Telemetry
 * Pub Sub vs Queue
 * Block chain - distributed ledger
-* Indexing - Btree, B+tree, BitMap
 * Concurrent HashMap Internals
-* DDOS attack
 * Race conditions
 * Disaster recovery
 * Auto scaling
@@ -566,6 +825,7 @@ Provide health check url to determine if node is healthy.
 * Inverted indexing
 * Time Series Database
 * Hyperlog
+* Elasticsearch
 
 ## Scenarios
 
@@ -688,11 +948,59 @@ Split the tasks into smaller sub-tasks so that they can be restarted in case of 
 Asynchronous jobs can be queued and processed.
 {{% /notice %}}
 
+### 5. Design a large scale file de-duplication service
+
+You will receive a number of files (customer records) in a folder once a day, the file sizes range from 10GB-50GB that need to be de-duplicated based on few columns eg: Name & phone number column.
+
+* Processing a large file takes time. So chunking the file into manageable sizes helps distribute the task, and restart if some tasks fail.
+* Avoid in-memory processing like Sets/Maps which can easily run out of memory.
+* You can use a database with unique constraints, but this is write intensive task hence won't scale.
+* Since the files arrive once a day, this is more batch oriented and not streaming task.
+* Use a Bloom Filter a probabilistic data structure. This is used to test whether an element is a member of a set. There can be False-positive matches but no false negatives. Refer above section for overview of Bloom Filter.
+* Pick a big bit array & many hash functions to avoid collision this will avoid false positives as much as possible.
+* Bloom filter bit array resides in memory hence ensure that the file is processed by the same service. If the bit array needs to be shared, use redis in-memory BITFIELD
+* If false positive can not be avoided despite the large hash range, we can rely upon db unique constraints check as the 2nd level of safety. 
+
+![](file-dedupe.png)
+
+
+{{% notice tip "Tip" %}}
+Smaller tasks take less time, can be restarted, can be distributed. Always check if the input data can be chunked.
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+Use Bloom Filter to test if an element is a member of a set.
+{{% /notice %}}
+
+### 6. Design a flash sale system
+
+[https://gitorko.github.io/flash-sale-system/](https://gitorko.github.io/post/flash-sale-system/)
+
+### 7. Design a chat server
+
+[https://gitorko.github.io/chat-server/](https://gitorko.github.io/post/chat-server/)
+
+### 8. Design a Voting service
+
+[https://gitorko.github.io/voting-system/](https://gitorko.github.io/post/voting-system/)
+
+### 9. Design a Stock Exchange (Price Time Priority Algorithm)
+
+[https://gitorko.github.io/stock-exchange/](https://gitorko.github.io/post/stock-exchange/)
+
+### 10. Design a ticket booking system
+
+[https://gitorko.github.io/ticket-booking-system/](https://gitorko.github.io/post/ticket-booking-system/)
+
 ## Youtube Channels
 
 [ByteByteGo](https://www.youtube.com/c/ByteByteGo)
 
 [Hussein Nasser](https://www.youtube.com/c/HusseinNasser-software-engineering)
+
+[https://www.youtube.com/c/DefogTech](https://www.youtube.com/c/DefogTech)
+
+[https://www.youtube.com/c/TechDummiesNarendraL](https://www.youtube.com/c/TechDummiesNarendraL)
 
 ## References
 
