@@ -553,7 +553,6 @@ Always ensure that database schema works with both new version and old version o
 * GitOps
 * Telemetry
 * Pub Sub vs Queue
-* FAAS
 * Block chain - distributed ledger
 * Indexing - Btree, B+tree, BitMap
 * Concurrent HashMap Internals
