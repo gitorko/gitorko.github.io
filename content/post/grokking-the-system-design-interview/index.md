@@ -665,19 +665,19 @@ Instead of incrementing/decrementing a counter, check if it's possible to create
 
 Build the code when someone commits code to a branch and deploy it to a machine.
 
-* Builds can take long time to complete hence split the task into 2, build and deploy.
-* Writing the records to DB would take more time compared to pushing to queue and polling the DB would need retry mechanism without wasting cpu cycles, hence using RabbitMQ solves these problems.
+* Builds can take long time to complete hence split the task into 2, if deploy fails we don't want to build again.
+* Writing the records to DB would take more time compared to pushing to queue and polling the DB would need retry mechanism without wasting cpu cycles, hence using RabbitMQ is a better fit.
 * Builds can take time, so we dont want the manager service constantly polling workers. Once the worker completes it will push an event that will be consumed by manager service to continue the deployment flow.
-* If workers die during the build then heartbeat will not be updated and a scheduler can restart the job.
+* If workers die during the build then heartbeat will not be updated and a scheduler can restart the job. If the build nodes make a direct connection for heart beat this can overwhelm the manager service as there will be many worker nodes.
 
 ![](code-deployment.png)
 
 {{% notice tip "Tip" %}}
-Split the tasks into sub-tasks so that they can be restarted in case of failure.
+Split the tasks into smaller sub-tasks so that they can be restarted in case of failure.
 {{% /notice %}}
 
 {{% notice tip "Tip" %}}
-Asynchronous jobs can be queued and processed. 
+Asynchronous jobs can be queued and processed.
 {{% /notice %}}
 
 ## Youtube Channels
