@@ -527,7 +527,8 @@ Service-to-service communication is essential in a distributed application but r
 
 ### 52. Deployment types
 
-Always ensure that database schema works with both new version and old version of the service.
+Ensure that database schema works with both new version and old version of the service.
+Provide health check url to determine if node is healthy.
 
 1. Rolling - Services are upgraded one after the other.
 2. Blue Green - Few services are upgraded and test teams validate and signoff before all services are upgraded.
