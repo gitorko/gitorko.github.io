@@ -793,14 +793,36 @@ To avoid security issues, the objective of all systems must be to reduce the num
 
 ### 58. Indexing - Btree, B+tree, BitMap
 
-1. BitMap index - Use less memory.
-2. Btree
-3. B+tree
+1. BitMap index - A binary array to represent value, Uses less memory.
+2. Btree - Creates a balanced tree on insert.
+3. B+tree - Similar to btree but values are present only in the node. Improves range queries.
 
+Btree (Max Degree 3)
+
+![](btree.png)
+
+B+tree (Max Degree 3)
+
+![](bplustree.png)
+
+[https://youtu.be/UzHl2VzyZS4](https://youtu.be/UzHl2VzyZS4)
 [https://youtu.be/5-JYVeM3IQg](https://youtu.be/5-JYVeM3IQg)
 
-### 59. Race conditions
+[https://www.cs.usfca.edu/~galles/visualization/BTree.html](https://www.cs.usfca.edu/~galles/visualization/BTree.html)
+[https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html](https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html)
 
+### 59. Data Race & Race conditions
+
+Data Race - Multiple threads access shared variable at same time without synchronization & at least one thread is writing, can cause corruption. Eg: Addition to long/double which are 64 bits.
+
+Race conditions - Multiple threads access shared variable, value of variable depends on execution order of threads.  Atomic looking operations are not done atomically.
+
+Race conditions can be of 2 types
+
+1. Check & Update - When two threads check if value present in map and put if absent.To prevent use locks or putIfAbsent atomic operations. 
+2. Read & Update - When two threads read a value and increment it. Use locks or atomic variables.
+
+[https://youtu.be/KGnXr62bgHM](https://youtu.be/KGnXr62bgHM)
 
 ### Others
 
@@ -826,6 +848,8 @@ To avoid security issues, the objective of all systems must be to reduce the num
 * Time Series Database
 * Hyperlog
 * Elasticsearch
+* OAuth 2.0
+* Java Fibers - Project Loom
 
 ## Scenarios
 
@@ -998,9 +1022,9 @@ Use Bloom Filter to test if an element is a member of a set.
 
 [Hussein Nasser](https://www.youtube.com/c/HusseinNasser-software-engineering)
 
-[https://www.youtube.com/c/DefogTech](https://www.youtube.com/c/DefogTech)
+[DefogTech](https://www.youtube.com/c/DefogTech)
 
-[https://www.youtube.com/c/TechDummiesNarendraL](https://www.youtube.com/c/TechDummiesNarendraL)
+[TechDummiesNarendraL](https://www.youtube.com/c/TechDummiesNarendraL)
 
 ## References
 
