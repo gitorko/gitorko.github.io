@@ -78,12 +78,14 @@ The outcome of a design should be such that if handed to another developer, he s
 3. Websocket - HTTP connection is upgraded to bidirectional connection.
 4. Server Sent Events - HTTP connection is kept open by the server and data is pushed to client continuously over it.
 
-| Websocket                 | Server Sent Event          | Long-Poll                  |
-|:--------------------------|:---------------------------|:---------------------------|
-| Full-duplex,Bidirectional | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
-| Server Push & Client Send | Server Push                | Client Pull                |
-| Text + Binary             | Text                       | Text + Binary              |
-| 1024 connections          | 6-8 parallel per domain    | Based on threads available |
+![](client-server.png)
+
+| Websocket                        | Server Sent Event          | Long-Poll                  |
+|:---------------------------------|:---------------------------|:---------------------------|
+| Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
+| Server Push & Client Send        | Server Push                | Client Pull                |
+| Text + Binary                    | Text                       | Text + Binary              |
+| 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
 
 [https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
@@ -244,7 +246,7 @@ Things to consider while designing distributed system
 2. Circuit Breaker Pattern - Instead of throwing error page handle service down gracefully.
 3. Service Discovery - All services register themselves.
 4. Observability - System is actively monitored.
-5. Fail-Over - Stand up server go live when primary servers dies.
+5. Fail-Over - Stand by server go live when primary servers dies.
 6. Throughput - The number of requests the system can process.
 7. Latency - Time taken to process the requests.
 8. Rate Limit - Restrict overuse of services by single or many users.
@@ -270,9 +272,11 @@ Different places to cache
 
 ### 11. Types of Cache
 
-1. Spatial cache
-2. Temporal cache
-3. Distributed cache
+1. Spatial cache - Locality based cache, bring all nearby associated data from disk to cache. Eg: If fetching user profile also load user rating to cache.
+2. Temporal cache -  Cache stores elements that are frequently used. Eg: LRU 
+3. Distributed cache - Cache spread across many nodes, keeping cache in sync with store is important.
+
+[https://youtu.be/ccemOqDrc2I](https://youtu.be/ccemOqDrc2I)
 
 ### 12. Cache Store
 
@@ -294,11 +298,11 @@ Different places to cache
 
 ### 14. Caching Strategy
 
-1. Read-Cache-aside - Application queries the cache. If the data is found, it returns the data directly. If not it fetches the data from the SoR, stores it into the cache, and then returns.
+1. Read-Cache-Aside - Application queries the cache. If the data is found, it returns the data directly. If not it fetches the data from the SoR, stores it into the cache, and then returns.
 2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and returns.
 3. Write-Around - Application writes to db and to the cache.
 4. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
-5. Write-through - Application writes to cache, cache service immediately writes to SoR.
+5. Write-Through - Application writes to cache, cache service immediately writes to SoR.
 
 ![](cache-strategy.png)
 
@@ -366,7 +370,17 @@ Kafka provides high throughput because of the following
 
 [https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/](https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/)
 
-### 21. Rabbit MQ Streams
+### 21. Stream processing vs Message processing
+
+| Message Processing                               | Stream Processing                                                            |
+|:-------------------------------------------------|:-----------------------------------------------------------------------------|
+| Messages are removed from queue after processing | Append only log which can be processed from any point again                  |
+| No concept of windowing                          | Data within a window matters, window can be 1 day, 1 year etc                |
+| Push based                                       | Pull based                                                                   |
+| Waits for ACK on delivery after push             | No need to wait for ACK as its pull based                                    |
+| Slow consumer can lead to build up of queue      | Data is written to logs and read from logs                                   |
+| Order not guaranteed                             | Order guaranteed (within log partition)                                      |
+| No downstream adapters                           | Adapters provide options to route to other downstream endpoints eg: database |
 
 [https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview](https://blog.rabbitmq.com/posts/2021/07/rabbitmq-streams-overview)
 
@@ -513,22 +527,36 @@ Eg: Daily site visitor count.
 1. Consensus over distribute system
 2. Leader election
 
+Consul, etcd, Zookeeper
+
 [https://youtu.be/WX4gjowx45E](https://youtu.be/WX4gjowx45E)
 
 [https://youtu.be/s8JqcZtvnsM](https://youtu.be/s8JqcZtvnsM)
 
 ### 38. CAP Theorem
 
+* C - Consistency 
+* A - Availability
+* P - Partition Tolerance
+
 ![](cap-theorem.png)
 
 [https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
 
-### 39. ACID
+### 39. ACID vs BASE
+
+ACID
 
 1. Atomicity - All changes to data are performed as if they are a single operation
 2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
 3. Isolation - The intermediate state of a transaction is not visible to other transactions.
 4. Durability - Data persisted survives even if system restarted.
+
+BASE
+
+1. Basically Available - System guarantees availability.
+2. Soft State - The state of the system may change over time, even without input.
+3. Eventual Consistency - The system will become consistent over a period of time
 
 ### 40. Database Scaling
 
@@ -635,9 +663,9 @@ Fail-Fast is preferred over slow service.
 
 ### 44. Circuit Breaker
 
-If a service is down, we want to avoid continuously making calls to the service, till it gets time to recover. We will then send a default response such a case.
+If a service is down, we want to avoid continuously making calls to the service, till it gets time to recover.
 If the number of request failures are above a threshold then we decide to return a default response.
-After a certain period we will allow certain request to hit the service and if the response is good, we will allow all the traffic.
+After a certain period we will allow few requests to hit the service and if the response is good, we will allow all the traffic.
 
 States
 
@@ -824,8 +852,80 @@ Race conditions can be of 2 types
 
 [https://youtu.be/KGnXr62bgHM](https://youtu.be/KGnXr62bgHM)
 
-### Others
+### 60. Merkel Tree
 
+Merkle tree also known as hash tree is a data structure used for data verification and synchronization.
+It's a tree data structure where each non-leaf node is a hash of its child nodes.
+
+If the file is 100 GB then its chunked into 4 parts, A hash is calculated for each chunk and the merkle tree created. 
+If any chunk of the file is corrupted then it's easy to detect it and fix it by comparing new merkle tree to the original merkle tree as the hash on corrupted side doesn't match.
+
+![](merkel-tree.png)
+
+1. This structure of the tree allows efficient mapping of huge data and small changes made to the data can be easily identified.
+2. If we want to know where data change has occurred then we will not have to traverse the whole structure but only a small part of the structure.
+3. The root hash is used as the fingerprint for the entire data. If root hash doesn't match then some data below has changed.
+
+### 61. Pub-Sub vs Point-To-Point
+
+Message brokers allows systems to communicate with each other asynchronously. This ensures loose coupling between systems. 
+Different messaging protocols AMQP, STOMP, MQTT can be used.
+
+1. Point-to-Point messaging: Message sent to queue is sent to only one consumer.
+2. Publish-subscribe messaging: Message sent to the topic is sent to all subscribers.
+
+![](message-broker.png)
+
+Guarantee that every message will only be delivered once.
+
+### 62. Availability Metrics
+
+Availability is the percentage of time that a system is operational (uptime). Measured in number of 9s.
+A service with 99.99% availability is described as having four 9s.
+
+| Availability (Percent) | Downtime (Year) | Downtime (Month) | Downtime (Day) |
+|:-----------------------|:----------------|:-----------------|:---------------|
+| 99.9% (three nine)     | 8h 45m          | 43m 49s          | 1m 26s         |
+| 99.99% (three nine)    | 52m 35s         | 4m 22s           | 8s             |
+
+[https://uptime.is/](https://uptime.is/)
+
+Availability in Sequence vs Parallel
+
+![](availability.png)
+
+### 63. Testing
+
+Functional testing
+
+1. Unit testing - Developers write tests that test only the specific function, interaction with DB or other services are mocked.
+2. Integration testing - Writing tests that interact with other components like DB or external services, validates system interactions.
+3. Functional testing - Similar to integration testing, but validates functionality, real use cases. 
+4. Regression testing - Run by QE team, automation scripts that executes tests and validate against recurrence of known issues.
+5. UAT - Testing done by user/customer before accepting the system.
+6. Smoke Testing / Sanity Testing - Testing done in production after deployment.
+
+Non-Functional Testing
+
+1. Performance & Scale testing - Testing done by perf team to identify performance and scale issues.
+2. Security testing - Testing done to ensure no security vulnerabilities exist.
+3. Usability testing - Tests if the colors and button placement are good. Tracks user behaviour when using the system.
+4. Soak testing - Runs suite of tests that run for longer period of time. eg: 2 days, 1 week etc.
+
+
+### 64. POST vs PUT vs PATCH
+
+1. POST is always for creating a resource (does not matter if it was duplicated) 
+2. PUT is for checking if resource exists then update, else create new resource.
+3. PATCH is always for updating a resource.
+
+PUT is idempotent method means that the result of a successful performed request is independent of the number of times it is executed.
+
+### Other Topics
+
+* Normalization vs De-Normalization
+* Federation
+* First Level vs Second Level Cache
 * HDFS - Distributed filesystem
 * Zookeeper leader election quorum
 * Gateway
@@ -834,9 +934,8 @@ Race conditions can be of 2 types
 * Hadoop - Map Reduce
 * CAS - compare and swap
 * Client side load balancing
-* GitOps
+* GitOps & CI/CD
 * Telemetry
-* Pub Sub vs Queue
 * Block chain - distributed ledger
 * Concurrent HashMap Internals
 * Race conditions
@@ -850,6 +949,15 @@ Race conditions can be of 2 types
 * Elasticsearch
 * OAuth 2.0
 * Java Fibers - Project Loom
+* RPC, gRPC
+* Rest vs SOAP vs GraphQL
+* Scatter Gather Pattern
+* CORS
+* P2P Network
+* Tor network
+* SOLID Design principles
+* SSL vs TLS vs mTLS
+* Storage types
 
 ## Scenarios
 
@@ -987,7 +1095,6 @@ You will receive a number of files (customer records) in a folder once a day, th
 
 ![](file-dedupe.png)
 
-
 {{% notice tip "Tip" %}}
 Smaller tasks take less time, can be restarted, can be distributed. Always check if the input data can be chunked.
 {{% /notice %}}
@@ -1028,5 +1135,18 @@ Use Bloom Filter to test if an element is a member of a set.
 
 ## References
 
+[https://github.com/checkcheckzz/system-design-interview](https://github.com/checkcheckzz/system-design-interview)
+
+[https://github.com/mmcgrana/services-engineering](https://github.com/mmcgrana/services-engineering)
+
 [https://github.com/resumejob/system-design-algorithms](https://github.com/resumejob/system-design-algorithms)
 
+[https://github.com/donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer)
+
+[https://github.com/relogX/system-design-questions](https://github.com/relogX/system-design-questions)
+
+[https://github.com/madd86/awesome-system-design](https://github.com/madd86/awesome-system-design)
+
+[https://github.com/karanpratapsingh/system-design](https://github.com/karanpratapsingh/system-design)
+
+[https://tianpan.co/notes/2016-02-13-crack-the-system-design-interview](https://tianpan.co/notes/2016-02-13-crack-the-system-design-interview)

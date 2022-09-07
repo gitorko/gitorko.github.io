@@ -1,4 +1,4 @@
-# GitOrko Blog
+# gitorko blog
 
 ## Setup
 

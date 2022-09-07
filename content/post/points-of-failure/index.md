@@ -13,11 +13,13 @@ toc: true
 We will look at the different points at which an application can fail in a distributed system and how to address failures.
 We will deliberately fail the application at these points to determine what the error looks like and how to handle it. To know how to build a good distributed system you need to understand where it can fail.
 
+Github: [https://github.com/gitorko/project57](https://github.com/gitorko/project57)
+
 ## Generic System
 
 ![](point-of-failure.png)
 
-## HTTP Connections
+### HTTP Connections
 
 {{% notice note "Problem" %}}
 A bad downstream client is making bad tcp connections that dont do anything, valid users are getting Denial-of-Service. What do you do?
@@ -45,7 +47,7 @@ Most will assume that this connection timeout actually closes the connection whe
 It only closes connection if the client doesnt send anything for 'N' seconds.
 {{% /notice %}}
 
-## TimeLimiter
+### TimeLimiter
 
 {{% notice note "Problem" %}}
 A new team member has updated a function and introduced a bug and the function is very slow or never returns a response. What do you do?
@@ -63,7 +65,7 @@ Spring also provides `spring.mvc.async.request-timeout` that you can explore to 
 Always assume the functions within your service will take forever and may never complete, design accordingly.
 {{% /notice %}}
 
-## Request Thread Pool & Connections
+### Request Thread Pool & Connections
 
 {{% notice note "Problem" %}}
 Users are reporting slow connection / timeout when connecting to your server? How many concurrent requests can your server handle?
@@ -96,7 +98,7 @@ The number of tomcat threads and the server hardware determine how many requests
 If you have 200 threads (BIO) and all request response on average take 1 second to complete then your server can handle 200 requests per second.
 {{% /notice %}}
 
-## Keep-Alive
+### Keep-Alive
 
 {{% notice note "Problem" %}}
 Network admin calls you to tell that many TCP connections are being created to the same clients. What do you do?
@@ -112,7 +114,7 @@ server.tomcat.max-keep-alive-requests = 100
 server.tomcat.keep-alive-timeout =  10
 ```
 
-## Rest Client Connection Timeout
+### Rest Client Connection Timeout
 
 {{% notice note "Problem" %}}
 You are invoking rest calls to an external service which has degraded and has become very slow there by causing your service to slow down. What do you do?
@@ -133,7 +135,7 @@ setReadTimeout(5_000);
 Always assume that all external API calls never return and design accordingly.
 {{% /notice %}}
 
-## Database Connection Pool
+### Database Connection Pool
 
 {{% notice note "Problem" %}}
 Users are reporting slowness in api that fetch relatively small data. What do you do?
@@ -163,7 +165,7 @@ Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection i
 Always assume that you will run out of database connections due to a run away or storm of requests and design accordingly.
 {{% /notice %}}
 
-## Slow Query
+### Slow Query
 
 {{% notice note "Problem" %}}
 Users are reporting slowness in a db fetch api that fetches data from multiple tables via join. Your DBA also confirms that query is too slow. What do you do?
@@ -184,7 +186,7 @@ Always assume that all DB calls never return or are very slow and design accordi
 
 You can further look at optimizing the query with help of indexes however here we design the backend system such that the service doesnt fail as a whole due to slow queries.
 
-## Memory Leak & CPU Spike
+### Memory Leak & CPU Spike
 
 {{% notice note "Problem" %}}
 You have developed your service on your laptop, you tested with a big heap memory setting. 
@@ -220,7 +222,51 @@ Only the resource limits defined determine when the pod gets killed.
 Exception in thread "http-nio-31000-exec-1" java.lang.OutOfMemoryError: Java heap space
 ```
 
-## Other Failures
+### Response Payload Size
+
+{{% notice note "Problem" %}}
+Your rest api returns list of customer records, However as more customers are added in production the size of response becomes bigger & bigger and slows down the request-response times.
+{{% /notice %}}
+
+Always add pagination support and avoid returning all the data in a single response. Data may grow later causing response size to get bigger over a period of time.
+
+Enable gzip compression which also reduce the size of response payload. 
+
+```bash
+server.compression.enabled=true
+ 
+# Minimum response when compression will kick in
+server.compression.min-response-size=512
+ 
+# Mime types that should be compressed
+server.compression.mime-types=text/xml, text/plain, application/json
+```
+
+You can also change the protocol to http2 to get more benefits like multiplexing many requests over single tcp connection.
+
+```bash
+server.http2.enabled=true
+```
+
+{{% notice info "Note" %}}
+Always try to reduce the size of the response payload. Use pagination for data records and gzip payload to reduce the size.
+{{% /notice %}}
+
+### API versioning
+
+{{% notice note "Problem" %}}
+A new team member has updated an existing API & introduced a new feature that was used by many downstream applications, however a bug got introduced and now all the downstream api are failing.
+{{% /notice %}}
+
+Always look at versioning your api instead of updating existing api that are used by downstream services. This contains the blast radius of any bug.
+
+eg: `/api/v1/customers` being the old api and `/api/v2/customers` being the new api
+
+{{% notice info "Note" %}}
+Backward compatibility is very important, specially when services rollback to older versions in distributed systems. Always work with versioned API if there are major changes or new features being introduced.
+{{% /notice %}}
+
+### Other Failures
 
 Once you expand the distributed system there can be various other points of failure
 

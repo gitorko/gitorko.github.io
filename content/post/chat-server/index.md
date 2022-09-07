@@ -33,12 +33,12 @@ Realtime data fetch from server via bidirectional communication is one of the ke
 3. Websocket - HTTP connection is upgraded to bidirectional connection.
 4. Server Sent Events - HTTP connection is kept open by the server and data is pushed to client continuously over it.
 
-| Websocket                 | Server Sent Event          | Long-Poll                  |
-|:--------------------------|:---------------------------|:---------------------------|
-| Full-duplex,Bidirectional | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
-| Server Push & Client Send | Server Push                | Client Pull                |
-| Text + Binary             | Text                       | Text + Binary              |
-| 1024 connections          | 6-8 parallel per domain    | Based on threads available |
+| Websocket                        | Server Sent Event          | Long-Poll                  |
+|:---------------------------------|:---------------------------|:---------------------------|
+| Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
+| Server Push & Client Send        | Server Push                | Client Pull                |
+| Text + Binary                    | Text                       | Text + Binary              |
+| 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
 
 1. Connect will open the websocket connection & disconnect should terminate the session.
 2. Two users should be able to send and receive messages.
