@@ -12,6 +12,8 @@ toc: true
 
 Few puzzles in java, to test the fundamentals
 
+Github: [https://github.com/gitorko/project01](https://github.com/gitorko/project01)
+
 # Puzzles
 
 ## Puzzle: 1 (pass by value vs pass by ref)
