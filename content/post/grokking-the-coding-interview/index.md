@@ -567,6 +567,15 @@ log(n) < √(n) < n < nlog(n) < n^2 < n^3 < 2^n < n!
 |29|Implement Custom Semaphore|[Solution](https://github.com/gitorko/project01/tree/main/src/test/java/com/demo/basics/concurrency/_22_semaphore/CustomSemaphore.java)|MEDIUM|
 |30|Parallel Stream|[Solution](https://github.com/gitorko/project01/tree/main/src/test/java/com/demo/basics/concurrency/_23_parallelstream/ParallelStreamPool.java)|MEDIUM|
 
+### Tips
+
+1. Linked list problems often use a dummy node.
+2. To delete a node in the link list you need previous node or be position one node behind.
+3. Time complexity is O(number of branches ^ n)
+4. In-order traversal of BST results in ascending order array.
+5. BFS requires a queue, DFS requires recursion.
+6. If the char set is bound to 26 chars, use char[26] array instead of Map or Set.
+
 ## Java Concurrency
 
 ### LinkedBlockingQueue (unbounded)
