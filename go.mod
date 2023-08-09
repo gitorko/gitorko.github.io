@@ -2,4 +2,4 @@ module gitorko
 
 go 1.14
 
-require github.com/chipzoller/hugo-clarity v0.0.0-20220804231030-5179510a03ea // indirect
+require github.com/chipzoller/hugo-clarity v0.0.0-20230830081649-d0ec11e00b01 // indirect

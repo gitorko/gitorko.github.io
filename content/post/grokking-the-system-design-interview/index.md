@@ -2,7 +2,7 @@
 title: 'Grokking the System Design Interview'
 description: 'Grokking the System Design Interview'
 summary: 'Interview preparation guide for system design'
-date: '2022-01-17'
+date: '2023-04-24'
 aliases: [/grokking-the-system-design-interview/]
 author: 'Arjun Surendra'
 categories: [System-Design]
@@ -12,35 +12,26 @@ toc: true
 
 ## System Design
 
-We will understand the fundamentals of system design and look at real world implementations 
-
-System design interview discussions are of two types
+We will understand the fundamentals of system design and look at real world use cases & implementations.
 
 ## Wide design (HLD - High Level Design)
 
-Wide design/HLD often is very open-ended and broad without any specifics.  
-
+Wide design/HLD often is very open-ended and broad without any specifics. You should not get into the details of implementation here. It's a 30,000 foot view of the system that covers what the various components of the systems are and how they interact with each other.  
 Eg: Design Food Delivery App, Design Uber, Design Twitter.
 
-You often end up explaining the following
-
 1. Component diagrams
-2. Class diagrams
-3. Sequence diagrams & Flow Diagrams
-4. Decision Trees
-5. Use-cases
-6. Database Schema & ER diagrams
-7. API
+2. Sequence diagrams & Flow Diagrams
+3. Decision Trees
+4. Use-cases
+5. Database Schema & ER diagrams
+6. API
 
-Prior knowledge of the product is required to some extent. If the candidate is asked to design `management system for a particle accelerator` without knowledge of the system it becomes very difficult.
+Prior knowledge of the system is required inorder to make the discussion meaningful. If the candidate is asked to design `management system for a particle accelerator` and he has no idea about, it becomes difficult to have meaningful discussions.
 
 ## Deep design (LLD - Low Level Design)
 
-Deep design/LLD often starts with a specific module with a clear outcome that is expected, and provides you more details about the problem statement and the expected output.
-
-Eg: Design a build system that builds the artifact when code is submitted, design a tiny url service etc.
-
-The outcome of a design should be such that if handed to another developer, he should be able to implement it.
+Deep design/LLD involves picking a specific module from HLD and doing a deep dive into its implementations. The problem statement is detailed and outcome is clear.
+Eg: Design a build system that builds the artifact when code is submitted, design a tiny url service that can handle 10K requests per day.
 
 ### 1. Functional requirements
 
@@ -57,9 +48,9 @@ The outcome of a design should be such that if handed to another developer, he s
 * What is the **latency** expected?
 * What is **load** the system needs to handle and **scale** requirements?
 * What **observability** & **monitoring** is needed by the system?
-* What is the uptime & **availability** SLA?
+* What is the **uptime** & **availability** SLA?
 * What **security** aspects need to be addressed?
-* Does it need auditing?
+* Does it need **auditing**?
 
 ### 3. Capacity planning
 
@@ -68,6 +59,7 @@ The outcome of a design should be such that if handed to another developer, he s
 * What bandwidth is required?
 * Do you need GPU specific processors or CPU specific processors?
 * What time of the day do you need the servers?
+* What is the budget and expenses related to the servers?
 
 ## Fundamentals
 
@@ -255,6 +247,9 @@ Things to consider while designing distributed system
 11. Timeout - Ensure proper connection timeouts are set so that slow downstream service cant impact upstream service.
 12. Fail-fast - Prefer to fail fast than deal with slow latency, as it can cascade the effect in upstream services.
 13. Chaos Monkey - Randomly turn off systems to ensure system is fault-tolerant.
+14. Data durability & Consistency - failure rates of storage, corruption rate in read-write process
+15. Replication - backing up data
+16. Trade-Offs
 
 ### 10. Caching
 
@@ -913,13 +908,23 @@ Non-Functional Testing
 4. Soak testing - Runs suite of tests that run for longer period of time. eg: 2 days, 1 week etc.
 
 
-### 64. POST vs PUT vs PATCH
+### 64. REST
 
 1. POST is always for creating a resource (does not matter if it was duplicated) 
 2. PUT is for checking if resource exists then update, else create new resource.
 3. PATCH is always for updating a resource.
 
 PUT is idempotent method means that the result of a successful performed request is independent of the number of times it is executed.
+
+| Method  | Description                                                        | Idempotent |
+|:--------|:-------------------------------------------------------------------|:-----------|
+| GET     | Get a resource object                                              | Yes        |
+| PUT     | Create a resource object or replace it                             | Yes        |
+| DELETE  | Delete a resource object                                           | Yes        |
+| POST    | Create a new resource object                                       | No         |
+| HEAD    | Return meta data of resource object                                | Yes        |
+| PATCH   | Apply partial update on resource object                            | False      |
+| OPTIONS | Determine what HTTP methods are supported by a particular resource | Yes        |
 
 ### Other Topics
 
