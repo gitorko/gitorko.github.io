@@ -1,7 +1,7 @@
 ---
 title: 'Grokking the Coding Interview'
 description: 'Grokking the Coding Interview'
-summary: 'Interview preparation guide'
+summary: 'Interview preparation guide for coding'
 date: '2023-08-07'
 aliases: [/grokking-the-coding-interview/]
 author: 'Arjun Surendra'
