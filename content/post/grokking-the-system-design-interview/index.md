@@ -219,6 +219,8 @@ In Spring JPA you can use isolation level on transactions or the whole session.
 
 ### 6. Indexing
 
+Database indexes help improve the speed and efficiency of querying data in a database
+
 1. Clustered index - A special type of index that reorders the way records in the table are physically stored.
    Therefore, table can have only one clustered index. The leaf nodes of a clustered index contain the data pages. eg:
    primary key
@@ -253,6 +255,11 @@ To execute and explain the plan
 EXPLAIN ANALYZE * FROM table;
 ```
 
+**Tradeoff**
+
+1. Storage Space: Indexes consume additional storage space, as they create and maintain separate data structures alongside the original table data.
+2. Write Performance: When data is inserted, updated, or deleted in a table, the associated indexes must also be updated, which can slow down write operations.
+
 [https://youtu.be/-qNSXK7s7_w](https://youtu.be/-qNSXK7s7_w)
 
 ### 7. Vertical Scaling vs Horizontal Scaling
@@ -283,9 +290,11 @@ Outages:
 
 ![](datacenter.png)
 
-### 9. Distributed System
+### 9. Distributed System & Microservices
 
-Things to consider while designing distributed system
+**Distributed system**
+
+Characteristics of distributed system
 
 1. Failure - Always assume that things will fail and plan for it. Eg: Network failures, Disk failures
 2. Circuit Breaker Pattern - Instead of throwing error page handle service down gracefully.
@@ -307,9 +316,22 @@ Things to consider while designing distributed system
 18. Trade-Offs - Every choice comes with its shortcoming be aware of it.
 19. Scaling - System should be able to cope with increased and decreased load.
 
+**Microservices**
+
+Microservices is an architectural style where applications are structured as a collection of small, loosely-coupled, and independently deployable services.
+Each microservice is responsible for a specific piece of functionality within the application & communicates with other microservices through well-defined APIs
+
+Characteristics of microservices
+
+1. Single Responsibility: Specific functionality, Makes the services easier to understand, develop, and maintain.
+2. Independence: Develop, deploy, and scale services independently of one another. Loose coupling. 
+3. Decentralized: Each service owns its data and business logic. Each service has its own database.
+4. Communication: Communicate with each other using lightweight protocols such as HTTP/REST, gRPC, or message queues.
+5. Fault Tolerance: Failure in one service does not necessarily cause the entire system to fail. Improves resiliency.
+
 ### 10. Caching
 
-Advantage of caching:
+Advantages of Caching
 
 1. Improves performance of application
 2. Reduces latency
@@ -385,6 +407,8 @@ Always remember to version your static content like css, images etc to help CDN 
 
 Edge Servers run compute operations closer to the customer region, eg: Streaming, Gaming etc.
 
+![](cdn.png)
+
 ### 17. Message Broadcast Protocols
 
 1. Tell Everyone Everything - Too much traffic noise.
@@ -426,10 +450,6 @@ Kafka provides high throughput because of the following
 
 ![](rabbit-mq.png)
 
-[https://youtu.be/O1PgqUqZKTA](https://youtu.be/O1PgqUqZKTA)
-
-### 20. Rabbit MQ vs Kafka
-
 | RabbitMQ                             | Kafka                              |
 |:-------------------------------------|:-----------------------------------|
 | Consumed event deleted, Less storage | All events stored, More storage    |
@@ -442,6 +462,36 @@ Kafka provides high throughput because of the following
 [https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case](https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case)
 
 [https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/](https://tanzu.vmware.com/developer/blog/understanding-the-differences-between-rabbitmq-vs-kafka/)
+
+[https://youtu.be/O1PgqUqZKTA](https://youtu.be/O1PgqUqZKTA)
+
+### 20. Redis
+
+Redis is an in-memory data store. Reading/writing to RAM is always faster than disk, hence it has high throughput and low latency.
+Redis employs a **single-threaded** architecture. Redis supports Non-blocking IO. 
+Redis can deliver up to 1 million requests per second when run on an average Linux system.
+
+Limitation is that dataset cant be larger than memory (RAM)
+
+Since redis is single threaded there is no need for lock, no need for thread synchronization, no context switching, no time spent to create or destroy threads. 
+It doesn't need multi thread because it uses **I/O multiplexing** where a single thread can wait on many socket connections for read/write.
+
+Datastructures supported
+
+1. String - (SDS, simple dynamic string)
+2. BitMap
+3. BitField
+4. Hash - (Hash Table, Zip List)
+5. List - (Link List, Zip List)
+6. Set - (Hash Table, IntSet)
+7. Sorted Set - (Skip List)
+8. Geospatial
+9. Hyperlog
+10. Stream
+
+![](redis.png)
+
+[https://youtu.be/5TRFpFBccQM](https://youtu.be/5TRFpFBccQM)
 
 ### 21. Stream processing vs Message processing
 
@@ -505,6 +555,7 @@ Types of Garbage Collector:
 7. ZGC collector - Applications run while GC is performed. Lowest pause time.
 
 [https://www.youtube.com/watch?v=2AZ0KKeXJSo](https://www.youtube.com/watch?v=2AZ0KKeXJSo)
+
 [https://www.youtube.com/watch?v=XXOaCV5xm9s](https://www.youtube.com/watch?v=XXOaCV5xm9s)
 
 ### 23. Proxy vs Reverse-Proxy
@@ -949,12 +1000,27 @@ and across application clusters, becomes increasingly complex as the number of s
 managed, observable, and secure communication between individual services. It works with a service discovery protocol to
 detect services. Istio and envoy are some of the most commonly used service mesh frameworks.
 
+* user-to-service connectivity is called **north-south** connectivity, API gateway controls this communication.
+* service-to-service connectivity is called **east-west** connectivity, service mesh controls this communication.
+
+Functions of API gateway
+
 1. Service Discovery
 2. Load Balancing
-3. Fault Tolerance
-4. Distributed Tracing
+3. Circuit Breaker
+4. Distributed Tracing & Logging
 5. Telemetry
-6. Security
+6. Security - Authentication & Authorization
+7. Routing - Routing, circuit breaker, blue-green and canary deployments, load balancing, health checks, and custom error handling
+8. Observability
+9. Rate limiting
+10. Caching
+11. Request and Response Transformation
+
+API gateways can be augmented with web application firewall (WAF) and denial of service (DoS) protection. 
+Depending on the system architecture and app delivery requirements, an API gateway can be deployed in front of the Kubernetes cluster as a load balancer (multi-cluster level), at its edge as an Ingress controller (cluster-level), or within it as a service mesh (service-level).
+
+![](api-gateway.png)
 
 ### 52. Deployment Strategy
 
@@ -1201,19 +1267,53 @@ it is executed.
 
 ### 65. Types of database
 
-1. Relational Database - Each row is a record and column is a field in the record. eg: PostgresSQL
-2. Columnar Database - Stores data by columns. Eg: Cassandra
-3. Document Database - Data is semi-structured, encoded in json, xml, bson eg: MongoDB
-4. Graph Database - Entities are represented as nodes and relations as edges. eg: Neo4j
-5. Key-Value Database - Data is stored in key value pairs. eg: Redis
+1. Relational Database - Each row is a record and column is a field in the record. eg: PostgresSQL, MySQL
+2. Columnar Database - Stores data by columns, handle write-heavy workloads. Eg: Apache Cassandra, HBase
+3. Document Database - Data is semi-structured, encoded in json, xml, bson eg: MongoDB, Couchbase
+4. Graph Database - Entities are represented as nodes and relations as edges, easier to perform complex relationship-based queries. eg: Neo4j, Amazon Neptune
+5. Key-Value Database - Data is stored in key value pairs, can be easily partitioned and scaled horizontally. eg: Redis, Amazon DynamoDB
 6. Time-Series Database - Optimized for timestamp data, comes with time based functions. eg: TimescaleDB
+
+### 66. Domain Name System (DNS)
+
+Domain Name System (DNS) translates human-friendly domain names into their corresponding IP addresses
+
+1. Lookup starts with the root server that points to the right TLD.
+2. Top-Level Domain (TLD) server points to the authoritative name server. Eg: TLD .com belongs to verisign
+3. The authoritative name server points to the zone or zone file that holds the DNS record. 
+
+![](dns.png)
+
+### 67. Distributed File Systems
+
+Distributed file systems are storage solutions designed to manage and provide access to files and directories across multiple servers, nodes, or machines, often distributed over a network.
+eg: HDFS
+
+### 68. Full-text Search (Inverted Index)
+
+Full-text search enables users to search for specific words or phrases. Full-text search relies on an inverted index, which is a data structure that maps words or phrases to the documents in which they appear.
+An inverted index is an index data structure storing a mapping from content, such as words/numbers, to its locations in a document or a set of documents
+eg: Elasticsearch
+
+Two types of inverted indexes
+
+1. Record-Level: Contains a list of references to documents for each word.
+2. Word-Level: Contains the positions of each word within a document.
+
+### 69. Backend for FrontEnd pattern (BFF)
+
+BFF is a variant of the API Gateway pattern, Instead of a single point of entry, it introduces multiple gateways. 
+You can have a tailored API that targets the needs of each client (mobile, web, desktop, voice assistant, etc.)
+Decoupling of Backend and Frontend gives us faster time to market as frontend teams can have dedicated backend teams serving their unique needs.
+The release of new features of one frontend does not affect the other.
+
+![](bff.png)
 
 ### Other Topics
 
 * Normalization vs De-Normalization
 * Federation
 * First Level vs Second Level Cache
-* HDFS - Distributed filesystem
 * Distributed tracing - Zipkin
 * Observability - wavefront, prometheus, nagios
 * Hadoop - Map Reduce
@@ -1227,7 +1327,6 @@ it is executed.
 * Auto scaling
 * Batch vs Stream data processing vs Micro Batch
 * Star vs Snow flake schema
-* Inverted indexing
 * Time Series Database
 * Hyperlog
 * Elasticsearch
@@ -1252,7 +1351,7 @@ it is executed.
 * API versioning
 * Backend for frontend (BFF) pattern
 * Transaction propagation & rollback policy 
-* DNS
+* Adaptive Bitrate Streaming for video
 
 ## Scenarios
 
@@ -1435,6 +1534,10 @@ need to be de-duplicated based on few columns eg: Name & phone number column.
 
 {{% notice tip "Tip" %}}
 Smaller tasks take less time, can be restarted/retried, can be distributed. Always check if the input data can be chunked & tasks made to smaller units instead of one big task.
+{{% /notice %}}
+
+{{% notice tip "Tip" %}}
+When there are more producers than consumers it will quickly overwhelm the system, use a queue to store and process the tasks asynchronously.
 {{% /notice %}}
 
 ### 6. Design a flash sale system
