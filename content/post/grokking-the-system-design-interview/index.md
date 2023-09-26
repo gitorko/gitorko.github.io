@@ -682,10 +682,6 @@ Consul, etcd, Zookeeper
 
 [https://youtu.be/fcFqFfsAlSQ](https://youtu.be/fcFqFfsAlSQ)
 
-[https://youtu.be/WX4gjowx45E](https://youtu.be/WX4gjowx45E)
-
-[https://youtu.be/s8JqcZtvnsM](https://youtu.be/s8JqcZtvnsM)
-
 ### 38. CAP Theorem
 
 * C - Consistency
@@ -696,11 +692,11 @@ Consul, etcd, Zookeeper
 
 [https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
 
-### 39. ACID vs BASE
+### 39. ACID vs BASE transactions
 
 ACID
 
-1. Atomicity - All changes to data are performed as if they are a single operation
+1. Atomicity - All changes to data are performed as if they are a single operation, either all succeed or all fail.
 2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
 3. Isolation - The intermediate state of a transaction is not visible to other transactions.
 4. Durability - Data persisted survives even if system restarted.
@@ -708,7 +704,7 @@ ACID
 BASE
 
 1. Basically Available - System guarantees availability.
-2. Soft State - The state of the system may change over time, even without input.
+2. Soft State - The state of the system may change over time, even without input. Replication can take time so till then state is in soft-state.
 3. Eventual Consistency - The system will become consistent over a period of time
 
 ### 40. Database Scaling
@@ -721,23 +717,23 @@ BASE
 
 ### 41. Partition vs Sharding
 
-1. Partitioning - Breaks up data into many smaller blocks within the same database server. Client need not be aware of
+1. <b>Partitioning</b> - Breaks up data into many smaller blocks within the same database server. Client need not be aware of
    partitions.
-   a. Horizontal partition - Based on key the data is split. eg: All records for 2021 get written to partition_2021, all
+   * Horizontal partition - Based on key the data is split. eg: All records for 2021 get written to partition_2021, all
    2022 records get written to partition_2022
-   b. Vertical partition - Based on some column the data is split. eg: All the image blob of a profile are stored in a
+   * Vertical partition - Based on some column the data is split. eg: All the image blob of a profile are stored in a
    different table.
-2. Sharding - Breaks up data into many smaller blocks in different database servers. Client must be aware of shards.
+2. <b>Sharding</b> - Breaks up data into many smaller blocks in different database servers. Client must be aware of shards.
    Cant do transactions or joins across shards. If data distribution is not uniform then will have to re-balance shards.
    eg: All customer records A-H go to database server1, all records I-Z go to database server2.
 
-When to Partition?
+<b>When to Partition?</b>
 
 1. When the table is too big for even indexes to search. Partition bring in improvement in query performance.
 2. When you need to purge old records as part of data management. Easier to drop partition than delete rows.
 3. Bulk loads and data deletion can be done much faster, as these operations can be performed on individual partitions.
 
-When to Shard?
+<b>When to Shard?</b>
 
 1. To scale out horizontally.
 2. When there are too many writes.
@@ -846,6 +842,8 @@ It isolates dependencies, so that problem in one dependency doesn't affect other
 limits instead of creating different thread pool.
 Fail-Fast is preferred over slow service.
 
+If the cart service is not-responding the threads will be blocked and waiting, since the thread pool is different the problem is isolated.
+
 ![](bulk-head.png)
 
 [https://youtu.be/R2FT5edyKOg](https://youtu.be/R2FT5edyKOg)
@@ -873,11 +871,11 @@ Nodes keep dying in a distributed system. To scale new nodes can be added as wel
 distribute traffic among the nodes uniformly.
 
 Why not use round-robin to distribute traffic?
-Services often cache some data, so it makes for a better design if the same client request is sent to the server which
-has all the data already cached. If you send the same client request randomly to random servers each time then cache is
+Services often cache some data or store local data, so it makes for a better design if the same client request is sent to the server which
+has all the data already cached/locally stored. If you send the same client request randomly to random servers each time then cache/local data is
 not utilized.
 
-Consistent hashing also prevents DOS attacks to some extent. If a spam client send random requests and round robin
+Consistent hashing also prevents <b>DOS attacks</b> to some extent. If a spam client send random requests and round robin
 distributes it across all nodes then the outage is large scale. However with consitent hashing only certain node will be
 impacted.
 
@@ -885,7 +883,8 @@ If you just hash the request and map it to a server then if the node count chang
 will move to different servers. Hence in consistent hashing we hash both the request and the servers to a hash space and
 link them in a hash ring.
 With consistent hashing adding a new servers affects only few requests.
-The distribution of servers in a hash ring may not be uniform hence you can use virtual servers. With more virtual
+
+The distribution of servers in a hash ring may not be uniform hence you can use <b>virtual servers</b>. With more virtual
 servers the distribution is more balanced.
 Eg: if there are 60K user requests and there are 6 servers each server can distribute and handle 10K. Do note that if
 one node goes down then all the requests flood the next node causing it to go down thus causing a full outage. Virtual
@@ -901,14 +900,16 @@ servers will avoid this to some extent.
    traffic.
 2. Token Bucket - Sustain - Constant token are added to bucket only if previous token are consumed. Smooth traffic.
 3. Leaky Bucket - Bucket size if fixed, if bucket full request are rejected, a processor de-queue bucket at fixed rate.
-4. Fixed Window - For the time period maintain a key,value pair. If counter is greater than rate limit reject. Leads to
-   burst traffic around edges of time period.
+4. Fixed Window - For the time period maintain a key,value pair (key=time, value=counter). If counter is greater than rate limit reject. Leads to
+   burst traffic around edges of time period. eg: If rate limit is 10 per min, then 8 request come in the last 30 sec of min window and  8 more requests come in the first 30 second of next min window, within the window the rate limit is honored but we still processed 16 requests within a 1 min window.
 5. Sliding Log - Go over all previous nodes upto the time interval, in the link list and check rate limit exceeded, if
-   yes then reject.
+   yes then reject. Since the 1 min window keeps changing traffic is smooth unlike fixed window.
 6. Sliding Window Counter - Go over all previous nodes upto the time interval, in the link list and check if rate limit
-   exceeded, if yes then reject. Instead of storing each request timestamp previous node stores the count.
+   exceeded, if yes then reject. Instead of storing each request timestamp like sliding log, previous node stores the count.
 
 ![](rate-limit.png)
+
+Places where rate limit can be applied
 
 ![](rate-limit-distributed.png)
 
@@ -916,7 +917,7 @@ servers will avoid this to some extent.
 
 [https://youtu.be/FU4WlwfS3G0](https://youtu.be/FU4WlwfS3G0)
 
-### 47. Push vs Pull
+### 47. Push vs Pull strategy
 
 1. RabbitMQ is push based, Kafka is pull based
 2. Push is expensive & real-time
@@ -924,20 +925,27 @@ servers will avoid this to some extent.
 
 ### 48. NIO
 
+Majority of threads spend time waiting, NIO (non-blocking IO) take the approach of not blocking the threads. Eg: Spring Reactor
+
 1. Non-Blocking IO helps systems scale with fewer resources.
 2. The complete source to destination flow has to be non-blocking.
 
 ### 49. Multi-Tenancy
 
-1. Multiple customers share same resource but customer are not aware of each other and instances are isolated.
-2. Kubernetes namespaces
+Multiple customers share same resource/server but customers are not aware of each other and instances are isolated.
+eg: Kubernetes namespaces
 
 ### 50. Authorization vs Authentication
 
 1. Authentication - Is the user allowed to use the system?
-2. Authorization - Does the user have the right role to execute that operation?
+2. Authorization - Does the user have the right role/permission to execute that operation?
 
 ### 51. Service Mesh
+
+Service-to-service communication is essential in a distributed application but routing this communication, both within
+and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables
+managed, observable, and secure communication between individual services. It works with a service discovery protocol to
+detect services. Istio and envoy are some of the most commonly used service mesh frameworks.
 
 1. Service Discovery
 2. Load Balancing
@@ -946,15 +954,15 @@ servers will avoid this to some extent.
 5. Telemetry
 6. Security
 
-Service-to-service communication is essential in a distributed application but routing this communication, both within
-and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables
-managed, observable, and secure communication between individual services. It works with a service discovery protocol to
-detect services. Istio and envoy are some of the most commonly used service mesh technologies.
-
 ### 52. Deployment Strategy
 
-Ensure that database schema works with both new version and old version of the service.
-Provide health check url to determine if node is healthy.
+<b>Guidelines for deployment</b>
+
+1. Ensure that database schema works with both new version and old version of the service.
+2. Provide health check url to determine if node is healthy.
+3. Ensure rollback works.
+
+<b>Types of deployment</b>
 
 1. Rolling - Services are upgraded one after the other.
 2. Blue Green - Few services are upgraded and test teams validate and signoff before all services are upgraded.
@@ -963,6 +971,8 @@ Provide health check url to determine if node is healthy.
 ![](deployment-model.png)
 
 ### 53. GeoHashing & Quadtree
+
+<b>GeoHashing</b>
 
 Geohashing is a geocoding method used to encode geographic coordinates such as latitude and longitude into short
 alphanumeric strings.
@@ -977,6 +987,8 @@ eg: Geohashes `af3bdmcef` and `af3bdmcfg` are spatially closer as they share the
 3. Easier to find nearest neighbour based on string match.
 
 ![](geo-hashing.png)
+
+<b>QuadTree</b>
 
 A quadtree is an in-memory tree data structure that is commonly used to partition a two-dimensional space by recursively
 subdividing it into four quadrants (grids) until the contents of the grids meet certain criteria.
@@ -997,6 +1009,8 @@ Locking is required to prevent the row from being updated by 2 threads concurren
 2. Optimistic Locking - A version field is introduced to the database table, The JPA ensures that version check is done
    before saving data, if the version has changed the update will throw Error. Scalability is high with this approach.
 
+[https://gitorko.github.io/post/optimistic-pessimistic-locking/](https://gitorko.github.io/post/optimistic-pessimistic-locking/)
+
 ### 55. Event sourcing
 
 Instead of storing the update to an object/record, change the db to append only. Every change to the object/record is
@@ -1016,8 +1030,10 @@ latest customer record.
 
 ### 56. Attack surfaces
 
-To avoid security issues, the objective of all systems must be to reduce the number of attack surfaces. More the
+To avoid security breaches, the objective of all systems must be to reduce the number of attack surfaces. More the
 components in your system, more the attack surfaces that need to be hardened.
+
+<b>Security Hardening</b>
 
 1. Network packet spoofing / eavesdropping - Someone on the same network can look at http packets using tools like
    wireshark, http packets are un-encrypted. Use https to prevent this attack
@@ -1031,7 +1047,7 @@ components in your system, more the attack surfaces that need to be hardened.
    to a password before it is hashed and stored)
 6. Reading Passwords - Avoid assigning passwords to Strings, instead assign them to char array. String use string pool
    in java so the password are not garbage collected immediately and may show up in heap dumps.
-7. Open ports - Enable security groups to open ports that are required. The process is called hardening of servers.
+7. Firewall & ports - Enable firewall and open only the ports that are required. eg: close ftp port is not needed.
 8. Token expiry - Always set short expiry (TTL) for tokens, if compromised then the token will expire soon.
 9. Roles - Always provide only needed roles to users, so that even if password is compromised permissions restrict them
    from doing more damage.
@@ -1044,9 +1060,21 @@ components in your system, more the attack surfaces that need to be hardened.
 
 ### 57. Kubernetes
 
+Kubernetes is a platform for managing containerized workloads.
+
+1. Service discovery
+2. Load balancing
+3. Storage orchestration
+4. Automated rollout & rollback
+5. Resource usage enforcement
+6. Self-healing
+7. Secret & Configuration management
+
 [https://gitorko.github.io/post/kubernetes-basics/](https://gitorko.github.io/post/kubernetes-basics/)
 
 ### 58. Indexing - Btree, B+tree, BitMap
+
+Indexes help find the data in large data set. Full table scan are costly hence reducing the search space is always preferred.
 
 1. BitMap index - A binary array to represent value, Uses less memory.
 2. Btree - Creates a balanced tree on insert.
