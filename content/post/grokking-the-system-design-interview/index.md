@@ -12,32 +12,7 @@ toc: true
 
 ## System Design
 
-We will cover various fundamentals of system design and look at a few use cases.
-
-## High Level Design (HLD)
-
-High Level Design (HLD) often is very open-ended and broad. It's a 30,000 foot view of the system that covers what the
-various components of the systems and how they interact with each other.
-The objective here is to come up with various sub-systems and modules and identify how they will interact with each
-other.
-Eg: Design Food Delivery App, Design Uber, Design Twitter.
-
-1. Component diagrams
-2. Sequence diagrams
-3. Use-cases
-4. API Interaction
-
-Prior knowledge of the system is required inorder to make the discussion meaningful. If the candidate is asked to
-design `management system for a particle accelerator` and he has no idea about it, it becomes difficult to have
-meaningful discussions.
-
-## Low Level Design (LLD)
-
-Low Level Design (LLD) involves picking a specific module/sub-system from the HLD and doing a deep dive into its
-implementations.
-The problem statement is more detailed and outcome is clear.
-Eg: Design a build system that builds the artifact when code is submitted capable for handling 1-5K parallel builds,
-design the order acceptance system for food delivery app that can cater to 7-10K requests per hour.
+We start with requirement gathering
 
 ### 1. Functional requirements
 
@@ -69,6 +44,30 @@ design the order acceptance system for food delivery app that can cater to 7-10K
 * What time of the day do you need the servers?
 * What is the budget and expenses related to the servers?
 
+## High Level Design (HLD)
+
+High Level Design (HLD) often is very open-ended and broad. It's a 30,000 foot view of the system that covers what the
+various components of the systems and how they interact with each other.
+The objective here is to come up with various sub-systems and modules and identify how they will interact with each
+other.
+Eg: Design Food Delivery App, Design Uber, Design Twitter.
+
+1. Component diagrams
+2. Sequence diagrams
+3. Use-cases
+4. API Interaction
+
+## Low Level Design (LLD)
+
+Low Level Design (LLD) involves picking a specific module/sub-system from the HLD and doing a deep dive into its
+implementations. The problem statement is more detailed and outcome is clear.
+Eg: Design the order acceptance system for food delivery app that can cater to 7-10K requests per hour.
+
+1. Entity Relationship diagrams
+2. Decision tree/Flow chart
+3. Class diagrams
+4. Swim-lane diagrams
+
 ## Fundamentals
 
 ### 1. Short-Polling vs Long-Polling vs SSE (Server Sent Events) vs Websocket
@@ -83,10 +82,10 @@ design the order acceptance system for food delivery app that can cater to 7-10K
 
 |                         | Websocket                        | Server Sent Event          | Long-Poll                  |
 |:------------------------|:---------------------------------|:---------------------------|:---------------------------|
-| <b>Type Of Channel</b>  | Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
-| <b>Type of Client</b>   | Server Push & Client Send        | Server Push                | Client Pull                |
-| <b>Type of Data</b>     | Text + Binary                    | Text                       | Text + Binary              |
-| <b>Connection Limit</b> | 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
+| **Type Of Channel**  | Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
+| **Type of Client**   | Server Push & Client Send        | Server Push                | Client Pull                |
+| **Type of Data**     | Text + Binary                    | Text                       | Text + Binary              |
+| **Connection Limit** | 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
 
 [https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
@@ -206,10 +205,10 @@ To prevent the following read issues, 4 isolation levels are provided
 
 | ISOLATION-LEVEL          | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
 |:-------------------------|:-----------|:--------------------|:-------------|
-| <b>READ_UNCOMMITED</b>   | YES        | YES                 | YES          |
-| <b>READ_COMMITED</b>     | NO         | YES                 | YES          |
-| <b>READ_REPEATABLE</b>   | NO         | NO                  | YES          |
-| <b>READ_SERIALIZABLE</b> | NO         | NO                  | NO           |
+| **READ_UNCOMMITED**   | YES        | YES                 | YES          |
+| **READ_COMMITED**     | NO         | YES                 | YES          |
+| **READ_REPEATABLE**   | NO         | NO                  | YES          |
+| **READ_SERIALIZABLE** | NO         | NO                  | NO           |
 
 
 In Spring JPA you can use isolation level on transactions or the whole session.
@@ -604,7 +603,7 @@ A streaming service is hosting a sports event. Millions of users suddenly login 
 ### 33. Bloom filter
 
 Bloom filter is a probabilistic algorithm.
-Determines if given element is present in a set or not (<b>member of set</b>). In some cases it can give false positive, but
+Determines if given element is present in a set or not (**member of set**). In some cases it can give false positive, but
 will never give a false negative.
 More hash functions you use lesser the collisions, wider the bit array lesser the collisions.
 
@@ -626,10 +625,10 @@ Real world use case:
 
 [https://youtu.be/V3pzxngeLqw](https://youtu.be/V3pzxngeLqw)
 
-### 34. Count Min Sketch
+### 34. Count-Min Sketch
 
-Count Min Sketch is a probabilistic algorithm.
-<b>Count frequency of event in streaming data</b>, uses multiple hash to map frequency on to a matrix. Uses less space.
+Count-Min Sketch is a probabilistic algorithm.
+**Count frequency of event in streaming data**, uses multiple hash to map frequency on to a matrix. Uses less space.
 In some cases it can over count due to hash collision but never under-count the events.
 
 1. Count frequency of events, range query, total, percentile.
@@ -717,23 +716,23 @@ BASE
 
 ### 41. Partition vs Sharding
 
-1. <b>Partitioning</b> - Breaks up data into many smaller blocks within the same database server. Client need not be aware of
+1. **Partitioning** - Breaks up data into many smaller blocks within the same database server. Client need not be aware of
    partitions.
    * Horizontal partition - Based on key the data is split. eg: All records for 2021 get written to partition_2021, all
    2022 records get written to partition_2022
    * Vertical partition - Based on some column the data is split. eg: All the image blob of a profile are stored in a
    different table.
-2. <b>Sharding</b> - Breaks up data into many smaller blocks in different database servers. Client must be aware of shards.
+2. **Sharding** - Breaks up data into many smaller blocks in different database servers. Client must be aware of shards.
    Cant do transactions or joins across shards. If data distribution is not uniform then will have to re-balance shards.
    eg: All customer records A-H go to database server1, all records I-Z go to database server2.
 
-<b>When to Partition?</b>
+**When to Partition?**
 
 1. When the table is too big for even indexes to search. Partition bring in improvement in query performance.
 2. When you need to purge old records as part of data management. Easier to drop partition than delete rows.
 3. Bulk loads and data deletion can be done much faster, as these operations can be performed on individual partitions.
 
-<b>When to Shard?</b>
+**When to Shard?**
 
 1. To scale out horizontally.
 2. When there are too many writes.
@@ -875,7 +874,7 @@ Services often cache some data or store local data, so it makes for a better des
 has all the data already cached/locally stored. If you send the same client request randomly to random servers each time then cache/local data is
 not utilized.
 
-Consistent hashing also prevents <b>DOS attacks</b> to some extent. If a spam client send random requests and round robin
+Consistent hashing also prevents **DOS attacks** to some extent. If a spam client send random requests and round robin
 distributes it across all nodes then the outage is large scale. However with consitent hashing only certain node will be
 impacted.
 
@@ -884,7 +883,7 @@ will move to different servers. Hence in consistent hashing we hash both the req
 link them in a hash ring.
 With consistent hashing adding a new servers affects only few requests.
 
-The distribution of servers in a hash ring may not be uniform hence you can use <b>virtual servers</b>. With more virtual
+The distribution of servers in a hash ring may not be uniform hence you can use **virtual servers**. With more virtual
 servers the distribution is more balanced.
 Eg: if there are 60K user requests and there are 6 servers each server can distribute and handle 10K. Do note that if
 one node goes down then all the requests flood the next node causing it to go down thus causing a full outage. Virtual
@@ -959,13 +958,13 @@ detect services. Istio and envoy are some of the most commonly used service mesh
 
 ### 52. Deployment Strategy
 
-<b>Guidelines for deployment</b>
+**Guidelines for deployment**
 
 1. Ensure that database schema works with both new version and old version of the service.
 2. Provide health check url to determine if node is healthy.
 3. Ensure rollback works.
 
-<b>Types of deployment</b>
+**Types of deployment**
 
 1. Rolling - Services are upgraded one after the other.
 2. Blue Green - Few services are upgraded and test teams validate and signoff before all services are upgraded.
@@ -975,7 +974,7 @@ detect services. Istio and envoy are some of the most commonly used service mesh
 
 ### 53. GeoHashing & Quadtree
 
-<b>GeoHashing</b>
+**GeoHashing**
 
 Geohashing is a geocoding method used to encode geographic coordinates such as latitude and longitude into short
 alphanumeric strings.
@@ -991,7 +990,7 @@ eg: Geohashes `af3bdmcef` and `af3bdmcfg` are spatially closer as they share the
 
 ![](geo-hashing.png)
 
-<b>QuadTree</b>
+**QuadTree**
 
 A quadtree is an in-memory tree data structure that is commonly used to partition a two-dimensional space by recursively
 subdividing it into four quadrants (grids) until the contents of the grids meet certain criteria.
@@ -1036,7 +1035,7 @@ latest customer record.
 To avoid security breaches, the objective of all systems must be to reduce the number of attack surfaces. More the
 components in your system, more the attack surfaces that need to be hardened.
 
-<b>Security Hardening</b>
+**Security Hardening**
 
 1. Network packet spoofing / eavesdropping - Someone on the same network can look at http packets using tools like
    wireshark, http packets are un-encrypted. Use https to prevent this attack
@@ -1099,23 +1098,23 @@ B+tree (Max Degree 3)
 
 ### 59. Data Race & Race conditions
 
-<b>Data Race</b> - Multiple threads access shared variable at same time without synchronization & at least one thread is
+**Data Race** - Multiple threads access shared variable at same time without synchronization & at least one thread is
 writing, can cause corruption. Eg: Addition to long/double which are 64 bits.
 
-<b>Race conditions</b> - Multiple threads access shared variable, value of variable depends on execution order of threads.
+**Race conditions** - Multiple threads access shared variable, value of variable depends on execution order of threads.
 Atomic looking operations are not done atomically.
 
 Race conditions can be of 2 types
 
-1. <b>Check & Update</b> - When two threads check if value present in map and put if absent.To prevent use locks or putIfAbsent
+1. **Check & Update** - When two threads check if value present in map and put if absent.To prevent use locks or putIfAbsent
    atomic operations.
-2. <b>Read & Update</b> - When two threads read a value and increment it. Use locks or atomic variables.
+2. **Read & Update** - When two threads read a value and increment it. Use locks or atomic variables.
 
 [https://youtu.be/KGnXr62bgHM](https://youtu.be/KGnXr62bgHM)
 
 ### 60. Merkel Tree
 
-Merkle tree also known as <b>hash tree</b> is a data structure used for data verification and synchronization.
+Merkle tree also known as **hash tree** is a data structure used for data verification and synchronization.
 It's a tree data structure where each non-leaf node is a hash of its child nodes.
 
 If the file is 100 GB then its chunked into 4 parts, A hash is calculated for each chunk and the merkle tree created.
@@ -1133,7 +1132,7 @@ original merkle tree as the hash on corrupted side doesn't match.
 
 ### 61. Pub-Sub vs Point-To-Point
 
-Message brokers allows systems to communicate with each other asynchronously. This ensures <b>loose coupling</b> between
+Message brokers allows systems to communicate with each other asynchronously. This ensures **loose coupling** between
 systems.
 Different messaging protocols AMQP, STOMP, MQTT can be used.
 
@@ -1156,13 +1155,13 @@ A service with 99.99% availability is described as having four 9s.
 
 [https://uptime.is/](https://uptime.is/)
 
-<b>Sequence vs Parallel Availability</b>
+**Sequence vs Parallel Availability**
 
 ![](availability.png)
 
 ### 63. Testing
 
-<b>Functional testing</b>
+**Functional testing**
 
 1. Unit tests - Developers write tests that test only the specific function, interaction with DB or other services are
    mocked.
@@ -1174,7 +1173,7 @@ A service with 99.99% availability is described as having four 9s.
 5. User Acceptance tests (UAT) - Testing done by user/customer before accepting the system.
 6. Smoke test / Sanity test - Testing done in production after deployment.
 
-<b>Non-Functional Testing</b>
+**Non-Functional Testing**
 
 1. Performance & Scale test - Testing done by perf team to identify performance and scale issues.
 2. Security test - Testing done to ensure no security vulnerabilities exist.
@@ -1257,7 +1256,9 @@ it is executed.
 
 ## Scenarios
 
-### 1. Design a shopping application where users can browse products and buy them.
+### 1. Design a shopping cart application.
+
+Users should be able to browse the various products and add them to cart and buy them.
 
 * If the products are rendered on a web page for each request, then the system won't scale.
 * Browsing products is more frequent than buying something.
@@ -1265,11 +1266,12 @@ it is executed.
 * Home pages or landing pages which are frequently hit perform better if they are static sites and on the CDN.
 * Even for user tailored home pages like Netflix, Hotstar etc, generate static sites per user and avoid actual backend
   calls as much as possible.
+* Each service in a micro-service architecture needs to have its own database.
 
 ![](shopping-application.png)
 
-* There are 2 services hence to we use a queue to rollback the transaction in case of any failures. i.e. Saga pattern
-* We use a DB to store the state in case the service go down they can recover from that point.
+* The external payment gateway can fail to respond hence there must be job to periodically check if the payment failed and no response came.
+* Once the order is placed the customer is redirected to the external payment gateway url with a callback url the gateway will call on success of payment.
 
 {{% notice tip "Tip" %}}
 If you can design a system where the calls never have to hit your backend service it improves the design. Eg: CDN, Edge
@@ -1279,49 +1281,40 @@ Look at client side caching as well if it means avoiding that backend call.
 
 ### 2. Design a URL shortener service (Tiny URL)
 
-Users will provide a long url, your service needs to return a short url. If the users give you the same short url you
-need to return the actual url.
+Users will provide a long url, your service needs to return a short url. If the users lookup the short url service
+needs to return the actual url.
 
 * If you generate a short url with UUID there can be collision if the key is same. More **collisions** more time is
   spent in returning a response degrading your service. The system will not scale.
-* If the pre-created short url are stored in a RDBMS database there is contention at the db when all the threads ask for
+* If the pre-created hash/short url code are stored in a RDBMS database there is contention at the db when all the threads ask for
   the next free key.
-* Ensure that pre-created short url are not sequential so that someone should not guess what the next key can be simply
+* Ensure that pre-created short url code are not sequential so that someone should not guess what the next key can be simply
   by incrementing one character.
+* The ratio of read to write (**READ:WRITE**) are not same. For every 1 write the reads can be 1000. 1:1000. Someone creates a tiny url and shares it with is 1000 followers. There will be more reads compared to writes.
 
 ![](url-shortner.png)
 
-* Given a key find the URL - We will use and RDMBS database for this. RDBMS handles the fetch very well and scales well.
-  We dont use a NO-SQL db as we want consistency (CAP).
-* We will use 2 table, first one where primary key is the short url and value is the actual url. The second table where
-  primary key is the actual url and the value is the short url.
-* A Generate key service will populate the queue with the existing short-url generated. Generate key service will ensure
+* Since we have more reads than writes we will use CQRS (Command and Query Responsibility Segregation) pattern here.
+* The Generate key service will populate the queue with the short-url codes. Generate key service will ensure
   that duplicate keys are not loaded by generating short urls in range eg: A-F, G-N ranges.
-* A consistent hashing service will handle the situation where we add more queues to the group.
-* The queue represented here is redis poll queue and not a listener based or a pub-sub queue.
+* A consistent hashing service will handle the situation where we add more queues to the group or cases when queues die.
 * The put operation first fetches a key from the queue, since there are multiple queues there is no contention to get a
-  new key. It then writes the key & value to the RDBMS.
-* If there is heavy writes at RDBMS then sharding can be done. The service needs to be aware of the shards to write to
-  and read from.
-* Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a reconciliation
+  new key. It then writes the key & value to the database.
+* If we need to scaling even more, we can use region specific sharding. The service will then need to be aware of the shards to write to
+  and read from. eg: Asia vs North America shard.
+* Nodes go down often, so if the queues die then there can be unused keys that are forever lost. We use a recovery
   task that runs nightly to recover any lost keys.
-* The service doesn't need to be aware of ranges hence we dont need any Zookeeper or consensus manager. If the short url
-  has to be generated on fly then you can use DB to know the ranges each nodes is handling, overhead of zookeeper
-  doesn't justify the benefits.
-* You can use a LRU cache to improve the get responses. Use one of the Caching Strategy discussed above.
+* Few other design approach suggest zookeeper to maintain range of keys, In the above design the service doesn't need to be aware of ranges hence we dont need Zookeeper or consensus manager. If the short url
+  has to be generated on fly then you can use DB to know the ranges each node is handling, overhead of zookeeper doesn't justify the benefits.
+* A tiny url fetches will have more probability of being queried again in short span hence cache will avoid the database call.
 
 {{% notice tip "Tip" %}}
-Avoid collisions, on a new environment there will be less collisions but as your data grows collisions will increase.
+Avoid collisions in hashing (when hash is same), on a new environment there will be fewer collisions but as your data grows collisions will increase.
 {{% /notice %}}
 
 {{% notice tip "Tip" %}}
 Avoid contention for resources, contentions grow exponentially as system scales. The simple act of asking the DB for the
 next free record among a set, incrementing a particular row value are examples where contention can occur.
-{{% /notice %}}
-
-{{% notice tip "Tip" %}}
-Don't hesitate to recommend RDBMS for high scale systems. Given a key find the record, RDBMS does this job very well.
-Remember Youtube uses RDBMS.
 {{% /notice %}}
 
 ### 3. Design a Youtube / Facebook like counter service
@@ -1332,26 +1325,27 @@ Users can like a post/video and submit their likes, the service needs to count h
 * Addition operation needs to be atomic making it difficult to scale.
 * If you treat the counter as a row in the DB and use optimistic locking with retry logic to increment with exponential
   backoff you avoid locking the resource but there are multiple attempts to update the counter which causes scale
-  issues. Hence DB is out of picture.
+  issues. So relational database is out of picture.
 * You can read more about 'Dynamic Striping' & Long Adder & Long Accumulator to get an idea how java does addition
   operation on scale. However this is restricted to a single instance.
 * If you consider each like counter as a new row you avoid contention of an update but more time is spent in summing up
   the total by counting all rows.
+* If the counter can be approx values, then you can use Count-Min Sketch approach.
 
 ![](like-service.png)
 
 * Redis provides **atomic** operations of increment. We dont want to keep a single video like counter on one node as it
   can overload it if there are more likes for that video compared to others.
-* By using **Round Robin** we can scale our service as by adding more redis nodes.
-* We use a **Pub-Sub** event model to let the count aggregator service to sum the counts across all redis nodes and save
+* By using **Round Robin** we can scale our service by adding more redis nodes.
+* We use a Queue event model to let the count aggregator service to sum the counts across all redis nodes and save
   that to a DB.
 * The get count will always read the DB for latest count. There will be a slight delay from the time we submit the like
-  till we see the count, however this is **eventual consistency**.
+  till we see the count which is **eventual consistency**.
 * The event queue payload can carry information about nodes that got updated, this way the aggregator service need not
   iterate over all redis nodes.
 
 {{% notice tip "Tip" %}}
-Avoid updating DB rows in most cases, updates don't scale. Always prefer using inserts over updates.
+Avoid updating DB rows in most cases, updates don't scale. Always prefer using inserts/append over updates.
 {{% /notice %}}
 
 {{% notice tip "Tip" %}}
@@ -1368,7 +1362,7 @@ If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 5
 
 * It looks similar to the like counter service, where we can (atomic) decrement the budget based on the number of Ads
   being served. An incoming request randomly picks an Ad and decrements the budget for that Ad till it reaches 0.
-  However such a design will still run into contention when scaled.
+  However such a design will still run into contention when scaled because of the decrement operation.
 * The contention occurs when we want to decrement the budget, since we cant distribute the budget value across multiple
   nodes, the decrement operation still needs to happen on one node and in atomic fashion.
 * Assume there is only 1 Nike brand with a budget of 1M. Now when there is huge load since there is only 1 brand and the
@@ -1383,8 +1377,7 @@ If each ad impression costs 1$ then you can do 1000 Ad impressions of Nike and 5
   associated ad is served.
 * Once the Queue is out of tokens no Ads are served for that brand.
 * The Ad fetcher service needs to be aware of which queue to deque, it needs to be aware of how many queues are
-  associated with the given brand.
-* If a queue goes down the token seeder can identify and recreate a new queue based on the transactional log that is
+  associated with the given brand. If a queue goes down the token seeder can identify and recreate a new queue based on the transactional log that is
   held by each service to identify how many tokens were already served.
 * If there is a new brand that wants to join, just create the tokens and seed a queue and add it to the group. The next
   round-robin should pick it up.
@@ -1394,7 +1387,7 @@ Instead of incrementing/decrementing a counter, check if it's possible to create
 tokens in a queue/bucket it's easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
-### 4. Design a Code Deployment System
+### 4. Design a Code Build & Deploy System
 
 Build the code when someone commits code to a branch and deploy it to a machine.
 
@@ -1408,6 +1401,10 @@ Build the code when someone commits code to a branch and deploy it to a machine.
   nodes.
 
 ![](code-deployment.png)
+
+* We maintain dedicated queues for each region. If one region is under heavy load we can add more consumers/workers to address that region.
+* A periodic job checks for worker node heartbeat, if the TTL has expired then will restart the job.
+* After the build is done the queue is updated, the next stage of deploy is started.
 
 {{% notice tip "Tip" %}}
 Split the tasks into smaller sub-tasks so that they can be restarted in case of failure.
@@ -1428,21 +1425,16 @@ need to be de-duplicated based on few columns eg: Name & phone number column.
 * You can use a database with unique constraints, but this is write intensive task hence won't scale.
 * Since the files arrive once a day, this is more batch oriented and not streaming task.
 * Use a Bloom Filter a probabilistic data structure. This is used to test whether an element is a member of a set. There
-  can be False-positive matches but no false negatives. Refer above section for overview of Bloom Filter.
-* Pick a big bit array & many hash functions to avoid collision this will avoid false positives as much as possible.
+  can be False-positive matches but no false negatives. Pick a big bit array & many hash functions to avoid collision this will avoid false positives as much as possible.
 * Bloom filter bit array resides in memory hence ensure that the file is processed by the same service. If the bit array
   needs to be shared, use redis in-memory BITFIELD
 * If false positive can not be avoided despite the large hash range, we can rely upon db unique constraints check as the
-  2nd level of safety.
+  2nd level check to verify only records that are identified as duplicate.
 
 ![](file-dedupe.png)
 
 {{% notice tip "Tip" %}}
-Smaller tasks take less time, can be restarted, can be distributed. Always check if the input data can be chunked.
-{{% /notice %}}
-
-{{% notice tip "Tip" %}}
-Use Bloom Filter to test if an element is a member of a set.
+Smaller tasks take less time, can be restarted/retried, can be distributed. Always check if the input data can be chunked & tasks made to smaller units instead of one big task.
 {{% /notice %}}
 
 ### 6. Design a flash sale system
@@ -1477,7 +1469,7 @@ Behavioural questions try to understand if the candidate is fit for certain role
 2. Team fit - Will hiring the candidate create conflict within teams?
 3. Role fit - Will candidate meet the role requirements?
 
-<b>Questions</b>
+**Questions**
 
 1. Why are you leaving your organization?
 2. What was the toughest problem you solved?
@@ -1485,7 +1477,7 @@ Behavioural questions try to understand if the candidate is fit for certain role
 4. What do you do when your proposed design is shot-down by other peers?
 5. What do you do when a junior causes a production outage?
 
-<b>Tips</b>
+**Tips**
 
 1. Avoid blaming others.
 2. Take ownership for success & failure.
