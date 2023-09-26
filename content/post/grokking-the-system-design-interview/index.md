@@ -678,7 +678,7 @@ Each node holds number of terms it has served as leader. If 2 systems get same v
 
 ![](consensus-algorithm.png)
 
-Consul, etcd, Zookeeper
+eg: Consul, etcd, Zookeeper
 
 [https://youtu.be/fcFqFfsAlSQ](https://youtu.be/fcFqFfsAlSQ)
 
@@ -940,7 +940,10 @@ eg: Kubernetes namespaces
 1. Authentication - Is the user allowed to use the system?
 2. Authorization - Does the user have the right role/permission to execute that operation?
 
-### 51. Service Mesh
+### 51. Service Mesh & API Gateway
+
+API gateway is a component sits between clients and services and  provides centralized handling of API communication between them.
+API Gateway authenticates all traffic before routing it to the called service
 
 Service-to-service communication is essential in a distributed application but routing this communication, both within
 and across application clusters, becomes increasingly complex as the number of services grows. Service mesh enables
@@ -1074,7 +1077,7 @@ Kubernetes is a platform for managing containerized workloads.
 
 ### 58. Indexing - Btree, B+tree, BitMap
 
-Indexes help find the data in large data set. Full table scan are costly hence reducing the search space is always preferred.
+Indexes help find the required data in large data set. Full table scan are costly hence reducing the search space is always preferred.
 
 1. BitMap index - A binary array to represent value, Uses less memory.
 2. Btree - Creates a balanced tree on insert.
@@ -1096,30 +1099,28 @@ B+tree (Max Degree 3)
 
 ### 59. Data Race & Race conditions
 
-Data Race - Multiple threads access shared variable at same time without synchronization & at least one thread is
+<b>Data Race</b> - Multiple threads access shared variable at same time without synchronization & at least one thread is
 writing, can cause corruption. Eg: Addition to long/double which are 64 bits.
 
-Race conditions - Multiple threads access shared variable, value of variable depends on execution order of threads.
+<b>Race conditions</b> - Multiple threads access shared variable, value of variable depends on execution order of threads.
 Atomic looking operations are not done atomically.
 
 Race conditions can be of 2 types
 
-1. Check & Update - When two threads check if value present in map and put if absent.To prevent use locks or putIfAbsent
+1. <b>Check & Update</b> - When two threads check if value present in map and put if absent.To prevent use locks or putIfAbsent
    atomic operations.
-2. Read & Update - When two threads read a value and increment it. Use locks or atomic variables.
+2. <b>Read & Update</b> - When two threads read a value and increment it. Use locks or atomic variables.
 
 [https://youtu.be/KGnXr62bgHM](https://youtu.be/KGnXr62bgHM)
 
 ### 60. Merkel Tree
 
-Merkle tree also known as hash tree is a data structure used for data verification and synchronization.
+Merkle tree also known as <b>hash tree</b> is a data structure used for data verification and synchronization.
 It's a tree data structure where each non-leaf node is a hash of its child nodes.
 
 If the file is 100 GB then its chunked into 4 parts, A hash is calculated for each chunk and the merkle tree created.
 If any chunk of the file is corrupted then it's easy to detect it and fix it by comparing new merkle tree to the
 original merkle tree as the hash on corrupted side doesn't match.
-
-![](merkel-tree.png)
 
 1. This structure of the tree allows efficient mapping of huge data and small changes made to the data can be easily
    identified.
@@ -1128,9 +1129,11 @@ original merkle tree as the hash on corrupted side doesn't match.
 3. The root hash is used as the fingerprint for the entire data. If root hash doesn't match then some data below has
    changed.
 
+![](merkel-tree.png)
+
 ### 61. Pub-Sub vs Point-To-Point
 
-Message brokers allows systems to communicate with each other asynchronously. This ensures loose coupling between
+Message brokers allows systems to communicate with each other asynchronously. This ensures <b>loose coupling</b> between
 systems.
 Different messaging protocols AMQP, STOMP, MQTT can be used.
 
@@ -1149,34 +1152,34 @@ A service with 99.99% availability is described as having four 9s.
 | Availability (Percent) | Downtime (Year) | Downtime (Month) | Downtime (Day) |
 |:-----------------------|:----------------|:-----------------|:---------------|
 | 99.9% (three nine)     | 8h 45m          | 43m 49s          | 1m 26s         |
-| 99.99% (three nine)    | 52m 35s         | 4m 22s           | 8s             |
+| 99.99% (four nine)     | 52m 35s         | 4m 22s           | 8s             |
 
 [https://uptime.is/](https://uptime.is/)
 
-Availability in Sequence vs Parallel
+<b>Sequence vs Parallel Availability</b>
 
 ![](availability.png)
 
 ### 63. Testing
 
-Functional testing
+<b>Functional testing</b>
 
-1. Unit testing - Developers write tests that test only the specific function, interaction with DB or other services are
+1. Unit tests - Developers write tests that test only the specific function, interaction with DB or other services are
    mocked.
-2. Integration testing - Writing tests that interact with other components like DB or external services, validates
+2. Integration tests - Writing tests that interact with other components like DB or external services, validates
    system interactions.
-3. Functional testing - Similar to integration testing, but validates functionality, real use cases.
-4. Regression testing - Run by QE team, automation scripts that executes tests and validate against recurrence of known
+3. Functional tests - Similar to integration testing, but validates functionality, real use cases.
+4. Regression tests - Run by QE team, automation scripts that executes tests and validate against recurrence of known
    issues.
-5. UAT - Testing done by user/customer before accepting the system.
-6. Smoke Testing / Sanity Testing - Testing done in production after deployment.
+5. User Acceptance tests (UAT) - Testing done by user/customer before accepting the system.
+6. Smoke test / Sanity test - Testing done in production after deployment.
 
-Non-Functional Testing
+<b>Non-Functional Testing</b>
 
-1. Performance & Scale testing - Testing done by perf team to identify performance and scale issues.
-2. Security testing - Testing done to ensure no security vulnerabilities exist.
-3. Usability testing - Tests if the colors and button placement are good. Tracks user behaviour when using the system.
-4. Soak testing - Runs suite of tests that run for longer period of time. eg: 2 days, 1 week etc.
+1. Performance & Scale test - Testing done by perf team to identify performance and scale issues.
+2. Security test - Testing done to ensure no security vulnerabilities exist.
+3. Usability test - Tests if the colors and button placement are good. Tracks user behaviour when using the system.
+4. Soak test - Runs suite of tests that run for longer period of time. eg: 2 days, 1 week etc.
 
 ### 64. REST
 
@@ -1197,14 +1200,21 @@ it is executed.
 | PATCH   | Apply partial update on resource object                            | False      |
 | OPTIONS | Determine what HTTP methods are supported by a particular resource | Yes        |
 
+### 65. Types of database
+
+1. Relational Database - Each row is a record and column is a field in the record. eg: PostgresSQL
+2. Columnar Database - Stores data by columns. Eg: Cassandra
+3. Document Database - Data is semi-structured, encoded in json, xml, bson eg: MongoDB
+4. Graph Database - Entities are represented as nodes and relations as edges. eg: Neo4j
+5. Key-Value Database - Data is stored in key value pairs. eg: Redis
+6. Time-Series Database - Optimized for timestamp data, comes with time based functions. eg: TimescaleDB
+
 ### Other Topics
 
 * Normalization vs De-Normalization
 * Federation
 * First Level vs Second Level Cache
 * HDFS - Distributed filesystem
-* Zookeeper leader election quorum
-* Gateway
 * Distributed tracing - Zipkin
 * Observability - wavefront, prometheus, nagios
 * Hadoop - Map Reduce
@@ -1213,8 +1223,7 @@ it is executed.
 * GitOps & CI/CD
 * Telemetry
 * Block chain - distributed ledger
-* Concurrent HashMap Internals
-* Race conditions
+* Concurrent HashMap Internals (HashMap vs syncronizedMap vs ConcurrentHashMap)
 * Disaster recovery
 * Auto scaling
 * Batch vs Stream data processing vs Micro Batch
@@ -1228,12 +1237,23 @@ it is executed.
 * RPC, gRPC
 * Rest vs SOAP vs GraphQL
 * Scatter Gather Pattern
-* CORS
+* CORS (Cross-origin resource sharing)
 * P2P Network
 * Tor network
 * SOLID Design principles
 * SSL vs TLS vs mTLS
 * Storage types
+* Hierarchy timing wheel
+* RSync
+* LSM tree
+* Salt / Ansible
+* JIT (Just in Time) compiler
+* Operational transformation - Shared document edit
+* Strangler pattern
+* API versioning
+* Backend for frontend (BFF) pattern
+* Transaction propagation & rollback policy 
+* DNS
 
 ## Scenarios
 
@@ -1444,6 +1464,37 @@ Use Bloom Filter to test if an element is a member of a set.
 ### 10. Design a ticket booking system
 
 [https://gitorko.github.io/ticket-booking-system/](https://gitorko.github.io/post/ticket-booking-system/)
+
+## Behavioural Questions
+
+Use STAR approach to answer a question
+
+![](star.png)
+
+Behavioural questions try to understand if the candidate is fit for certain role
+
+1. Org fit - Will hiring the candidate create issues for the organization?
+2. Team fit - Will hiring the candidate create conflict within teams?
+3. Role fit - Will candidate meet the role requirements?
+
+<b>Questions</b>
+
+1. Why are you leaving your organization?
+2. What was the toughest problem you solved?
+3. How do you deal with an ill-tempered colleague?
+4. What do you do when your proposed design is shot-down by other peers?
+5. What do you do when a junior causes a production outage?
+
+<b>Tips</b>
+
+1. Avoid blaming others.
+2. Take ownership for success & failure.
+3. Learn to delegate responsibilities & trust people to complete it.
+4. Accept feedback both positive & negative.
+5. Use the organization tools & procedures to handle conflicts that are beyond your control.
+6. Seek Peer or Mentor review/feedback when in doubt.
+7. Team accomplishment prioritizes over individual accomplishment.
+8. Treat others how you would like to be treated.
 
 ## Youtube Channels
 
