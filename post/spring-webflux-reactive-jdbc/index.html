@@ -48,57 +48,56 @@ R2DBC is still not recommended for production, hence this approach should help y
 </span></span><span class=line><span class=ln> 3</span><span class=cl><span class=kn>import</span> <span class=nn>java.util.Optional</span><span class=o>;</span>
 </span></span><span class=line><span class=ln> 4</span><span class=cl><span class=kn>import</span> <span class=nn>java.util.concurrent.Callable</span><span class=o>;</span>
 </span></span><span class=line><span class=ln> 5</span><span class=cl>
-</span></span><span class=line><span class=ln> 6</span><span class=cl><span class=kn>import</span> <span class=nn>com.demo.project64.domain.Customer</span><span class=o>;</span>
-</span></span><span class=line><span class=ln> 7</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.beans.factory.annotation.Autowired</span><span class=o>;</span>
-</span></span><span class=line><span class=ln> 8</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.beans.factory.annotation.Qualifier</span><span class=o>;</span>
-</span></span><span class=line><span class=ln> 9</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.data.repository.CrudRepository</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>10</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.publisher.Flux</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>11</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.publisher.Mono</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>12</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.scheduler.Scheduler</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>13</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.scheduler.Schedulers</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>14</span><span class=cl>
-</span></span><span class=line><span class=ln>15</span><span class=cl><span class=kd>public</span> <span class=kd>abstract</span> <span class=kd>class</span> <span class=nc>AbstractReactiveService</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>16</span><span class=cl>
-</span></span><span class=line><span class=ln>17</span><span class=cl>    <span class=nd>@Qualifier</span><span class=o>(</span><span class=s>&#34;jdbcScheduler&#34;</span><span class=o>)</span>
-</span></span><span class=line><span class=ln>18</span><span class=cl>    <span class=nd>@Autowired</span>
-</span></span><span class=line><span class=ln>19</span><span class=cl>    <span class=n>Scheduler</span> <span class=n>jdbcScheduler</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>20</span><span class=cl>
-</span></span><span class=line><span class=ln>21</span><span class=cl>    <span class=kd>public</span> <span class=n>Flux</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>findAll</span><span class=o>()</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>22</span><span class=cl>        <span class=k>return</span> <span class=n>asyncIterable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>findAll</span><span class=o>().</span><span class=na>iterator</span><span class=o>());</span>
-</span></span><span class=line><span class=ln>23</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>24</span><span class=cl>
-</span></span><span class=line><span class=ln>25</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Optional</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;&gt;</span> <span class=nf>findById</span><span class=o>(</span><span class=n>Long</span> <span class=n>id</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>26</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>findById</span><span class=o>(</span><span class=n>id</span><span class=o>));</span>
-</span></span><span class=line><span class=ln>27</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>28</span><span class=cl>
-</span></span><span class=line><span class=ln>29</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>save</span><span class=o>(</span><span class=n>Customer</span> <span class=n>customer</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>30</span><span class=cl>        <span class=k>return</span> <span class=o>(</span><span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;)</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>save</span><span class=o>(</span><span class=n>customer</span><span class=o>));</span>
-</span></span><span class=line><span class=ln>31</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>32</span><span class=cl>
-</span></span><span class=line><span class=ln>33</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Void</span><span class=o>&gt;</span> <span class=nf>delete</span><span class=o>(</span><span class=n>Customer</span> <span class=n>customer</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>34</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>35</span><span class=cl>            <span class=n>getRepository</span><span class=o>().</span><span class=na>delete</span><span class=o>(</span><span class=n>customer</span><span class=o>);</span>
-</span></span><span class=line><span class=ln>36</span><span class=cl>            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>37</span><span class=cl>        <span class=o>});</span>
-</span></span><span class=line><span class=ln>38</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>39</span><span class=cl>
-</span></span><span class=line><span class=ln>40</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Void</span><span class=o>&gt;</span> <span class=nf>deleteAll</span><span class=o>()</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>41</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>42</span><span class=cl>            <span class=n>getRepository</span><span class=o>().</span><span class=na>deleteAll</span><span class=o>();</span>
-</span></span><span class=line><span class=ln>43</span><span class=cl>            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
-</span></span><span class=line><span class=ln>44</span><span class=cl>        <span class=o>});</span>
-</span></span><span class=line><span class=ln>45</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>46</span><span class=cl>
-</span></span><span class=line><span class=ln>47</span><span class=cl>    <span class=kd>protected</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>asyncCallable</span><span class=o>(</span><span class=n>Callable</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>callable</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>48</span><span class=cl>        <span class=k>return</span> <span class=n>Mono</span><span class=o>.</span><span class=na>fromCallable</span><span class=o>(</span><span class=n>callable</span><span class=o>).</span><span class=na>subscribeOn</span><span class=o>(</span><span class=n>Schedulers</span><span class=o>.</span><span class=na>parallel</span><span class=o>()).</span><span class=na>publishOn</span><span class=o>(</span><span class=n>jdbcScheduler</span><span class=o>);</span>
-</span></span><span class=line><span class=ln>49</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>50</span><span class=cl>
-</span></span><span class=line><span class=ln>51</span><span class=cl>    <span class=kd>protected</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Flux</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>asyncIterable</span><span class=o>(</span><span class=n>Iterable</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>iterable</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=ln>52</span><span class=cl>        <span class=k>return</span> <span class=n>Flux</span><span class=o>.</span><span class=na>fromIterable</span><span class=o>(</span><span class=n>iterable</span><span class=o>).</span><span class=na>subscribeOn</span><span class=o>(</span><span class=n>Schedulers</span><span class=o>.</span><span class=na>parallel</span><span class=o>()).</span><span class=na>publishOn</span><span class=o>(</span><span class=n>jdbcScheduler</span><span class=o>);</span>
-</span></span><span class=line><span class=ln>53</span><span class=cl>    <span class=o>}</span>
-</span></span><span class=line><span class=ln>54</span><span class=cl>
-</span></span><span class=line><span class=ln>55</span><span class=cl>    <span class=kd>protected</span> <span class=kd>abstract</span> <span class=n>CrudRepository</span> <span class=nf>getRepository</span><span class=o>();</span>
-</span></span><span class=line><span class=ln>56</span><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=ln> 6</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.beans.factory.annotation.Autowired</span><span class=o>;</span>
+</span></span><span class=line><span class=ln> 7</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.beans.factory.annotation.Qualifier</span><span class=o>;</span>
+</span></span><span class=line><span class=ln> 8</span><span class=cl><span class=kn>import</span> <span class=nn>org.springframework.data.repository.CrudRepository</span><span class=o>;</span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.publisher.Flux</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>10</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.publisher.Mono</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>11</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.scheduler.Scheduler</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>12</span><span class=cl><span class=kn>import</span> <span class=nn>reactor.core.scheduler.Schedulers</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>13</span><span class=cl>
+</span></span><span class=line><span class=ln>14</span><span class=cl><span class=kd>public</span> <span class=kd>abstract</span> <span class=kd>class</span> <span class=nc>AbstractReactiveService</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>15</span><span class=cl>
+</span></span><span class=line><span class=ln>16</span><span class=cl>    <span class=nd>@Qualifier</span><span class=o>(</span><span class=s>&#34;jdbcScheduler&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=ln>17</span><span class=cl>    <span class=nd>@Autowired</span>
+</span></span><span class=line><span class=ln>18</span><span class=cl>    <span class=n>Scheduler</span> <span class=n>jdbcScheduler</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>19</span><span class=cl>
+</span></span><span class=line><span class=ln>20</span><span class=cl>    <span class=kd>public</span> <span class=n>Flux</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>findAll</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>21</span><span class=cl>        <span class=k>return</span> <span class=n>asyncIterable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>findAll</span><span class=o>().</span><span class=na>iterator</span><span class=o>());</span>
+</span></span><span class=line><span class=ln>22</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>23</span><span class=cl>
+</span></span><span class=line><span class=ln>24</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Optional</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;&gt;</span> <span class=nf>findById</span><span class=o>(</span><span class=n>Long</span> <span class=n>id</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>25</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>findById</span><span class=o>(</span><span class=n>id</span><span class=o>));</span>
+</span></span><span class=line><span class=ln>26</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>27</span><span class=cl>
+</span></span><span class=line><span class=ln>28</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>save</span><span class=o>(</span><span class=n>T</span> <span class=n>customer</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>29</span><span class=cl>        <span class=k>return</span> <span class=o>(</span><span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;)</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=n>getRepository</span><span class=o>().</span><span class=na>save</span><span class=o>(</span><span class=n>customer</span><span class=o>));</span>
+</span></span><span class=line><span class=ln>30</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>31</span><span class=cl>
+</span></span><span class=line><span class=ln>32</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Void</span><span class=o>&gt;</span> <span class=nf>delete</span><span class=o>(</span><span class=n>T</span> <span class=n>object</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>33</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>34</span><span class=cl>            <span class=n>getRepository</span><span class=o>().</span><span class=na>delete</span><span class=o>(</span><span class=n>object</span><span class=o>);</span>
+</span></span><span class=line><span class=ln>35</span><span class=cl>            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>36</span><span class=cl>        <span class=o>});</span>
+</span></span><span class=line><span class=ln>37</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>38</span><span class=cl>
+</span></span><span class=line><span class=ln>39</span><span class=cl>    <span class=kd>public</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>Void</span><span class=o>&gt;</span> <span class=nf>deleteAll</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>40</span><span class=cl>        <span class=k>return</span> <span class=n>asyncCallable</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>41</span><span class=cl>            <span class=n>getRepository</span><span class=o>().</span><span class=na>deleteAll</span><span class=o>();</span>
+</span></span><span class=line><span class=ln>42</span><span class=cl>            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+</span></span><span class=line><span class=ln>43</span><span class=cl>        <span class=o>});</span>
+</span></span><span class=line><span class=ln>44</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>45</span><span class=cl>
+</span></span><span class=line><span class=ln>46</span><span class=cl>    <span class=kd>protected</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Mono</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>asyncCallable</span><span class=o>(</span><span class=n>Callable</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>callable</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>47</span><span class=cl>        <span class=k>return</span> <span class=n>Mono</span><span class=o>.</span><span class=na>fromCallable</span><span class=o>(</span><span class=n>callable</span><span class=o>).</span><span class=na>subscribeOn</span><span class=o>(</span><span class=n>Schedulers</span><span class=o>.</span><span class=na>parallel</span><span class=o>()).</span><span class=na>publishOn</span><span class=o>(</span><span class=n>jdbcScheduler</span><span class=o>);</span>
+</span></span><span class=line><span class=ln>48</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>49</span><span class=cl>
+</span></span><span class=line><span class=ln>50</span><span class=cl>    <span class=kd>protected</span> <span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>Flux</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=nf>asyncIterable</span><span class=o>(</span><span class=n>Iterable</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>iterable</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=ln>51</span><span class=cl>        <span class=k>return</span> <span class=n>Flux</span><span class=o>.</span><span class=na>fromIterable</span><span class=o>(</span><span class=n>iterable</span><span class=o>).</span><span class=na>subscribeOn</span><span class=o>(</span><span class=n>Schedulers</span><span class=o>.</span><span class=na>parallel</span><span class=o>()).</span><span class=na>publishOn</span><span class=o>(</span><span class=n>jdbcScheduler</span><span class=o>);</span>
+</span></span><span class=line><span class=ln>52</span><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=ln>53</span><span class=cl>
+</span></span><span class=line><span class=ln>54</span><span class=cl>    <span class=kd>protected</span> <span class=kd>abstract</span> <span class=n>CrudRepository</span> <span class=nf>getRepository</span><span class=o>();</span>
+</span></span><span class=line><span class=ln>55</span><span class=cl><span class=o>}</span>
 </span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln> 1</span><span class=cl><span class=kn>package</span> <span class=nn>com.demo.project64.service</span><span class=o>;</span>
 </span></span><span class=line><span class=ln> 2</span><span class=cl>
 </span></span><span class=line><span class=ln> 3</span><span class=cl><span class=kn>import</span> <span class=nn>java.util.List</span><span class=o>;</span>
