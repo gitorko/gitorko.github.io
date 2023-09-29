@@ -421,12 +421,21 @@ Edge Servers run compute operations closer to the customer region, eg: Streaming
 
 ### 18. Kafka
 
-Kafka is a distributed & fault-tolerant,high throughput, scalable stream processing & messaging system.
+Kafka is a distributed & fault-tolerant, high throughput, scalable stream processing & messaging system.
 
 1. Kafka as publisher-subscriber messaging system.
 2. Kafka as queue (point-point) messaging system.
 3. Kafka as stream processing system that reacts to event in realtime.
 4. Kafka as a store for data.
+
+**Terms**
+
+* Broker: Kafka server
+* Topic: Logical grouping of partition, data stream.
+* Partition: Messages are stored in a partition. A topic can contain many partitions.
+* Offset: Used to keep track of message.
+* Consumer: Client application that processes message from a partition.
+* Consumer Group: Group of consumers
 
 ![](kafka-architecture.png)
 
@@ -434,6 +443,9 @@ Kafka is a distributed & fault-tolerant,high throughput, scalable stream process
 
 * Order is guaranteed only withing a partition and not across partitions.
 * Within a consumer group a partition can be read only by one consumer.
+* Leader replicates partition to other replica servers based on replication count. If leader fails then follower will become leader.
+* Zookeeper manages all brokers, keeps track of offset, consumer group, topic, paritions etc.
+* Once a message acknowledgement fails kafka will retry and even after certain retries if it fails, the message will be moved to dead letter.
 
 Kafka provides high throughput because of the following
 
@@ -446,18 +458,53 @@ Kafka provides high throughput because of the following
 
 [https://youtu.be/UNUz1-msbOM](https://youtu.be/UNUz1-msbOM)
 
-### 19. Rabbit MQ
+### 19. RabbitMQ
+
+RabbitMQ is a distributed message-broker that support various message protocols.
+
+* AMQP (Advanced Message Queuing Protocol)
+* STOMP (Streaming Text Oriented Messaging Protocol)
+* MQTT (MQ Telemetry Transport)
+
+Models of communication
+
+1. Queue - Message published once & consumed once.
+2. Pub-Sub - Message published once consumed many times
+
+Retry Mechanism
+
+1. Auto-Ack - Broker will delete message after delivering it to consumer. Doesn't wait till consumer processes it.
+2. Manual-Ack - Broker will delete message only after consumer acknowledges processing it.
+
+After certain retry if it still fails then rejected messages will move to dead letter queue.
+
+RabbitMQ Distributed Setup
+
+1. Cluster - Exchanges replicate to all servers. , all nodes need same version. Support bi-direction. 
+2. Federation - Exchange on one broker publishes to an exchange on another. Many brokers on different version. Supports both uni and bi direction.
+3. Shovel plugin - similar to federation but works at low level.
+
+Difference
+
+| Cluster                   | Federation                              |
+|:--------------------------|:----------------------------------------|
+| Single logical broker     | Many brokers                            |
+| All nodes on same version | All nodes on different version          |
+| Bi-Direction topology     | Uni-Direction  or Bi-Direction topology |
+| CP System (CAP)           | AP System (CAP)                         |
 
 ![](rabbit-mq.png)
 
-| RabbitMQ                             | Kafka                              |
-|:-------------------------------------|:-----------------------------------|
-| Consumed event deleted, Less storage | All events stored, More storage    |
-| Queues are single threaded           | Can scale based on consumer groups |
-| Complex with more brokers            | Scales with more brokers           |
-| No events replay                     | Events can be read from any point  |
-| Ordering guaranteed                  | Ordering per partition             |
-| Push model                           | Push & Pull model                  |
+**RabbitMQ vs Kafka**
+
+| RabbitMQ                                   | Kafka                                          |
+|:-------------------------------------------|:-----------------------------------------------|
+| Push model                                 | Pull model                                     |
+| Consumed event deleted, Less storage       | All events stored, More storage required       |
+| Queues are single threaded                 | Can scale based on consumer groups             |
+| Smart broker (routing key) & Dumb Consumer | Dumb broker & Smart Consumer (partition aware) |
+| No events replay                           | Events can be read from any point              |
+| Ordering guaranteed                        | Ordering guaranteed only within partition      |
 
 [https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case](https://www.upsolver.com/blog/kafka-versus-rabbitmq-architecture-performance-use-case)
 
@@ -475,6 +522,7 @@ Limitation is that dataset cant be larger than memory (RAM)
 
 Since redis is single threaded there is no need for lock, no need for thread synchronization, no context switching, no time spent to create or destroy threads. 
 It doesn't need multi thread because it uses **I/O multiplexing** where a single thread can wait on many socket connections for read/write.
+Redis cluster can be scaled even more with **sharding**.
 
 Datastructures supported
 
@@ -490,6 +538,14 @@ Datastructures supported
 10. Stream
 
 ![](redis.png)
+
+**Redis Use-Cases**
+
+1. Caching
+2. Session store
+3. Gaming leaderboards (SortedSet)
+4. Rate limiting (INCR - Counter & Setting TTL)
+5. Distributed Lock (SETNX - SET if Not exists)
 
 [https://youtu.be/5TRFpFBccQM](https://youtu.be/5TRFpFBccQM)
 
@@ -1355,6 +1411,16 @@ The release of new features of one frontend does not affect the other.
 
 ## Scenarios
 
+Each of the usecases below highlights a good system design practice:
+
+1. Avoid making backend calls if possible.
+2. Avoid using contention for shared resources.
+3. Avoid updating row, consider inserts over updates.
+4. If possible create objects of representative resources instead of using counter
+5. Split the big task to smaller task, consider failure and retry
+6. Use a queue in cases where producer can produce more than consumer can consume
+7. Minimize the request-response time window.
+
 ### 1. Design a shopping cart application.
 
 Users should be able to browse the various products and add them to cart and buy them.
@@ -1407,8 +1473,8 @@ needs to return the actual url.
   has to be generated on fly then you can use DB to know the ranges each node is handling, overhead of zookeeper doesn't justify the benefits.
 * A tiny url fetches will have more probability of being queried again in short span hence cache will avoid the database call.
 
-{{% notice tip "Tip" %}}
-Avoid collisions in hashing (when hash is same), on a new environment there will be fewer collisions but as your data grows collisions will increase.
+{{% notice warning "Note" %}}
+Be aware of collisions in hashing (when hash is same), on a new environment there will be fewer collisions but as your data grows collisions will increase.
 {{% /notice %}}
 
 {{% notice tip "Tip" %}}
@@ -1509,10 +1575,6 @@ Build the code when someone commits code to a branch and deploy it to a machine.
 Split the tasks into smaller sub-tasks so that they can be restarted in case of failure.
 {{% /notice %}}
 
-{{% notice tip "Tip" %}}
-Asynchronous jobs can be queued and processed.
-{{% /notice %}}
-
 ### 5. Design a large scale file de-duplication service
 
 You will receive a number of files (customer records) in a folder once a day, the file sizes range from 10GB-50GB that
@@ -1542,7 +1604,21 @@ When there are more producers than consumers it will quickly overwhelm the syste
 
 ### 6. Design a flash sale system
 
+You have limited items that are up for sale. You can expect a large number of users trying to buy the product by adding it to the shopping cart. You cant oversell or undersell.
+
+![](flash-sale.png)
+
+* The main objective is to keep the request-response window small. If the request waits (synchronous) till the operation of adding to cart is complete it will bring down the system.
+* We will use a rabbitmq to queue the incoming burst of requests, **hot-potato** handling. As soon as the request to add to cart is received we will add it to the queue.
+* Each user after placing the request to add to cart will be in wait state and query the status of his request.
+
+**Real Implementation**
+
 [https://gitorko.github.io/flash-sale-system/](https://gitorko.github.io/post/flash-sale-system/)
+
+{{% notice tip "Tip" %}}
+Always minimize the request-response time window. The longer the request is kept open it will negatively impact the system.
+{{% /notice %}}
 
 ### 7. Design a chat server
 
