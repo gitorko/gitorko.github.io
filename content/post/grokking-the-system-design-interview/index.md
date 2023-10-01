@@ -38,11 +38,67 @@ We start with requirement gathering
 ### 3. Capacity planning
 
 * How many servers would you need?
+* How many users (load) are going to access the service?
 * How much storage is required?
-* What bandwidth is required?
+* What network bandwidth is required?
+* What latency can be tolerated?
 * Do you need GPU specific processors or CPU specific processors?
 * What time of the day do you need the servers?
 * What is the budget and expenses related to the servers?
+
+Back Of Envelope estimation
+
+**Load Estimation** 
+
+How many requests per second need to be handled?
+
+| Type                           | Count | Description         |
+|:-------------------------------|:------|:--------------------|
+| Average users per day          | 10^6  | 1 million           |
+| Average requests per user      | 10    |                     |
+| Average total requests per day | 10^7  | 10 million requests |
+| Average total requests per sec | 100   |                     |
+
+**Storage Estimation**
+
+How much storage is needed for 5 year?
+
+| Type                                   | Count   | Description         |
+|:---------------------------------------|:--------|:--------------------|
+| Average Total requests per day         | 10^7    | 10 million requests |
+| Average size of request per user       | 2 MB    |                     |
+| Average size of request per day        | 20^7 MB | 20 TB               |
+| Average size of request for 5 year day | 36 PB   |                     |
+
+**Bandwidth Estimation**
+
+How much network bandwidth is needed?
+
+| Type                             | Count      | Description |
+|:---------------------------------|:-----------|:------------|
+| Average size of request per day  | 20^7 MB    | 20 TB       |
+| Average size of request per sec  | 230 MB/Sec |             |
+
+**Latency Estimation**
+
+What latency is acceptable?
+
+| Type               | Count  | Description                   |
+|:-------------------|:-------|:------------------------------|
+| Sequential Latency | 100 ms | Sum of latency of all sources |
+| Parallel Latency   | 75 ms  | Max of latency of all sources |
+
+**Resource Estimation**
+
+How many CPU core/servers are needed?
+
+| Type                                    | Count       | Description |
+|:----------------------------------------|:------------|:------------|
+| Average total requests per sec          | 100 req/sec |             |
+| Average cpu processing time per request | 100 ms/req  |             |
+| Average cpu processing time per sec     | 10^6 ms/sec |             |
+| Average 1 cpu core processing per sec   | 10^5 ms/sec |             |
+| Average number of cpu core              | 10          |             |
 
 ## High Level Design (HLD)
 
@@ -80,12 +136,12 @@ Eg: Design the order acceptance system for food delivery app that can cater to 7
 
 ![](client-server.png)
 
-|                         | Websocket                        | Server Sent Event          | Long-Poll                  |
-|:------------------------|:---------------------------------|:---------------------------|:---------------------------|
-| **Type Of Channel**  | Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
-| **Type of Client**   | Server Push & Client Send        | Server Push                | Client Pull                |
-| **Type of Data**     | Text + Binary                    | Text                       | Text + Binary              |
-| **Connection Limit** | 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
+|                        | Websocket                        | Server Sent Event          | Long-Poll                  |
+|:-----------------------|:---------------------------------|:---------------------------|:---------------------------|
+| **Type Of Channel**    | Full-duplex,Bidirectional        | Half-duplex,Unidirectional | Half-duplex,Unidirectional |
+| **Type of Client**     | Server Push & Client Send        | Server Push                | Client Pull                |
+| **Type of Data**       | Text + Binary                    | Text                       | Text + Binary              |
+| **Connection Limit**   | 65,536 (max number of TCP ports) | 6-8 parallel per domain    | Based on threads available |
 
 [https://youtu.be/ZBM28ZPlin8](https://youtu.be/ZBM28ZPlin8)
 
@@ -203,17 +259,17 @@ Phantom Read
 
 To prevent the following read issues, 4 isolation levels are provided
 
-| ISOLATION-LEVEL          | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
-|:-------------------------|:-----------|:--------------------|:-------------|
-| **READ_UNCOMMITED**   | YES        | YES                 | YES          |
-| **READ_COMMITED**     | NO         | YES                 | YES          |
-| **READ_REPEATABLE**   | NO         | NO                  | YES          |
-| **READ_SERIALIZABLE** | NO         | NO                  | NO           |
+| ISOLATION-LEVEL         | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
+|:------------------------|:-----------|:--------------------|:-------------|
+| **READ_UNCOMMITED**     | YES        | YES                 | YES          |
+| **READ_COMMITED**       | NO         | YES                 | YES          |
+| **READ_REPEATABLE**     | NO         | NO                  | YES          |
+| **READ_SERIALIZABLE**   | NO         | NO                  | NO           |
 
 
 In Spring JPA you can use isolation level on transactions or the whole session.
 
-```java
+```
 @Transactional(isolation = Isolation.SERIALIZABLE)
 ```
 
@@ -381,13 +437,18 @@ Different places to cache
 
 ### 14. Caching Strategy
 
+Read heavy caching strategies
+
 1. Read-Cache-Aside - Application queries the cache. If the data is found, it returns the data directly. If not it
    fetches the data from the SoR (store-of-record), stores it into the cache, and then returns.
 2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and
    returns.
-3. Write-Around - Application writes to db and to the cache.
-4. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
-5. Write-Through - Application writes to cache, cache service immediately writes to SoR.
+
+Write heavy caching strategies
+
+1. Write-Around - Application writes to db and to the cache.
+2. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
+3. Write-Through - Application writes to cache, cache service immediately writes to SoR.
 
 ![](cache-strategy.png)
 
@@ -452,11 +513,20 @@ Kafka provides high throughput because of the following
 1. Kafka scales because it works on append only mode, sequential disk write is faster than random access file write
 2. Kafka copies data from disk to network by ready with zero copy. OS buffer directly copies to NIC buffer.
 
+There is no set limit to the number of topics that can exist in a Kafka cluster, each partition has a limit of 4000 partitions per broker, maximum 200,000 partitions per Kafka cluster
+
 [https://gitorko.github.io/post/spring-apache-kafka/](https://gitorko.github.io/post/spring-apache-kafka/)
 
 [https://youtu.be/Cie5v59mrTg](https://youtu.be/Cie5v59mrTg)
 
 [https://youtu.be/UNUz1-msbOM](https://youtu.be/UNUz1-msbOM)
+
+**Kafka Use-Cases**
+
+1. Activity tracking for high traffic website
+2. Processing streaming big data
+3. Monitoring financial data in real time
+4. IoT sensor data processing
 
 ### 19. RabbitMQ
 
@@ -710,9 +780,9 @@ A streaming service is hosting a sports event. Millions of users suddenly login 
 ### 33. Bloom filter
 
 Bloom filter is a probabilistic algorithm.
-Determines if given element is present in a set or not (**member of set**). In some cases it can give false positive, but
-will never give a false negative.
+Determines if given element is present in a set or not (**member of set**). In some cases it can give false positive, but will never give a false negative.
 More hash functions you use lesser the collisions, wider the bit array lesser the collisions.
+It is space efficient as it uses less memory.
 
 1. To determine 'Member of set'
 2. No false negative but can give false positive
@@ -721,12 +791,13 @@ More hash functions you use lesser the collisions, wider the bit array lesser th
 
 ![](bloom-filter.png)
 
-Real world use case:
+**Bloom Filter Use-Cases**
 
 1. Malicious url detection in browser via bloom filter.
 2. CDN cache url, cache page only if 2nd request (member of set).
 3. Weak password detection.
 4. Username already taken.
+5. Cache only on 2nd request
 
 [https://youtu.be/Bay3X9PAX5k](https://youtu.be/Bay3X9PAX5k)
 
@@ -796,18 +867,22 @@ eg: Consul, etcd, Zookeeper
 
 ![](cap-theorem.png)
 
+1. CA System - Single Node MySql, Oracle
+2. CP System - Zookeeper
+3. AP System - Apache Couchbase, Cassandra
+
 [https://youtu.be/KmGy3sU6Xw8](https://youtu.be/KmGy3sU6Xw8)
 
 ### 39. ACID vs BASE transactions
 
-ACID
+**ACID**
 
 1. Atomicity - All changes to data are performed as if they are a single operation, either all succeed or all fail.
 2. Consistency - Data is in a consistent state when a transaction starts and when it ends.
 3. Isolation - The intermediate state of a transaction is not visible to other transactions.
 4. Durability - Data persisted survives even if system restarted.
 
-BASE
+**BASE**
 
 1. Basically Available - System guarantees availability.
 2. Soft State - The state of the system may change over time, even without input. Replication can take time so till then state is in soft-state.
@@ -1393,7 +1468,7 @@ The release of new features of one frontend does not affect the other.
 * Scatter Gather Pattern
 * CORS (Cross-origin resource sharing)
 * P2P Network
-* Tor network
+* Tor network & VPN
 * SOLID Design principles
 * SSL vs TLS vs mTLS
 * Storage types
@@ -1612,6 +1687,8 @@ You have limited items that are up for sale. You can expect a large number of us
 * We will use a rabbitmq to queue the incoming burst of requests, **hot-potato** handling. As soon as the request to add to cart is received we will add it to the queue.
 * Each user after placing the request to add to cart will be in wait state and query the status of his request.
 
+If the add to cart operation has to be completed within same request-response then use the same design as used in use case 4 `Design an Advertisement Impression Service tied to a budget` where you pre-allocate token on the queue.
+
 **Real Implementation**
 
 [https://gitorko.github.io/flash-sale-system/](https://gitorko.github.io/post/flash-sale-system/)
@@ -1622,7 +1699,26 @@ Always minimize the request-response time window. The longer the request is kept
 
 ### 7. Design a chat server
 
+The chat server needs to support 1-1 and group text based chat. The client can be offline and will receive all the message when they are back online.
+
+![](chat-server.png)
+
+* Publish-Subscribe pattern, asynchronous in nature.
+* We need to store the data to be read later when consumer is offline, hence Kafka seems a good fit, however Kafka topic and partition management introduces latency hence we use redis queue instead.
+* We will split the command channel and data channel. Command channel only send the next call-back url and action to invoke. The client will fetch the data via HTTP call. Data traffic is heavy and hence will not overload the command bidirectional channel.
+* We will partition the users based on region.
+* Which region maps to which active service is maintained by config database. Each user will have a dedicated queue to which messages will written. The same messages will be written to the DB as well in append only mode. This can be done either by service writing to both or from queue-queue transfer (i.e persist-queue transfer to delivery-queue).
+* In case the queue failure/user migration the message in DB which are not acknowledged will be reloaded to the queue. 
+* If the communication is uni-directional we can use SSE, since we want to send heartbeats we will use websocket which is bidirectional.
+* The metadata can be stored in Relation database, which the message itself can be stored in Document Database.
+
+**Real Implementation**
+
 [https://gitorko.github.io/chat-server/](https://gitorko.github.io/post/chat-server/)
+
+{{% notice tip "Tip" %}}
+Split the communication channel to command and data channel.
+{{% /notice %}}
 
 ### 8. Design a Voting service
 
@@ -1655,6 +1751,15 @@ Behavioural questions try to understand if the candidate is fit for certain role
 3. How do you deal with an ill-tempered colleague?
 4. What do you do when your proposed design is shot-down by other peers?
 5. What do you do when a junior causes a production outage?
+
+**Questions you can ask**
+
+1. How is the work culture?
+2. How often is the on-call & release cycles?
+3. What is the career growth path/levels at the org?
+4. Are the projects greenfield (new) or brownfield (existing)?
+5. How big are the teams and how many levels are there in the reporting structure?
+6. What is the cash:stock options in salary component?
 
 **Tips**
 
