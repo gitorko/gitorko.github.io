@@ -609,6 +609,15 @@ Datastructures supported
 
 ![](redis.png)
 
+**Redis Persistence**
+
+1. RDB (Redis Database): Performs point-in-time snapshots of your dataset at specified intervals.
+2. AOF (Append Only File): Logs every write operation received by the server. These operations can then be replayed again at server startup, reconstructing the original dataset.
+3. No persistence: persistence disabled.
+4. RDB + AOF: Combine both AOF and RDB.
+
+[https://redis.io/docs/management/persistence/](https://redis.io/docs/management/persistence/)
+
 **Redis Use-Cases**
 
 1. Caching
