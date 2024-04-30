@@ -2,7 +2,7 @@
 enableSearch = true
 
 # socials
-twitter = "@janedoe"
+twitter = ""
 largeTwitterCard = false # set to true if you want to show a large twitter card image. The default is a small twitter card image
 # introDescription = "Technologist"
 # introURL = "about/" # set the url for the 'read more' button below the introDescription, or set to false to not show the button

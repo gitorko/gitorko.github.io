@@ -2,7 +2,7 @@
 title: 'Spring Webflux & R2DBC'
 description: 'Spring Webflux & R2DBC'
 summary: 'Webflux integration with reactive R2DBC.'
-date: '2021-11-06'
+date: '2024-04-30'
 aliases: [/spring-webflux-r2dbc/]
 author: 'Arjun Surendra'
 categories: [Spring, R2DBC]
@@ -10,14 +10,14 @@ tags: [r2dbc, webflux]
 toc: true
 ---
 
-Webflux integration with reactive R2DBC. 
+Webflux integration with reactive R2DBC with liquibase.
 R2DBC stands for Reactive Relational Database Connectivity, It provides a reactive driver to connect to relational database.
 
 Github: [https://github.com/gitorko/project65](https://github.com/gitorko/project65)
 
 ## Spring Data R2DBC
 
-Spring Data R2DBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of ORM frameworks. This makes Spring Data R2DBC a simple, limited, opinionated object mapper. Currently, its use in production is not recommended. 
+Spring Data R2DBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of ORM frameworks. This makes Spring Data R2DBC a simple, limited, opinionated object mapper. 
 
 The following databases are supported via r2dbc libraries
 
@@ -35,7 +35,11 @@ The following databases are supported via r2dbc libraries
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/java/com/demo/project65/controller/HomeController.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/java/com/demo/project65/config/DataSourceConfig.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/java/com/demo/project65/config/DbConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/java/com/demo/project65/repository/CustomerRepository.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/resources/application.yaml" >}}
 
 ## Setup
 

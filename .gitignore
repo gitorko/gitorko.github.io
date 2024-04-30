@@ -5,3 +5,4 @@
 /dataSources.local.xml
 /.hugo_build.lock
 /.java-version
+/resources/_gen

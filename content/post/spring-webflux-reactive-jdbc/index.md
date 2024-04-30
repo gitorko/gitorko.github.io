@@ -2,7 +2,7 @@
 title: 'Spring Webflux & Reactive JDBC'
 description: 'Spring Webflux & Reactive JDBC'
 summary: 'Webflux integration with reactive JDBC, to allow non-blocking calls to database.'
-date: '2019-04-03'
+date: '2024-01-30'
 aliases: [/spring-webflux-reactive-jdbc/]
 author: 'Arjun Surendra'
 categories: [Spring, JPA]
@@ -19,9 +19,9 @@ Github: [https://github.com/gitorko/project64](https://github.com/gitorko/projec
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/Main.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/service/AbstractReactiveService.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/repositoryservice/AbstractReactiveRepoService.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/service/CustomerReactiveService.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/repositoryservice/CustomerReactiveRepoService.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/repository/CustomerRepository.java" >}}
 
