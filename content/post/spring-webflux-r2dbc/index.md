@@ -65,6 +65,11 @@ Caused by: java.lang.IllegalArgumentException: Cannot decode value of type java.
 org.springframework.data.r2dbc.function.convert.EntityRowMapper.readFrom(EntityRowMapper.java:99) ~[spring-data-r2dbc-1.0.0.M1.jar:1.0.0.M1]
 ```
 
+If you encounter unit test failures because of r2dbc repository in @SpringBootTest then exclude the classes
+
+```
+@EnableAutoConfiguration(exclude = {R2dbcAutoConfiguration.class, LiquibaseAutoConfiguration.class})
+```
 ## References
 
 [https://spring.io/projects/spring-data-r2dbc](https://spring.io/projects/spring-data-r2dbc)
