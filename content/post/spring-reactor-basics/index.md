@@ -20,14 +20,6 @@ Methods demonstrating how to use spring reactor
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project83/main/src/test/java/com/demo/project83/ReactorTest.java" >}}
 
-Reactor chaining samples
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project83/main/src/test/java/com/demo/project83/ReactorChainTest.java" >}}
-
-Reactor object samples
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project83/main/src/test/java/com/demo/project83/ReactorObjectTest.java" >}}
-
 ## References
 
 [https://projectreactor.io/](https://projectreactor.io/)
