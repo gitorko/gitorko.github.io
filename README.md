@@ -35,6 +35,11 @@ Start server
 hugo server
 ```
 
+```bash
+hugo new content post/new-post.md
+hugo server -D
+```
+
 ## Topics
 
 * JVM Memory analysis
