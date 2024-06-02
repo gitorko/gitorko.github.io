@@ -16,50 +16,52 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 
 ## References
 
-| Project    | Link                                  | Status                                                                                  |
-|:-----------|:--------------------------------------|:----------------------------------------------------------------------------------------|
-| project01  | https://github.com/gitorko/project01  | Data Structure & Algorithms                                                             |
-| project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                     | 
-| project60  | https://github.com/gitorko/project60  | Spring WebFlux & Angular, Reactive MongoDB, Clarity, Docker                             |  
-| project61  | https://github.com/gitorko/project61  | Kubernetes Samples                                                                      |
-| project62  | https://github.com/gitorko/project62  | Java Design Patterns                                                                    |
-| project63  | https://github.com/gitorko/project63  | Spring Boot - Drools                                                                    |
-| project64  | https://github.com/gitorko/project64  | Spring WebFlux Reactive JDBC                                                            |
-| project65  | https://github.com/gitorko/project65  | Spring Webflux & R2DBC                                                                  |
-| project66  | https://github.com/gitorko/project66  | Spring Data JPA N+1                                                                     |
-| project67  | https://github.com/gitorko/project67  | Optimistic vs Pessimistic Locking                                                       |
-| project68  | https://github.com/gitorko/project68  | Spring Boot Micrometer - Prometheus, Wavefront                                          |
-| project69  | https://github.com/gitorko/project69  | HTML reports with freemarker                                                            |
-| project70  | https://github.com/gitorko/project70  | Jasper Report with Spring                                                               |
-| project71  | https://github.com/gitorko/project71  |                                                                                         |
-| project72  | https://github.com/gitorko/project72  | Spring Cloud Sleuth & Zipkin                                                            |
-| project73  | https://github.com/gitorko/project73  | Spring Events                                                                           |
-| project74  | https://github.com/gitorko/project74  | RabbitMQ Stream                                                                         |
-| project75  | https://github.com/gitorko/project75  | Spring Boot - Querydsl                                                                  |
-| project76  | https://github.com/gitorko/project76  | Spring Boot - Vault & Property Refresh                                                  |
-| project77  | https://github.com/gitorko/project77  | Java & Spring based State Machine                                                       |
-| project78  | https://github.com/gitorko/project78  | Spring & RabbitMQ                                                                       |
-| project79  | https://github.com/gitorko/project79  | Spring Boot MVC Web project Thymeleaf, Login, Charts                                    |
-| project80  | https://github.com/gitorko/project80  | Spring Boot & Kafka                                                                     |
-| project81  | https://github.com/gitorko/project81  |                                                                                         |
-| project82  | https://github.com/gitorko/project82  | Spring Data JPA                                                                         |
-| project83  | https://github.com/gitorko/project83  | Spring Reactor Basics                                                                   |
-| project84  | https://github.com/gitorko/project84  | Jenkins Pipeline + Data processing                                                      |
-| project85  | https://github.com/gitorko/project85  | Model Mapper                                                                            |
-| project86  | https://github.com/gitorko/project86  | Clarity - Server Driven Data Grid with QueryDSL                                         |
-| project87  | https://github.com/gitorko/project87  | Ticket Booking Application with QR code tickets                                         |
-| project88  | https://github.com/gitorko/project88  | SpringBoot Web, JWT, Angular, Clarity, Authentication, Authorization, Postgres, Charts  |
-| project89  | https://github.com/gitorko/project89  | SpringBoot Web + JWT + React.js + Bootstrap + Postgres + Google Charts                  |
-| project90  | https://github.com/gitorko/project90  | Flash Sale + RabbitMQ + Postgres + Jmeter                                               |
-| project91  | https://github.com/gitorko/project91  |                                                                                         |
-| project92  | https://github.com/gitorko/project92  | Chat Server                                                                             |
-| project93  | https://github.com/gitorko/project93  | Apache Superset + Employee DB                                                           |
-| project94  | https://github.com/gitorko/project94  | Voting System                                                                           |
-| project95  | https://github.com/gitorko/project95  | Traefik Rate Limit                                                                      |
-| project96  | https://github.com/gitorko/project96  | Spring Boot & GraphQL                                                                   |
-| project97  | https://github.com/gitorko/project97  | Spring Integration                                                                      |
-| project98  | https://github.com/gitorko/project98  | Spring Boot & Ehcache                                                                   |
-| project99  | https://github.com/gitorko/project99  |                                                                                         |
-| project100 | https://github.com/gitorko/project100 | Stock Exchange - Price Time Priority Algorithm                                          |
-| project101 | https://github.com/gitorko/project101 |                                                                                         |
-| project102 | https://github.com/gitorko/project102 | deeplearning4j - Supervised classification (Neural Networks)                            |
+| Project    | Link                                  | Status                                                                                 |
+|:-----------|:--------------------------------------|:---------------------------------------------------------------------------------------|
+| project01  | https://github.com/gitorko/project01  | Data Structure & Algorithms                                                            |
+| project02  | https://github.com/gitorko/project02  |                                                                                        |
+| project03  | https://github.com/gitorko/project03  | Kotlin Spring Boot Rest                                                                |
+| project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    | 
+| project60  | https://github.com/gitorko/project60  | Spring WebFlux & Angular, Reactive MongoDB, Clarity, Docker                            |  
+| project61  | https://github.com/gitorko/project61  | Kubernetes Samples                                                                     |
+| project62  | https://github.com/gitorko/project62  | Java Design Patterns                                                                   |
+| project63  | https://github.com/gitorko/project63  | Spring Boot - Drools                                                                   |
+| project64  | https://github.com/gitorko/project64  | Spring WebFlux Reactive JDBC                                                           |
+| project65  | https://github.com/gitorko/project65  | Spring Webflux & R2DBC                                                                 |
+| project66  | https://github.com/gitorko/project66  | Spring Data JPA N+1                                                                    |
+| project67  | https://github.com/gitorko/project67  | Optimistic vs Pessimistic Locking                                                      |
+| project68  | https://github.com/gitorko/project68  | Spring Boot Micrometer - Prometheus, Wavefront                                         |
+| project69  | https://github.com/gitorko/project69  | HTML reports with freemarker                                                           |
+| project70  | https://github.com/gitorko/project70  | Jasper Report with Spring                                                              |
+| project71  | https://github.com/gitorko/project71  |                                                                                        |
+| project72  | https://github.com/gitorko/project72  | Spring Cloud Sleuth & Zipkin                                                           |
+| project73  | https://github.com/gitorko/project73  | Spring Events                                                                          |
+| project74  | https://github.com/gitorko/project74  | RabbitMQ Stream                                                                        |
+| project75  | https://github.com/gitorko/project75  | Spring Boot - Querydsl                                                                 |
+| project76  | https://github.com/gitorko/project76  | Spring Boot - Vault & Property Refresh                                                 |
+| project77  | https://github.com/gitorko/project77  | Java & Spring based State Machine                                                      |
+| project78  | https://github.com/gitorko/project78  | Spring & RabbitMQ                                                                      |
+| project79  | https://github.com/gitorko/project79  | Spring Boot MVC Web project Thymeleaf, Login, Charts                                   |
+| project80  | https://github.com/gitorko/project80  | Spring Boot & Kafka                                                                    |
+| project81  | https://github.com/gitorko/project81  |                                                                                        |
+| project82  | https://github.com/gitorko/project82  | Spring Data JPA                                                                        |
+| project83  | https://github.com/gitorko/project83  | Spring Reactor Basics                                                                  |
+| project84  | https://github.com/gitorko/project84  | Jenkins Pipeline + Data processing                                                     |
+| project85  | https://github.com/gitorko/project85  | Model Mapper                                                                           |
+| project86  | https://github.com/gitorko/project86  | Clarity - Server Driven Data Grid with QueryDSL                                        |
+| project87  | https://github.com/gitorko/project87  | Ticket Booking Application with QR code tickets                                        |
+| project88  | https://github.com/gitorko/project88  | SpringBoot Web, JWT, Angular, Clarity, Authentication, Authorization, Postgres, Charts |
+| project89  | https://github.com/gitorko/project89  | SpringBoot Web + JWT + React.js + Bootstrap + Postgres + Google Charts                 |
+| project90  | https://github.com/gitorko/project90  | Flash Sale + RabbitMQ + Postgres + Jmeter                                              |
+| project91  | https://github.com/gitorko/project91  |                                                                                        |
+| project92  | https://github.com/gitorko/project92  | Chat Server                                                                            |
+| project93  | https://github.com/gitorko/project93  | Apache Superset + Employee DB                                                          |
+| project94  | https://github.com/gitorko/project94  | Voting System                                                                          |
+| project95  | https://github.com/gitorko/project95  | Traefik Rate Limit                                                                     |
+| project96  | https://github.com/gitorko/project96  | Spring Boot & GraphQL                                                                  |
+| project97  | https://github.com/gitorko/project97  | Spring Integration                                                                     |
+| project98  | https://github.com/gitorko/project98  | Spring Boot & Ehcache                                                                  |
+| project99  | https://github.com/gitorko/project99  |                                                                                        |
+| project100 | https://github.com/gitorko/project100 | Stock Exchange - Price Time Priority Algorithm                                         |
+| project101 | https://github.com/gitorko/project101 |                                                                                        |
+| project102 | https://github.com/gitorko/project102 | deeplearning4j - Supervised classification (Neural Networks)                           |
