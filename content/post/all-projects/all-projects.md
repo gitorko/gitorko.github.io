@@ -46,7 +46,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project80  | https://github.com/gitorko/project80  | Spring Boot & Kafka                                                                                   |
 | project81  | https://github.com/gitorko/project81  |                                                                                                       |
 | project82  | https://github.com/gitorko/project82  | Spring Data JPA                                                                                       |
-| project83  | https://github.com/gitorko/project83  | Spring Reactor Basics                                                                                 |
+| project83  | https://github.com/gitorko/project83  | Spring Reactor, Functional Programming, Completable Future Basics                                     |
 | project84  | https://github.com/gitorko/project84  | Jenkins Pipeline + Data processing                                                                    |
 | project85  | https://github.com/gitorko/project85  | Model Mapper                                                                                          |
 | project86  | https://github.com/gitorko/project86  | Clarity - Server Driven Data Grid with QueryDSL                                                       |
