@@ -10,6 +10,10 @@ tags: [zipkin, sleuth]
 toc: true
 ---
 
+{{% notice warning "Deprecated" %}}
+Spring cloud sleuth is deprecated, Refer to [https://gitorko.github.io/post/spring-observability/](https://gitorko.github.io/post/spring-observability/)
+{{% /notice %}}
+
 Spring cloud sleuth helps you trace a request and zipkin server help you trace in a distributed environment.
 
 Github: [https://github.com/gitorko/project72](https://github.com/gitorko/project72)
