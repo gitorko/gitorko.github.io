@@ -47,6 +47,24 @@ Ehcache is more focused on local caching and does not provide built-in support f
 5. Transaction Support: Supports distributed transactions, allowing multiple nodes in a cluster to participate in a single transaction. It ensures consistency and isolation across the distributed cache.
 6. Management and Monitoring Capabilities: Offers a web-based management console for monitoring the cluster status, metrics, and performance.
 
+
+### Code
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/IgniteConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/SpringCacheConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/DbFactory.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CustomerService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/EmployeeService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CompanyService.java" >}}
+
+
+### Issues
+
 Standard CrudRepository save(entity), save(entities), delete(entity) operations aren't supported.
 We have to use the save(key, value), save(Map<ID, Entity> values), deleteAll(Iterable<ID> ids) methods.
 
@@ -60,7 +78,6 @@ Blocked system-critical thread has been detected. This can lead to cluster-wide 
 
 GC pauses decreases overall performance. if pause will be longer than failureDetectionTimeout node will be disconnected from cluster.
 [https://apacheignite.readme.io/docs/jvm-and-system-tuning](https://apacheignite.readme.io/docs/jvm-and-system-tuning)
-
 
 ```
  Failed to add node to topology because it has the same hash code for partitioned affinity as one of existing nodes
@@ -78,21 +95,6 @@ Topology snapshot [ver=3, locNode=2e963fb3, servers=3, clients=0, state=ACTIVE, 
 Failed to validate cache configuration. Cache store factory is not serializable.
 ```
 CacheJdbcPojoStoreFactory will be serialized hence needs to implement Serializable
-
-### Code
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/IgniteConfig.java" >}}
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/SpringCacheConfig.java" >}}
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/DbFactory.java" >}}
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CustomerService.java" >}}
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/EmployeeService.java" >}}
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CompanyService.java" >}}
-
 
 ### References
 
