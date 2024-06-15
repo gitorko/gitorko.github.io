@@ -61,6 +61,39 @@ Blocked system-critical thread has been detected. This can lead to cluster-wide 
 GC pauses decreases overall performance. if pause will be longer than failureDetectionTimeout node will be disconnected from cluster.
 [https://apacheignite.readme.io/docs/jvm-and-system-tuning](https://apacheignite.readme.io/docs/jvm-and-system-tuning)
 
+
+```
+ Failed to add node to topology because it has the same hash code for partitioned affinity as one of existing nodes
+```
+
+Instance cant have same node id.
+
+When 3 nodes are running you will see the cluster
+
+```
+Topology snapshot [ver=3, locNode=2e963fb3, servers=3, clients=0, state=ACTIVE, CPUs=16, offheap=38.0GB, heap=24.0GB]
+```
+
+```
+Failed to validate cache configuration. Cache store factory is not serializable.
+```
+CacheJdbcPojoStoreFactory will be serialized hence needs to implement Serializable
+
+### Code
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/IgniteConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/SpringCacheConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/config/DbFactory.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CustomerService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/EmployeeService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CompanyService.java" >}}
+
+
 ### References
 
 [https://ignite.apache.org/](https://ignite.apache.org/)
