@@ -30,6 +30,13 @@ Spring integration provides different ways to configure:
 
 ### Terminology
 
+1. Inbound Adapter - Real world object -> Message<T>
+2. Outbound Adapter - Message<T> -> Real world object
+3. Inbound Gateway - Real world object -> Spring Integration -> Real world object
+4. Outbound Gateway - Spring Integration -> Real world object -> Spring Integration
+
+Message can be split, route, transform, wiretap, enrich, aggregate the messages.
+
 1. Message - Wrapper that can wrap a java object, contains payload & headers
 2. Message Channel - A conduit for transmitting messages between producers & consumers
     a. Point-to-Point channel - one consumer should receive each message from a channel
