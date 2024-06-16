@@ -18,18 +18,28 @@ Github: [https://github.com/gitorko/project91](https://github.com/gitorko/projec
 
 Apache Ignite is a distributed database. 
 Data in Ignite is stored in-memory and/or on-disk, and is either partitioned or replicated across a cluster of multiple nodes. 
-This provides caching, scalability, performance, and resiliency & more advanced use cases like streaming & distributed job execution are also supported.
+
+Features:
 
 1. Store data in key-value pair
 2. Supports caching by storing data in-memory
 3. Supports on disk storage
 4. Supports ACID transactions (only at the key-value level)
-5. Supports RDMS like SQL queries
-6. Does not support foreign key constraints
+5. Supports RDMS like SQL queries, Does not support foreign key constraints
+6. In-Memory data grid
 7. Supports stream processing
-8. Supports distributed job execution.
+8. Supports distributed compute
+9. Supports scaling & resiliency
+10. Supports messaging queue
+11. Supports Multi-tier storage
 
-Apache Ignite automatically synchronizes these changes with the database in an asynchronous, background task
+Apache Ignite Setup
+
+1. Embedded server
+2. Embedded client 
+3. Cluster setup
+
+Apache Ignite automatically synchronizes the changes with the database in an asynchronous, background task
 If an entity is not cached it is read from the database and put to the cache for future use.
 
 ### Redis vs Apache Ignite
