@@ -16,7 +16,9 @@ Github: [https://github.com/gitorko/project02](https://github.com/gitorko/projec
 
 ## Rsocket
 
-RSocket is an application protocol for multiplexed, duplex communication over TCP, WebSocket, and other byte stream transports, using one of the following interaction models
+RSocket is a binary & message passing protocol for multiplexed, duplex communication over TCP, WebSocket, and other byte stream transports.
+
+**Interaction Models**
 
 | Type             | Description                                            |
 |:-----------------|:-------------------------------------------------------|
@@ -32,6 +34,15 @@ RSocket is an application protocol for multiplexed, duplex communication over TC
 3. Session resumption - loss of connectivity and requires some state to be maintained.
 4. Fragmentation - re-assembly of large messages.
 5. Keepalive - heartbeats.
+
+**Differences**
+
+| RSocket                         | GRPC                          | Rest              |
+|:--------------------------------|:------------------------------|:------------------|
+| Binary Protocol                 | Works on HTTP2                | Works on HTTP/1.1 |
+| Works on 5/6 layer of OSI model | Works on 7 layer of OSI model |                   |
+
+
 
 ### Code
 
