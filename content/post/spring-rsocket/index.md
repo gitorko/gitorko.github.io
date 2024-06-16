@@ -37,11 +37,11 @@ RSocket is a binary & message passing protocol for multiplexed, duplex communica
 
 **Differences**
 
-| RSocket                         | GRPC                          | Rest              |
-|:--------------------------------|:------------------------------|:------------------|
-| Binary Protocol                 | Works on HTTP2                | Works on HTTP/1.1 |
-| Works on 5/6 layer of OSI model | Works on 7 layer of OSI model |                   |
-
+| RSocket                                   | GRPC                              | Rest              |
+|:------------------------------------------|:----------------------------------|:------------------|
+| Binary Protocol (TCP, a File, WebSockets) | Works on HTTP2 (Protocol Buffers) | Works on HTTP/1.1 |
+| Works on 5/6 layer of OSI model           | Works on 7 layer of OSI model     |                   |
+| Support Back pressure handling            |                                   |                   |
 
 
 ### Code
@@ -53,3 +53,5 @@ RSocket is a binary & message passing protocol for multiplexed, duplex communica
 ### References
 
 [https://docs.spring.io/spring-framework/reference/rsocket.html](https://docs.spring.io/spring-framework/reference/rsocket.html)
+
+[https://medium.com/netifi/differences-between-grpc-and-rsocket-e736c954e60](https://medium.com/netifi/differences-between-grpc-and-rsocket-e736c954e60)
