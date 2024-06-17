@@ -22,6 +22,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project01  | https://github.com/gitorko/project01  | Data Structure & Algorithms                                                            |
 | project02  | https://github.com/gitorko/project02  | Spring - Rsocket                                                                       |
 | project03  | https://github.com/gitorko/project03  | Kotlin Spring Boot Rest                                                                |
+| project04  | https://github.com/gitorko/project04  | Distributed Locking - Apache Ignite                                                    |
 | project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    | 
 | project60  | https://github.com/gitorko/project60  | Spring WebFlux & Angular, Reactive MongoDB, Clarity, Docker                            |  
 | project61  | https://github.com/gitorko/project61  | Kubernetes Samples                                                                     |
