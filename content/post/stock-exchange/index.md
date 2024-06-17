@@ -191,7 +191,7 @@ System is able to match & process 5,000 unique orders per ticker in 2 mins that 
 
 Import the postman collection to postman
 
-[Postman Collection](https://github.com/gitorko/project100/blob/main/postman/Project100.postman_collection.json)
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project100/main/postman/Project100.postman_collection.json)
 
 ## Setup
 

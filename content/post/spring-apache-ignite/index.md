@@ -19,28 +19,48 @@ Github: [https://github.com/gitorko/project91](https://github.com/gitorko/projec
 Apache Ignite is a distributed database. 
 Data in Ignite is stored in-memory and/or on-disk, and is either partitioned or replicated across a cluster of multiple nodes. 
 
-Features:
+![](logo.png)
 
-1. Store data in key-value pair
-2. Supports caching by storing data in-memory
-3. Supports on disk storage
-4. Supports ACID transactions (only at the key-value level)
-5. Supports RDMS like SQL queries, Does not support foreign key constraints
-6. In-Memory data grid
-7. Supports stream processing
-8. Supports distributed compute
-9. Supports scaling & resiliency
-10. Supports messaging queue
-11. Supports Multi-tier storage
+**Features**
 
-Apache Ignite Setup
+1. Key-value Store
+2. In-Memory Cache
+3. In-Memory Data Grid - Data stored on multiple nodes
+4. In-Memory Database - Disk based persistence
+5. ACID transactions - Only at the key-value level
+6. SQL queries - Does not support foreign key constraints
+7. Stream processing
+8. Distributed compute - Uses co-located data
+9. Messaging queue
+10. Multi-tier storage - Storage in postgres, mysql
+11. Distributed SQL (Sql queries to fetch data stored on different nodes)
+
+**Apache Ignite Setup**
 
 1. Embedded server
 2. Embedded client 
 3. Cluster setup
 
+![](apache-ignite.png)
+
 Apache Ignite automatically synchronizes the changes with the database in an asynchronous, background task
 If an entity is not cached it is read from the database and put to the cache for future use.
+
+![](cache-strategy.png)
+
+### Terminology
+
+1. Cache Mode 
+   - Partition Cache (Default) - Data is partitioned and each partition is stored on different node (Fast write)
+   - Replicated Cache - Data will be replicated across all cache (Slow write)
+2. Affinity Function - Determines the partition data belongs to
+3. Backup - Backup of partition is stored with primary and secondary owner 
+4. Atomicity Mode
+   - Atomic (Default) - Operations performed atomically, one at a time. Transactions are not supported.
+   - Transactional - ACID-compliant transactions (Slow)
+5. Eviction - LRU
+   - When persistence is `off` some data is evicted & lost
+   - When persistence is `on` then page is evicted from memory but data is present on disk
 
 ### Redis vs Apache Ignite
 
@@ -49,14 +69,12 @@ While Redis stores data in memory, Ignite relies on memory and disk to store dat
 ### EhCache vs Apache Ignite
 Ehcache is more focused on local caching and does not provide built-in support for distributed caching or computing. EhCache primarily intended for single-node caching scenarios.
 
-
 1. Scalability and Distributed Computing - Easily scaled across multiple nodes in a cluster. It allows for data and computation to be distributed across the nodes, providing high availability and fault tolerance.
 2. Data Partitioning and Replication: - Offers advanced data partitioning and replication capabilities. It automatically partitions the data across multiple nodes in a cluster, ensuring that each node only holds a portion of the overall data set. This enables parallel processing and efficient data retrieval. In addition, Ignite allows for configurable data replication, ensuring data redundancy and fault tolerance. 
 3. Computational Capabilities - Supports running distributed computations across the cluster, allowing for parallel processing and improved performance. It provides APIs for distributed SQL queries, machine learning, and real-time streaming analytics.
 4. Integration with Other Technologies: Integrates seamlessly with various other technologies and frameworks. It provides connectors and integrations for popular data processing frameworks like Apache Spark, Apache Hadoop, and Apache Cassandra. It also offers support for various persistence stores, such as JDBC, NoSQL databases, and Hadoop Distributed File System (HDFS).
 5. Transaction Support: Supports distributed transactions, allowing multiple nodes in a cluster to participate in a single transaction. It ensures consistency and isolation across the distributed cache.
 6. Management and Monitoring Capabilities: Offers a web-based management console for monitoring the cluster status, metrics, and performance.
-
 
 ### Code
 
@@ -72,6 +90,13 @@ Ehcache is more focused on local caching and does not provide built-in support f
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CompanyService.java" >}}
 
+## Postman
+
+![](img01.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project91/main/postman/Project91.postman_collection.json)
 
 ### Issues
 
