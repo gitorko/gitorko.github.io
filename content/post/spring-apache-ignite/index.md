@@ -5,7 +5,7 @@ summary: 'Spring - Apache Ignite'
 date: '2024-06-15'
 aliases: [/spring-apache-ignite/]
 author: 'Arjun Surendra'
-categories: [ApacheIgnite, Spring]
+categories: [Apache-Ignite, Spring]
 tags: [ignite, caching, postgres]
 toc: true
 ---
