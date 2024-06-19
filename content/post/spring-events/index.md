@@ -22,9 +22,9 @@ Do note that this will be in-memory so if the server restarts all events will be
 
 ## Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/CustomEventListener.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/CustomEvent.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/CustomAsync.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/CustomEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/pojo/CustomEvent.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/service/CustomAsync.java" >}}
 
 Run the project
 
