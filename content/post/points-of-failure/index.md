@@ -238,6 +238,8 @@ resources:
 
 Now when you invoke the api that causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.
 
+![](img01.png)
+
 ![](memory-spike.png)
 
 ![](pod-oom-killed.png)
@@ -324,7 +326,7 @@ Once you expand the distributed system there can be various other points of fail
 
 ## Postman
 
-![](postman.png)
+![](img02.png)
 
 Import the postman collection to postman
 
@@ -332,9 +334,7 @@ Import the postman collection to postman
 
 ## Setup
 
-![](intellij-config.png)
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project57/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project57/main/README.md" >}}
 
 ## References
 
