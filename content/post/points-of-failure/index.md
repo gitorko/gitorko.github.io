@@ -19,41 +19,54 @@ Github: [https://github.com/gitorko/project57](https://github.com/gitorko/projec
 
 ![](point-of-failure.png)
 
-### HTTP Connections
+### Denial-of-Service Attacks
 
 {{% notice note "Problem" %}}
-A bad downstream client is making bad tcp connections that dont do anything, valid users are getting Denial-of-Service. What do you do?
+Your server is receiving a lot of bad TCP connections. A bad downstream client is making bad tcp connections that doesn't do anything, valid users are getting **Denial-of-Service**. What do you do?
 {{% /notice %}}
 
-Your server is receiving a lot of bad TCP connections. To test this make the thread count to 1 and change the connection timeout to 10 ms.
-Now issue a telnet command to connect to the running port, It will connect but since no data is sent the TCP connection is closed in 10 ms. 
-Introduce a bigger timeout and try to hit the rest api when telnet is blocking the single connection, your rest api will wait till the TCP connection is free.
+Create 10 telnet connections that connect to the tomcat server and then invoke the rest api to getTime which will not return anything as it will wait till the TCP connection is free.
 
 ```bash
-server.tomcat.threads.max=1
-server.tomcat.connection-timeout=10
-
-telnet localhost 31000
+for ((i=1;i<=10;i++));
+do
+  echo $i
+  telnet 127.0.0.1 31000 &
+done
 ```
  
 The connection timeout means - If the client is not sending data after establishing the TCP handshake for 'N' seconds then close the connection.
 
 ```bash
-server.tomcat.connection-timeout=5000
+server.tomcat.connection-timeout=500
 ```
 
 {{% notice warning "Note" %}}
 Most will assume that this connection timeout actually closes the connection when a long running task takes more than 'N' seconds. This is not true.
-It only closes connection if the client doesnt send anything for 'N' seconds.
+It only closes connection if the client doesn't send anything for 'N' seconds.
 {{% /notice %}}
 
 ### TimeLimiter
 
 {{% notice note "Problem" %}}
-A new team member has updated a function and introduced a bug and the function is very slow or never returns a response. What do you do?
+A new team member has updated an API and introduced a bug and the function is very slow or never returns a response. System users are complaining of a slow system?
 {{% /notice %}}
 
 If a function takes too long to complete it will block the tomcat thread which will further degrade the system performance. Use Resilience4j to explicitly timeout long running jobs, this way runaway functions cant impact your entire system.
+
+Create 10 threads that take very long to complete
+
+```bash
+ab -n 10 -c 1 http://localhost:31000/api/echo1/jack
+```
+
+Now with all tomcat threads busy trigger the echo2 request api that will timeout in 1 sec.
+
+```bash
+curl --location 'http://localhost:31000/api/echo2/jack'
+```
+
+This shows that a bad api `echo1` can affect the good api `echo2`. The `echo1` api would still need to be fixed however now since `echo2` timed out you will be able to handle it with a circuit breaker pattern instead of having `echo2` never return.
 
 ```
 @TimeLimiter(name = "service1-tl")
@@ -176,6 +189,16 @@ To test this we explicitly slow down a query with pg_sleep function.
 
 We set timeout on the transaction to ensure that slow query doesn't impact the entire system, after 5 seconds if the query doesnt return result an exception is thrown.
 
+
+```bash
+ab -n 10 -c 10 http://localhost:31000/api/db-call-1
+```
+
+
+```bash
+ab -n 10 -c 10 http://localhost:31000/api/db-call-2
+```
+
 ```
 @Transactional(timeout = 5)
 ```
@@ -185,6 +208,12 @@ Always assume that all DB calls never return or are very slow and design accordi
 {{% /notice %}}
 
 You can further look at optimizing the query with help of indexes however here we design the backend system such that the service doesnt fail as a whole due to slow queries.
+
+You can enable `show-sql` to view all the db queries
+
+```bash
+spring.jpa.show-sql: true
+```
 
 ### Memory Leak & CPU Spike
 
@@ -214,7 +243,7 @@ Now when you invoke the api that causes a memory spike, the pod will be killed (
 ![](pod-oom-killed.png)
 
 {{% notice info "Note" %}}
-An OutOfMemoryError side the pod doesnt necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
+For an OutOfMemoryError the pod doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
 Only the resource limits defined determine when the pod gets killed.
 {{% /notice %}}
 
@@ -279,6 +308,7 @@ Once you expand the distributed system there can be various other points of fail
 7. Cache invalidation/eviction failure
 8. Load Balancer failures
 9. Datacenter failure for one region
+10. Cache TTL failure
 
 ## Code
 
@@ -299,12 +329,6 @@ Once you expand the distributed system there can be various other points of fail
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json)
-
-## JMeter
-
-![](load-test.png)
-
-[https://raw.githubusercontent.com/gitorko/project57/main/jmeter/LoadTest.jmx](https://raw.githubusercontent.com/gitorko/project57/main/jmeter/LoadTest.jmx)
 
 ## Setup
 
