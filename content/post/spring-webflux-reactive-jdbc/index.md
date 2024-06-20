@@ -11,11 +11,14 @@ toc: true
 ---
 
 Webflux integration with reactive JDBC, to allow non-blocking calls to database.
-R2DBC is still not recommended for production, hence this approach should help you integrate existing relational database with webflux.
 
 Github: [https://github.com/gitorko/project64](https://github.com/gitorko/project64)
 
-## Code
+## Webflux JDBC
+
+This approach provides alternate way to integrate existing relational database with webflux if the project is not ready to use R2DBC.
+
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/java/com/demo/project64/Main.java" >}}
 
@@ -31,17 +34,17 @@ Github: [https://github.com/gitorko/project64](https://github.com/gitorko/projec
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/src/main/resources/application.yaml" >}}
 
-## Setup
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project64/main/README.md" >}}
-
-## Postman
+### Postman
 
 ![](img01.png)
 
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project64/main/postman/Project64.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project64/main/README.md" >}}
 
 ## References
 

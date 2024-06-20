@@ -28,7 +28,7 @@ Apache Ignite is a distributed database. It supports distributed locking mechani
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project04/main/docker/deployment.yaml" >}}
 
-## Postman
+### Postman
 
 ![](img01.png)
 
@@ -36,6 +36,10 @@ Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project04/main/postman/Project04.postman_collection.json)
 
-### References
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project04/main/README.md" >}}
+
+## References
 
 [https://ignite.apache.org/](https://ignite.apache.org/)

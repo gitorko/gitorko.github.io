@@ -55,7 +55,9 @@ Provide QR code ticket and completes the ticketing flow on admit.
 3. System should scale well when number of users increases.
 4. We will use a fixed rate scheduler to release any tickets held for more than 30 seconds.
 
-## Design
+## Implementation
+
+### Design
 
 1. We will postgres DB to persist the booking data.
 2. We will use optimistic locking as it scales well without locking the db rows.
@@ -114,7 +116,7 @@ Entered indicates that user has been admitted to the event on showing the QR cod
 
 ![](img13.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project87/main/src/main/java/com/demo/project87/controller/HomeController.java" >}}
 
@@ -124,9 +126,9 @@ Entered indicates that user has been admitted to the event on showing the QR cod
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project87/main/ui/src/app/components/home/home.component.ts" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project87/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project87/main/README.md" >}}
 
 ## References
 

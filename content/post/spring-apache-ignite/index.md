@@ -90,13 +90,17 @@ Ehcache is more focused on local caching and does not provide built-in support f
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/src/main/java/com/demo/project91/service/CompanyService.java" >}}
 
-## Postman
+### Postman
 
 ![](img01.png)
 
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project91/main/postman/Project91.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project91/main/README.md" >}}
 
 ### Issues
 
@@ -131,6 +135,6 @@ Failed to validate cache configuration. Cache store factory is not serializable.
 ```
 CacheJdbcPojoStoreFactory will be serialized hence needs to implement Serializable
 
-### References
+## References
 
 [https://ignite.apache.org/](https://ignite.apache.org/)

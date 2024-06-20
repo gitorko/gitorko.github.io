@@ -30,17 +30,17 @@ Every meter has a name (hierarchical) and tag. There are 4 main types of meters.
 
 MeterRegistryCustomizer, you can customize the whole set of registries at once or individual implementation.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project68/main/src/main/java/com/demo/project68/Main.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project68/main/src/main/resources/application.yaml" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project68/main/docker/prometheus.yml" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project68/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project68/main/README.md" >}}
 
-## Dashboard - Prometheus & Grafana
+### Prometheus & Grafana
 
 Invoke the rest api couple of times.
 

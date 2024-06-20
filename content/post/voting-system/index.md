@@ -63,7 +63,9 @@ The same solution can be extended to the following systems
 4. The project can be changed to spring reactor to make use of non blocking framework.
 5. Unsubscribe flow needs to be handled when browser is closed
 
-## Design
+## Implementation
+
+### Design
 
 1. We will use Redis to count the votes, this will help us scale well. The counter increment needs to be atomic in nature. Redis provides this feature out of the box, where there is less contention among threads when updating atomic long.
 2. We will not persist the votes to a database as the objective is to keep an active running counter. Adding a database in the synchronous call introduces latency which prevent scaling the application.
@@ -80,17 +82,17 @@ To understand the problem with a counter on multi-thread environment refer [Atom
 
 ![](img02.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project94/main/src/main/java/com/demo/project94/controller/HomeController.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project94/main/src/main/java/com/demo/project94/config/RedisConfiguration.java" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project94/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project94/main/README.md" >}}
 
-## Testing
+### Testing
 
 To reset the votes
 
@@ -106,7 +108,7 @@ curl --request POST 'http://localhost:8080/api/vote/cat'
 curl --request POST 'http://localhost:8080/api/vote/cat'
 ```
 
-## JMeter
+### JMeter
 
 Open the jmx file with Jmeter. Run the test that simulate a 10K concurrent votes and check the throughput.
 

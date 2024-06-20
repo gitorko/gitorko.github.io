@@ -76,6 +76,10 @@ Ticket(id=3, seatNumber=3, onDay=2020-08-17, bookedBy=null, version=0)
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/src/main/resources/application.yaml" >}}
 
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/README.md" >}}
+
 ## References
 
 Spring Data JPA : [https://spring.io/projects/spring-data-jpa](https://spring.io/projects/spring-data-jpa)

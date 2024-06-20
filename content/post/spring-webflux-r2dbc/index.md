@@ -29,7 +29,7 @@ The following databases are supported via r2dbc libraries
 5. Postgres (io.r2dbc:r2dbc-postgresql)
 6. Oracle (com.oracle.database.r2dbc:oracle-r2dbc)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/java/com/demo/project65/Main.java" >}}
 
@@ -41,11 +41,7 @@ The following databases are supported via r2dbc libraries
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/src/main/resources/application.yaml" >}}
 
-## Setup
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project65/main/README.md" >}}
-
-## Postman
+### Postman
 
 ![](img01.png)
 
@@ -53,7 +49,12 @@ Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json)
 
-## Errors
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project65/main/README.md" >}}
+
+
+### Errors
 
 If you encounter any of the error mentioned below it could probably be because the data type in postgres cant be mapped by r2dbc.
 Eg: CHAR is not supported, changing to VARCHAR will fix the issue.

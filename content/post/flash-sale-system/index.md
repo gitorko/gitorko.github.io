@@ -48,7 +48,9 @@ A flash sale system that supports one item per user and reserving the item in a 
 2. System should be highly available & be able to handle burst of request traffic in short duration.
 3. System should scale well when number of users increases
 
-## Design
+## Implementation
+
+### Design
 
 1. We will use a rabbitmq to queue the incoming burst of requests.
 2. Each request response time window will be kept as minimal as possible to avoid crashing the system under heavy load.
@@ -79,7 +81,7 @@ After adding an item the client waits for the action to complete.
 
 ![](img07.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project90/main/src/main/java/com/demo/project90/controller/HomeController.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project90/main/src/main/java/com/demo/project90/queue/EventListener.java" >}}
@@ -87,11 +89,11 @@ After adding an item the client waits for the action to complete.
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project90/main/ui/src/app/components/home/home.component.html" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project90/main/ui/src/app/components/home/home.component.ts" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project90/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project90/main/README.md" >}}
 
-## Testing
+### Testing
 
 ![](img08.png)
 ![](img09.png)

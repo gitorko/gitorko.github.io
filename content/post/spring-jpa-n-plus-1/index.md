@@ -20,20 +20,11 @@ N+1 problem is a performance issue in ORM that fires multiple select queries
 By default fetch is FetchType.LAZY in hibernate, changing to FetchType.EAGER wont guarantee a fix either also eager fetch will fetch more data than needed.
 The @ManyToOne and @OneToOne associations use FetchType.EAGER by default.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project66/main/src/main/java/com/demo/project66/Main.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project66/main/src/main/resources/application.yaml" >}}
-
-
-## Testing
-
-Run the project
-
-```bash
-./gradlew bootRun
-```
 
 You will see a sql query being fired to fetch each post comment object.
 
@@ -132,6 +123,10 @@ PostComment(id=18, comment=Comment 1 for 5)
 PostComment(id=19, comment=Comment 2 for 5)
 PostComment(id=20, comment=Comment 3 for 5)
 ```
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project66/main/README.md" >}}
 
 ## References
 

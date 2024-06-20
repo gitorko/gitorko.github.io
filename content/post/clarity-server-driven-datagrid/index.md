@@ -30,11 +30,13 @@ Open [http://localhost:8080/](http://localhost:8080/)
 
 When dealing with large amounts of data or heavy processing, a DataGrid often has to access the currently displayed data only, requesting only the necessary pieces of data from the server.
 
-## Design
+## Implementation 
+
+### Design
 
 ![](img01.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project86/main/src/main/java/com/demo/project86/controller/HomeController.java" >}}
 
@@ -50,9 +52,9 @@ The debounceTime added to debounce the events so that rest api doesn't get calle
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project86/main/ui/src/app/components/home/home.component.ts" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project86/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project86/main/README.md" >}}
 
 ## References
 

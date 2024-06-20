@@ -20,15 +20,15 @@ We will generate a single html file report using freemarker template and provide
 
 ![](img01.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/src/main/java/org/gitokro/project69/HomeController.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/src/main/resources/templates/my-report.ftl" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project69/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/README.md" >}}
 
 ## References
 

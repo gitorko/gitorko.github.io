@@ -52,6 +52,12 @@ jenv global 11.0
 jenv local 17.0
 ```
 
+To add existing jdk
+
+```bash
+jenv add /Users/username/Library/Java/JavaVirtualMachines/azul-17.0.11/Contents/Home
+```
+
 ## Tools
 
 You can also download the various tools needed to work with java

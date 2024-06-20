@@ -26,7 +26,7 @@ Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java appli
 6. It is self-maintaining, Successful jobs are automatically deleted after a configurable amount of time, so there is no need to perform manual storage cleanup.
 7. The job details are stored in db.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/HomeController.java" >}}
 
@@ -39,9 +39,9 @@ Open dashboard: [http://localhost:8000/dashboard/](http://localhost:8000/dashboa
 ![](img03.png)
 ![](img04.png)
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project59/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/README.md" >}}
 
 ## References
 

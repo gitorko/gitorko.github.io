@@ -42,13 +42,15 @@ Spring dev tools allow seamless reload on any changes for html and java files so
 7. Thymeleaf template
 8. Chart.js charts for bar,pie,stack charts with data from rest api
 
-## Design
+## Implementation
+
+### Design
 
 ![](img02.png)
 ![](img03.png)
 ![](img04.png)
 
-## Code
+### Code
 
 On Intellij to allow spring dev tools to reload on change you need to enable 'Update classes and resources' as shown below
 
@@ -72,9 +74,9 @@ chart.js is a library that provides various charts, the project renders charts a
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project79/main/src/main/resources/templates/login.html" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project79/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project79/main/README.md" >}}
 
 ## References
 

@@ -27,13 +27,13 @@ docker-compose -f docker/docker-compose.yml up
 
 Open [http://localhost:8080/](http://localhost:8080/)
 
-## Features
+### Features
 
 Clarity is an open source library that provides various Angular components.
 
 ![](img01.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project60/main/src/main/java/com/demo/project60/Main.java" >}}
 
@@ -47,9 +47,9 @@ Clarity is an open source library that provides various Angular components.
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project60/main/ui/src/app/home/home.component.ts" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project60/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project60/main/README.md" >}}
 
 ## References
 

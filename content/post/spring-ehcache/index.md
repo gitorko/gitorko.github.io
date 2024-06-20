@@ -40,7 +40,7 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 4. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
 5. Write-through - Application writes to cache, cache service immediately writes to SoR.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CountryCache.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CountryCacheListener.java" >}}
@@ -49,15 +49,15 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 
 Notice the SQL is printed each time a db call happens, if the data is cached no DB call is made.
 
-## Setup
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project98/main/README.md" >}}
-
-## Postman
+### Postman
 
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project98/main/postman/Project98.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/README.md" >}}
 
 ## References
 

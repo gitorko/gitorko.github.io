@@ -10,11 +10,15 @@ tags: [pipeline, ETL, jenkins]
 toc: true
 ---
 
-Jenkins is mostly used to setup CI/CD pipelines. Here we will use it to setup a data pipeline that can be used to orchestrate data processing jobs. 
+Spring boot application integrated with jenkins pipeline for data processing jobs.
 
 Github: [https://github.com/gitorko/project84](https://github.com/gitorko/project84)
 
-## Requirement
+## Jenkins
+
+Jenkins is mostly used for setting up CI/CD or build pipelines. Here we will use it to setup a data pipeline that can be used to orchestrate data processing jobs.
+
+### Requirement
 
 Lets consider a company sells paint. 
 
@@ -42,7 +46,7 @@ The features of jenkins that make it friendly for data processing are:
 11. Pull from maven - Ability to download the jar from maven.
 12. Plugin support - Numerous plugin are available for jenkins.
 
-## Code
+### Code
 
 The backend job that needs to do the processing. It takes the input as arguments and processes each stage and writes the results to a postgres db.
 
@@ -58,7 +62,7 @@ The properties file
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project84/main//src/main/resources/application.yaml" >}}
 
-## Jenkins
+### Jenkins
 
 ![](jenkins.png)
 
@@ -246,9 +250,9 @@ Once the job is successful you will notice that it didnt run the STAGE1 job and 
 
 You can even schedule this job to run daily.
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project84/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project84/main/README.md" >}}
 
 ## References
 

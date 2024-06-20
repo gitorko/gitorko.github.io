@@ -64,9 +64,17 @@ management:
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project71/main/src/main/java/com/demo/project71/config/ThreadConfig.java" >}}
 
-Test the api via postman
+### Postman
 
 ![](img11.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project71/main/postman/Project71.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project71/main/README.md" >}}
 
 Open zipkin dashboard
 

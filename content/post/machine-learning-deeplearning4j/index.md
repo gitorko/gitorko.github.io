@@ -58,6 +58,10 @@ Prediction Step - Using the model we created above we predict which flower type 
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project102/main/src/main/java/com/demo/neural/Main.java" >}}
 
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project102/main/README.md" >}}
+
 ## References
 
 [https://deeplearning4j.konduit.ai/](https://deeplearning4j.konduit.ai/)

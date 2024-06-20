@@ -50,7 +50,11 @@ RSocket is a binary & message passing protocol for multiplexed, duplex communica
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project02/main/rclient/src/main/java/com/demo/project02/rclient/RclientApp.java" >}}
 
-### References
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project02/main/README.md" >}}
+
+## References
 
 [https://docs.spring.io/spring-framework/reference/rsocket.html](https://docs.spring.io/spring-framework/reference/rsocket.html)
 

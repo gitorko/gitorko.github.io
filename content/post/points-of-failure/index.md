@@ -2,11 +2,11 @@
 title: 'Points Of Failure in Distributed System'
 description: 'Points Of Failure in Distributed System'
 summary: 'Points Of Failure in Distributed System'
-date: '2022-08-28'
+date: '2024-06-20'
 aliases: [/points-of-failure/]
 author: 'Arjun Surendra'
 categories: [Distributed-System]
-tags: [failure, resilience4j]
+tags: [failure, resilience4j, kubernetes, spring, postgres]
 toc: true
 ---
 
@@ -15,9 +15,9 @@ We will deliberately fail the application at these points to determine what the 
 
 Github: [https://github.com/gitorko/project57](https://github.com/gitorko/project57)
 
-## Generic System
+## Distributed System
 
-![](point-of-failure.png)
+![](generic-system.png)
 
 ### Denial-of-Service Attacks
 
@@ -46,7 +46,7 @@ Most will assume that this connection timeout actually closes the connection whe
 It only closes connection if the client doesn't send anything for 'N' seconds.
 {{% /notice %}}
 
-### TimeLimiter
+### Time Limiter
 
 {{% notice note "Problem" %}}
 A new team member has updated an API and introduced a bug and the function is very slow or never returns a response. System users are complaining of a slow system?
@@ -240,9 +240,9 @@ Now when you invoke the api that causes a memory spike, the pod will be killed (
 
 ![](img01.png)
 
-![](memory-spike.png)
+![](img03.png)
 
-![](pod-oom-killed.png)
+![](img04.png)
 
 {{% notice info "Note" %}}
 For an OutOfMemoryError the pod doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
@@ -296,6 +296,29 @@ eg: `/api/v1/customers` being the old api and `/api/v2/customers` being the new 
 {{% notice info "Note" %}}
 Backward compatibility is very important, specially when services rollback to older versions in distributed systems. Always work with versioned API if there are major changes or new features being introduced.
 {{% /notice %}}
+
+### Rate Limiter
+
+{{% notice note "Problem" %}}
+A particular customer of your service is over using the API to the extent that other users are unable to get a response on the API
+{{% /notice %}}
+
+Look at implementing rate limiting per customer.
+
+[http://gitorko.github.io/post/spring-traefik-rate-limit](http://gitorko.github.io/post/spring-traefik-rate-limit)
+
+### Retry
+
+### Circuit Breaker Pattern
+
+### Bulk Head Pattern
+
+![](img06.png)
+
+### Observability
+
+### Chaos Monkey
+
 
 ### Other Failures
 

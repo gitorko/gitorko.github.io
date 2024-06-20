@@ -29,7 +29,7 @@ GraphQLQueryResolver -> @QueryMapping
 The code uses Extended Scalars for graphql-java to support Date and other type objects in GraphQL
 The code shows how pagination can be done in GraphQL 
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project96/main/src/main/java/com/demo/project96/controller/QueryController.java" >}}
 
@@ -49,11 +49,7 @@ The key terminologies in GraphQL are
 * Mutation: Used to create, update and delete data
 * Subscription: Similar to a query allowing you to fetch data from the server. Subscriptions offer a long-lasting operation that can change their result over time.
 
-## Setup
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project96/main/README.md" >}}
-
-## Testing
+### Postman
 
 ![](img01.png)
 ![](img02.png)
@@ -61,6 +57,14 @@ The key terminologies in GraphQL are
 ![](img04.png)
 ![](img05.png)
 ![](img06.png)
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project96/main/postman/Project96.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project96/main/README.md" >}}
 
 ## References
 

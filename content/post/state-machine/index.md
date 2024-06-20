@@ -21,7 +21,7 @@ We will use the shopping cart state machine diagram as a reference to implement 
 
 ![](statemachine.png)
 
-## Code
+### Code
 
 Here we use state design pattern and observer pattern to design a state machine.
 
@@ -30,6 +30,10 @@ Here we use state design pattern and observer pattern to design a state machine.
 We can also use the spring state machine libraries
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project77/main/src/main/java/com/demo/project77/spring/Application.java" >}}
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project77/main/README.md" >}}
 
 ## References
 

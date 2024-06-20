@@ -31,7 +31,7 @@ Internally it has 4 modules –
 3. Search – This module provides a simple JSON API for finding and retrieving traces stored in backend. The primary consumer of this API is the Web UI.
 4. Web UI – A very nice UI interface for viewing traces.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project72/main/src/main/java/com/demo/project72/service/GreetService.java" >}}
 
@@ -39,11 +39,11 @@ Internally it has 4 modules –
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project72/main/src/main/resources/application.yaml" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project72/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project72/main/README.md" >}}
 
-## Testing
+### Testing
 
 Invoke the rest api and notice the trace
 

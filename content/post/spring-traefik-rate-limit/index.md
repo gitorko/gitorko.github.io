@@ -6,7 +6,7 @@ date: '2022-04-23'
 aliases: [/spring-boot-traefik-rate-limit/,/spring-traefik-rate-limit/]
 author: 'Arjun Surendra'
 categories: [Spring, Traefik, Kubernetes]
-tags: [spring, spring-boot, traefik, rate-limit]
+tags: [spring, spring-boot, traefik, rate-limit, kubernetes]
 toc: true
 ---
 
@@ -25,7 +25,7 @@ Rate limiting is a technique for controlling the rate of requests to your applic
 
 ![](img01.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project95/main/docker/deployment.yaml" >}}
 
@@ -33,11 +33,13 @@ Rate limiting is a technique for controlling the rate of requests to your applic
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project95/main/docker/deployment-traefik-ratelimit.yaml" >}}
 
-## Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project95/main/README.md" >}}
+### Setup
 
-## Testing
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project95/main/README.md" >}}
+
+
+### Testing
 
 Deploy the image to kubernetes
 

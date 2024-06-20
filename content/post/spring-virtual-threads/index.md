@@ -3,15 +3,14 @@ title: 'Spring Virtual Threads'
 description: 'Spring Virtual Threads'
 summary: 'Spring Boot with Java Virtual Threads'
 date: '2024-06-01'
-aliases: [/all-projects/]
+aliases: [/spring-virtual-threads/]
 author: 'Arjun Surendra'
-categories: [VirtualThreads, Spring, Java21]
-tags: [virtual-threads, spring]
+categories: [VirtualThreads, Spring, JDK21]
+tags: [virtual-threads, spring, jdk21]
 toc: true
 featured: true
 draft: false
 ---
-
 
 ## Virtual Threads
 
@@ -25,17 +24,14 @@ To enable virtual threads in spring boot application
 spring.threads.virtual.enabled=true
 ```
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/src/main/java/com/demo/project58/controller/HomeController.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/src/main/resources/application.yaml" >}}
 
-Run the project
+### Setup
 
-```bash
-./gradlew bootRun
-```
-
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/README.md" >}}
 
 ## References
 

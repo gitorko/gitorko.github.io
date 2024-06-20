@@ -31,7 +31,7 @@ Remote procedure call (RPC) is a way to invoking a function on another computer 
 
 ![](img01.png)
 
-## Code
+### Code
 
 Queue to send and receive messages
 
@@ -78,9 +78,9 @@ RPC
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project78/main/src/main/java/com/demo/project78/rpc/server/RpcServer.java" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project78/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project78/main/README.md" >}}
 
 ## References
 

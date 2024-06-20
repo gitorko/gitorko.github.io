@@ -10,15 +10,19 @@ tags: [spring]
 toc: true
 ---
 
-HashiCorp's vault is a tool to store and secure secrets along with tight access control. You can store tokens, passwords, certificates, API keys and other secrets.
-Spring Vault provides spring abstractions to vault.
-Sometimes you need your running application to detect the changed property value in order to provide a toggle on/off feature.
+Spring application with vault integration
 
 Github: [https://github.com/gitorko/project76](https://github.com/gitorko/project76)
 
 ![](img01.png)
 
-## Code
+## Vault
+
+HashiCorp's vault is a tool to store and secure secrets along with tight access control. You can store tokens, passwords, certificates, API keys and other secrets.
+Spring Vault provides spring abstractions to vault.
+Sometimes you need your running application to detect the changed property value in order to provide a toggle on/off feature.
+
+### Code
 
 Based on the spring profile the respective properties get loaded from vault.
 
@@ -32,11 +36,11 @@ After the feature flag is changed, the new property value is detected by the app
 
 To provide a feature toggle feature you can use the @RefreshScope annotation and trigger a refresh using spring actuator.
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project76/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project76/main/README.md" >}}
 
-## Testing 
+### Testing 
 
 You should now see the values being fetched from vault.
 

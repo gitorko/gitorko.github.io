@@ -11,20 +11,21 @@ toc: true
 ---
 
 Spring boot integration with Drools.
-Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.
 
 Github: [https://github.com/gitorko/project63](https://github.com/gitorko/project63)
 
-## Code
+## Drools
+
+Drools is a Business Rule Management System (BRMS). Business & Non-Technical users can write the rules in a format that is easy to understand and plug it into drools engine. These rules/facts are processed to produce results. Cost of changing the rules is low.
+
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project63/main/src/main/java/com/demo/project63/Main.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project63/main/src/main/resources/product-discount.drl" >}}
 
-Run the project
+### Setup
 
-```bash
-./gradlew bootRun
-```
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project63/main/README.md" >}}
 
 ## References
 

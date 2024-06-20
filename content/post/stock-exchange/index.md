@@ -162,7 +162,9 @@ If heaps are implemented then in the above case, if there are only 2 transaction
 3. System should scale well when number of orders increases.
 4. Should be able to distribute the service with sticky affinity for one type of ticker.
 
-## Design
+## Implementation
+
+### Design
 
 Real world trading algorithms are more complex, involve more memory & cpu optimized data structures, and can handle huge volumes. Most trading systems are written in C/C++.
 
@@ -177,7 +179,7 @@ System is able to match & process 5,000 unique orders per ticker in 2 mins that 
 ![](img03.png)
 ![](img04.png)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project100/main/src/main/java/com/demo/project100/service/OrderService.java" >}}
 
@@ -185,7 +187,7 @@ System is able to match & process 5,000 unique orders per ticker in 2 mins that 
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project100/main/src/main/java/com/demo/project100/service/CombinationSum.java" >}}
 
-## Postman
+### Postman
 
 ![](img02.png)
 
@@ -193,9 +195,9 @@ Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project100/main/postman/Project100.postman_collection.json)
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project100/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project100/main/README.md" >}}
 
 ## References
 

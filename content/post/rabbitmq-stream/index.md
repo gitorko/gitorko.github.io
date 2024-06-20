@@ -12,22 +12,24 @@ toc: true
 
 RabbitMQ Stream implementation.
 
-Streams implement append-only log, messages are persistent and replicated.  
+Github: [https://github.com/gitorko/project74](https://github.com/gitorko/project74)
+
+## RabbitMQ Streams
+
+Streams implement append-only log, messages are persistent and replicated.
 
 1. Large fan-outs - Deliver the same message to multiple subscribers
 2. Replay / Time-travelling - Read messages from any point.
 3. Throughput Performance - Log based messaging deliver performance compared to traditional queues.
 4. Large logs - Streams are designed to store larger amounts of data in an efficient manner with minimal in-memory overhead.
 
-Github: [https://github.com/gitorko/project74](https://github.com/gitorko/project74)
-
-## RabbitMQ Stream
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project74/main/src/main/java/com/demo/project74/AsyncService.java" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project74/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project74/main/README.md" >}}
 
 ## References
 

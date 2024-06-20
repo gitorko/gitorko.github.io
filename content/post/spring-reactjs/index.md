@@ -37,7 +37,9 @@ Uses Spring Data to persist data into the postgres db. Spring dev tools allow se
 3. CRUD UI for adding and removing customer to db.
 4. Charts for bar,pie,stack charts with data from rest api
 
-## Design
+## Implementation
+
+### Design
 
 ![](img03.png)
 ![](img04.png)
@@ -45,7 +47,7 @@ Uses Spring Data to persist data into the postgres db. Spring dev tools allow se
 ![](img06.png)
 ![](img07.png)
 
-## Code
+### Code
 
 To allow spring dev tools to reload on change you need to enable 'Update classes and resources' in Intellij as shown below
 
@@ -67,11 +69,11 @@ We will use the bootstrap 5 library and use the many components it provides.
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project89/main/ui/src/app/Login.tsx" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project89/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project89/main/README.md" >}}
 
-## Testing
+### Testing
 
 ```bash
 curl --location --request POST 'http://localhost:8080/api/login' \

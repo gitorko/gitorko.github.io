@@ -43,12 +43,14 @@ Realtime data fetch from server via bidirectional communication is one of the ke
 1. Connect will open the websocket connection & disconnect should terminate the session.
 2. Two users should be able to send and receive messages.
 
-## Design
+## Implementation
+
+### Design
 
 ![](img01.png)
 ![](img02.png)
 
-## Code
+### Code
 
 You can enable plain websockets via @EnableWebSocket however in the example below we are using STOMP over WebSocket protocol by using @EnableWebSocketMessageBroker. STOMP is a subprotocol operating on top of the lower-level WebSocket. Here we create an in-memory message broker for sending and receiving messages.
 Instead of the annotation @SendTo, you can also use SimpMessagingTemplate which you can autowire inside your controller.
@@ -58,9 +60,9 @@ Instead of the annotation @SendTo, you can also use SimpMessagingTemplate which 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project92/main/ui/src/app/home/home.component.html" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project92/main/ui/src/app/home/home.component.ts" >}}
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project92/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project92/main/README.md" >}}
 
 ## References
 

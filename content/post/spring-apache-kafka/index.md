@@ -49,7 +49,7 @@ There is an even higher level of abstraction provided by spring cloud stream whi
 ![](img04.png)
 ![](img05.png)
 
-## Kafka Producer & Consumer
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/producer/KafkaProducer.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/consumer/KafkaConsumer.java" >}}
@@ -84,13 +84,15 @@ KafkaStreams enables us to consume from Kafka topics, analyze or transform data,
 
 We will now count the users by age group.
 
+### Code
+
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/stream/KafkaStream.java" >}}
 
 Run the main method of KafkaStream.
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project80/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/README.md" >}}
 
 ## References
 

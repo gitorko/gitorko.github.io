@@ -40,7 +40,9 @@ Spring dev tools allow seamless reload on any changes for java files.
 6. Spring JPA
 7. Chart.js charts for bar,pie,stack charts with data from rest api
 
-## Design
+## Implementation
+
+### Design
 
 ![](img03.png)
 
@@ -58,7 +60,7 @@ User role cant delete the record, only admin role can delete the record
 
 ![](img08.png)
 
-## Code 
+### Code 
 
 On Intellij to allow spring dev tools to reload on change you need to enable 'Update classes and resources' as shown below
 
@@ -102,11 +104,11 @@ public class IndexController {
 }
 ```
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project88/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project88/main/README.md" >}}
 
-## Testing
+### Testing
 
 ![](img02.png)
 

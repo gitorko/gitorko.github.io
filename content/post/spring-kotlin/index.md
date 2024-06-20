@@ -10,9 +10,15 @@ tags: [spring, kotlin]
 toc: true
 ---
 
+A spring boot project with Kotlin
+
 Github: [https://github.com/gitorko/project03](https://github.com/gitorko/project03)
 
-## Code
+## Kotlin
+
+Kotlin is a cross-platform, statically typed, general-purpose high-level programming language with type inference. Kotlin is designed to interoperate fully with Java, and the JVM version of Kotlin's standard library depends on the Java Class Library, but type inference allows its syntax to be more concise.
+
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project03/main/src/main/kotlin/com/demo/project03/Main.kt" >}}
 
@@ -22,15 +28,15 @@ Github: [https://github.com/gitorko/project03](https://github.com/gitorko/projec
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project03/main/src/main/kotlin/com/demo/project03/repo/CustomerRepository.kt" >}}
 
-## Postman
+### Postman
 
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project03/main/postman/Project03.postman_collection.json)
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project03/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project03/main/README.md" >}}
 
 ## References
 

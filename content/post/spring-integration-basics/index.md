@@ -68,7 +68,7 @@ Message can be split, route, transform, wiretap, enrich, aggregate the messages.
 3. ExecutorChannel - Delegates to an instance of TaskExecutor to perform the dispatch
 4. FluxChannel - Allows reactive consumption
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project97/main/src/main/java/com/demo/project97/integration/BasicIntegration.java" >}}
 
@@ -78,15 +78,15 @@ Message can be split, route, transform, wiretap, enrich, aggregate the messages.
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project97/main/src/main/java/com/demo/project97/integration/RabbitMQIntegration.java" >}}
 
-## Setup
-
-{{< markcode "https://raw.githubusercontent.com/gitorko/project97/main/README.md" >}}
-
-## Postman
+### Postman
 
 Import the postman collection to postman
 
 [Postman Collection](https://raw.githubusercontent.com/gitorko/project97/main/postman/Project97.postman_collection.json)
+
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project97/main/README.md" >}}
 
 ## References
 

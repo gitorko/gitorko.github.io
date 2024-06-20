@@ -5,7 +5,7 @@ summary: 'Spring boot application integration with redis for messaging & data pe
 date: '2021-07-10'
 aliases: [/spring-redis/]
 author: 'Arjun Surendra'
-categories: [Spring, Spring-Reactor]
+categories: [Spring, Redis]
 tags: [spring, spring-boot, redis]
 toc: true
 ---
@@ -18,7 +18,7 @@ Github: [https://github.com/gitorko/project56](https://github.com/gitorko/projec
 
 Redis can be used as an in-memory data store, database, cache, streaming engine, and message broker.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project56/main/src/main/java/com/demo/project56/config/RedisConfiguration.java" >}}
 
@@ -26,7 +26,7 @@ Redis can be used as an in-memory data store, database, cache, streaming engine,
 
 ![](img01.png)
 
-## Postman
+### Postman
 
 Import the postman collection to postman
 
@@ -34,9 +34,9 @@ Import the postman collection to postman
 
 ![](img02.png)
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project56/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project56/main/README.md" >}}
 
 ## References
 

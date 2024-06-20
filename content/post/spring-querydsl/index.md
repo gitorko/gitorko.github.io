@@ -19,17 +19,17 @@ Github: [https://github.com/gitorko/project75](https://github.com/gitorko/projec
 Let's say you used Spring Data to query the db by using spring naming convention. 
 If your table has 100's of column and you have to query by any column you can't write 100 access functions. This is where query dsl comes into play.
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project75/main/src/main/java/com/demo/project75/Main.java" >}}
 
 It uses in memory h2 db to persist.
 
-## Setup
+### Setup
 
-{{< markcode "https://raw.githubusercontent.com/gitorko/project75/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project75/main/README.md" >}}
 
-## Testing
+### Testing
 
 You can now search based on all the columns of the db and get the response.
 

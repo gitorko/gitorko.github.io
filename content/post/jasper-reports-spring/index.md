@@ -21,16 +21,16 @@ To generate the jasper template you will need to download and install jasper stu
 
 [https://community.jaspersoft.com/download](https://community.jaspersoft.com/download)
 
-## Code
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project70/main/src/main/java/com/demo/project70/Main.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project70/main/src/main/resources/EmployeeReports.jrxml" >}}
 
 Run the project to generate the EmployeeReports.pdf file.
 
-```bash
-./gradlew bootRun
-```
+### Setup
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project70/main/README.md" >}}
 
 To create the jasper report template file you can use jasper studio
 
