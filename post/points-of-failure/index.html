@@ -3,7 +3,7 @@
 </a><a href=https://www.linkedin.com/in/arjunsurendra/><svg class="icon"><title>linkedin</title><use xlink:href="#linkedin"/></svg>
 </a><a href=https://gitorko.github.io/index.xml><svg class="icon"><title>rss</title><use xlink:href="#rss"/></svg></a><div class=color_mode><input type=checkbox class=color_choice id=mode></div></div></div></nav></header><main><div class="grid-inverse wrap content"><article class=post_content><h1 class=post_title>Points Of Failure in Distributed System</h1><div class=post_meta><span><svg class="icon"><title>calendar</title><use xlink:href="#calendar"/></svg>
 </span><span class=post_date>Aug 28, 2022</span>
-<span class=post_time>· 13 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/failure/ title=failure class="post_tag button button_translucent">failure
+<span class=post_time>· 14 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/failure/ title=failure class="post_tag button button_translucent">failure
 </a><a href=https://gitorko.github.io/tags/resilience4j/ title=resilience4j class="post_tag button button_translucent">resilience4j
 </a></span><span class=page_only>&nbsp;·<div class=post_share>Share on:
 <a href="https://twitter.com/intent/tweet?text=Points%20Of%20Failure%20in%20Distributed%20System&url=https%3a%2f%2fgitorko.github.io%2fpost%2fpoints-of-failure%2f&tw_p=tweetbutton" class=twitter title="Share on Twitter" target=_blank rel=nofollow><svg class="icon"><title>twitter</title><use xlink:href="#twitter"/></svg>
@@ -51,7 +51,7 @@ However your kubernetes admin calls you to inform that kubernetes is a shared re
 </span></span></span><span class=line><span class=ln>5</span><span class=cl><span class=w>    </span><span class=nt>limits</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=ln>6</span><span class=cl><span class=w>      </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2&#34;</span><span class=w>
 </span></span></span><span class=line><span class=ln>7</span><span class=cl><span class=w>      </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;380Mi&#34;</span><span class=w>
-</span></span></span></code></pre></div><p>Now when you invoke the api that causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.</p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1855 height=1026 src=/post/points-of-failure/memory-spike.png></picture></figure></p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=633 height=189 src=/post/points-of-failure/pod-oom-killed.png></picture></figure></p><div class="notices info"><div class=label>Note</div><p>For an OutOfMemoryError the pod doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
+</span></span></span></code></pre></div><p>Now when you invoke the api that causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.</p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=902 height=588 src=/post/points-of-failure/img01.png></picture></figure></p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1855 height=1026 src=/post/points-of-failure/memory-spike.png></picture></figure></p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=633 height=189 src=/post/points-of-failure/pod-oom-killed.png></picture></figure></p><div class="notices info"><div class=label>Note</div><p>For an OutOfMemoryError the pod doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
 Only the resource limits defined determine when the pod gets killed.</p></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=ln>1</span><span class=cl>Exception in thread &#34;http-nio-8080-exec-1&#34; java.lang.OutOfMemoryError: Java heap space
 </span></span></code></pre></div><h3 id=response-payload-size>Response Payload Size</h3><div class="notices note"><div class=label>Problem</div><p>Your rest api returns list of customer records, However as more customers are added in production the size of response becomes bigger & bigger and slows down the request-response times.</p></div><p>Always add <strong>pagination</strong> support and avoid returning all the data in a single response. Data may grow later causing response size to get bigger over a period of time.</p><p>Enable gzip compression which also reduce the size of response payload.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>server.compression.enabled<span class=o>=</span><span class=nb>true</span>
 </span></span><span class=line><span class=ln>2</span><span class=cl> 
@@ -329,54 +329,97 @@ Only the resource limits defined determine when the pod gets killed.</p></div><d
 </span></span></span><span class=line><span class=ln>21</span><span class=cl><span class=w>    </span><span class=nt>init</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=ln>22</span><span class=cl><span class=w>      </span><span class=nt>mode</span><span class=p>:</span><span class=w> </span><span class=l>always</span><span class=w>
 </span></span></span><span class=line><span class=ln>23</span><span class=cl><span class=w></span><span class=nt>server</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>24</span><span class=cl><span class=w>  </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
-</span></span></span><span class=line><span class=ln>25</span><span class=cl><span class=w>  </span><span class=nt>compression</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>26</span><span class=cl><span class=w>    </span><span class=nt>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span></span></span><span class=line><span class=ln>27</span><span class=cl><span class=w>    </span><span class=c># Minimum response when compression will kick in</span><span class=w>
-</span></span></span><span class=line><span class=ln>28</span><span class=cl><span class=w>    </span><span class=nt>min-response-size</span><span class=p>:</span><span class=w> </span><span class=m>512</span><span class=w>
-</span></span></span><span class=line><span class=ln>29</span><span class=cl><span class=w>    </span><span class=c># Mime types that should be compressed</span><span class=w>
-</span></span></span><span class=line><span class=ln>30</span><span class=cl><span class=w>    </span><span class=nt>mime-types</span><span class=p>:</span><span class=w> </span><span class=l>text/xml, text/plain, application/json</span><span class=w>
-</span></span></span><span class=line><span class=ln>31</span><span class=cl><span class=w>  </span><span class=nt>tomcat</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>32</span><span class=cl><span class=w>    </span><span class=nt>connection-timeout</span><span class=p>:</span><span class=w> </span><span class=m>20000</span><span class=w>
-</span></span></span><span class=line><span class=ln>33</span><span class=cl><span class=w>    </span><span class=nt>threads</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>34</span><span class=cl><span class=w>      </span><span class=nt>max</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span></span></span><span class=line><span class=ln>35</span><span class=cl><span class=w>    </span><span class=nt>max-keep-alive-requests</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span></span></span><span class=line><span class=ln>36</span><span class=cl><span class=w>    </span><span class=nt>keep-alive-timeout</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span></span></span><span class=line><span class=ln>37</span><span class=cl><span class=w>    </span><span class=nt>max-connections</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
-</span></span></span><span class=line><span class=ln>38</span><span class=cl><span class=w>
-</span></span></span><span class=line><span class=ln>39</span><span class=cl><span class=w></span><span class=nt>resilience4j.timelimiter</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>40</span><span class=cl><span class=w>  </span><span class=nt>instances</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>41</span><span class=cl><span class=w>    </span><span class=nt>service1-tl</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>42</span><span class=cl><span class=w>      </span><span class=nt>timeoutDuration</span><span class=p>:</span><span class=w> </span><span class=l>1s</span><span class=w>
-</span></span></span><span class=line><span class=ln>43</span><span class=cl><span class=w>      </span><span class=nt>cancelRunningFuture</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span></span></span></code></pre></div><h2 id=postman>Postman</h2><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1522 height=647 src=/post/points-of-failure/postman.png></picture></figure></p><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json>Postman Collection</a></p><h2 id=setup>Setup</h2><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1036 height=675 src=/post/points-of-failure/intellij-config.png></picture></figure></p><h1 id=project-57>Project 57</h1><p>Point of Failures in System</p><p><a href=https://gitorko.github.io/points-of-failure/>https://gitorko.github.io/points-of-failure/</a></p><h3 id=version>Version</h3><p>Check version</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl><span class=nv>$java</span> --version
-</span></span><span class=line><span class=ln>2</span><span class=cl>openjdk 21.0.3 2024-04-16 LTS
-</span></span></code></pre></div><h3 id=postgres-db>Postgres DB</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>docker run -p 5432:5432 --name pg-container -e <span class=nv>POSTGRES_PASSWORD</span><span class=o>=</span>password -d postgres:14
-</span></span><span class=line><span class=ln>2</span><span class=cl>docker ps
-</span></span><span class=line><span class=ln>3</span><span class=cl>docker <span class=nb>exec</span> -it pg-container psql -U postgres -W postgres
-</span></span><span class=line><span class=ln>4</span><span class=cl>CREATE USER <span class=nb>test</span> WITH PASSWORD <span class=s1>&#39;test@123&#39;</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>5</span><span class=cl>CREATE DATABASE <span class=s2>&#34;test-db&#34;</span> WITH OWNER <span class=s2>&#34;test&#34;</span> ENCODING UTF8 TEMPLATE template0<span class=p>;</span>
-</span></span><span class=line><span class=ln>6</span><span class=cl>grant all PRIVILEGES ON DATABASE <span class=s2>&#34;test-db&#34;</span> to test<span class=p>;</span>
-</span></span><span class=line><span class=ln>7</span><span class=cl>
-</span></span><span class=line><span class=ln>8</span><span class=cl>docker stop pg-container
-</span></span><span class=line><span class=ln>9</span><span class=cl>docker start pg-container
-</span></span></code></pre></div><h3 id=dev>Dev</h3><p>To run the backend in dev mode.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>./gradlew clean build
-</span></span><span class=line><span class=ln>2</span><span class=cl>./gradlew bootRun
-</span></span></code></pre></div><p>Command to check port on Mac</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>lsof -i tcp:8080
-</span></span></code></pre></div><h3 id=kubernetes>Kubernetes</h3><p>Stop any existing postgres db</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>docker stop pg-container
-</span></span><span class=line><span class=ln>2</span><span class=cl>brew services stop postgresql@14
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln> 1</span><span class=cl>kubectl config use-context docker-desktop
-</span></span><span class=line><span class=ln> 2</span><span class=cl>
-</span></span><span class=line><span class=ln> 3</span><span class=cl>mkdir /tmp/data
-</span></span><span class=line><span class=ln> 4</span><span class=cl> 
-</span></span><span class=line><span class=ln> 5</span><span class=cl>./gradlew clean build
-</span></span><span class=line><span class=ln> 6</span><span class=cl>docker build -f k8s/Dockerfile --force-rm -t project57:1.0.0 .
-</span></span><span class=line><span class=ln> 7</span><span class=cl>kubectl apply -f k8s/deployment.yaml
-</span></span><span class=line><span class=ln> 8</span><span class=cl>kubectl get pods -w
-</span></span><span class=line><span class=ln> 9</span><span class=cl>
-</span></span><span class=line><span class=ln>10</span><span class=cl>kubectl logs -f service/project57-service
-</span></span><span class=line><span class=ln>11</span><span class=cl>
-</span></span><span class=line><span class=ln>12</span><span class=cl>kubectl delete -f k8s/deployment.yaml
+</span></span></span><span class=line><span class=ln>24</span><span class=cl><span class=w>  </span><span class=nt>http2</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>25</span><span class=cl><span class=w>    </span><span class=nt>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span><span class=line><span class=ln>26</span><span class=cl><span class=w>  </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
+</span></span></span><span class=line><span class=ln>27</span><span class=cl><span class=w>  </span><span class=nt>compression</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>28</span><span class=cl><span class=w>    </span><span class=nt>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=ln>29</span><span class=cl><span class=w>    </span><span class=c># Minimum response when compression will kick in</span><span class=w>
+</span></span></span><span class=line><span class=ln>30</span><span class=cl><span class=w>    </span><span class=nt>min-response-size</span><span class=p>:</span><span class=w> </span><span class=m>512</span><span class=w>
+</span></span></span><span class=line><span class=ln>31</span><span class=cl><span class=w>    </span><span class=c># Mime types that should be compressed</span><span class=w>
+</span></span></span><span class=line><span class=ln>32</span><span class=cl><span class=w>    </span><span class=nt>mime-types</span><span class=p>:</span><span class=w> </span><span class=l>text/xml, text/plain, application/json</span><span class=w>
+</span></span></span><span class=line><span class=ln>33</span><span class=cl><span class=w>  </span><span class=nt>tomcat</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>34</span><span class=cl><span class=w>    </span><span class=nt>connection-timeout</span><span class=p>:</span><span class=w> </span><span class=m>20000</span><span class=w>
+</span></span></span><span class=line><span class=ln>35</span><span class=cl><span class=w>    </span><span class=nt>threads</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>36</span><span class=cl><span class=w>      </span><span class=nt>max</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span><span class=line><span class=ln>37</span><span class=cl><span class=w>    </span><span class=nt>max-keep-alive-requests</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span><span class=line><span class=ln>38</span><span class=cl><span class=w>    </span><span class=nt>keep-alive-timeout</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span><span class=line><span class=ln>39</span><span class=cl><span class=w>    </span><span class=nt>max-connections</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=ln>40</span><span class=cl><span class=w>
+</span></span></span><span class=line><span class=ln>41</span><span class=cl><span class=w></span><span class=nt>resilience4j.timelimiter</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>42</span><span class=cl><span class=w>  </span><span class=nt>instances</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>43</span><span class=cl><span class=w>    </span><span class=nt>service1-tl</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>44</span><span class=cl><span class=w>      </span><span class=nt>timeoutDuration</span><span class=p>:</span><span class=w> </span><span class=l>1s</span><span class=w>
+</span></span></span><span class=line><span class=ln>45</span><span class=cl><span class=w>      </span><span class=nt>cancelRunningFuture</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span></code></pre></div><h2 id=postman>Postman</h2><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1307 height=707 src=/post/points-of-failure/img02.png></picture></figure></p><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project57/main/postman/Project57.postman_collection.json>Postman Collection</a></p><h2 id=setup>Setup</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-md data-lang=md><span class=line><span class=ln> 1</span><span class=cl><span class=gh># Project 57
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=gh></span>
+</span></span><span class=line><span class=ln> 3</span><span class=cl>Point of Failures in System
+</span></span><span class=line><span class=ln> 4</span><span class=cl>
+</span></span><span class=line><span class=ln> 5</span><span class=cl>[<span class=nt>https://gitorko.github.io/points-of-failure/</span>](<span class=na>https://gitorko.github.io/points-of-failure/</span>)
+</span></span><span class=line><span class=ln> 6</span><span class=cl>
+</span></span><span class=line><span class=ln> 7</span><span class=cl><span class=gu>### Version
+</span></span></span><span class=line><span class=ln> 8</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl>Check version
+</span></span><span class=line><span class=ln>10</span><span class=cl>
+</span></span><span class=line><span class=ln>11</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>12</span><span class=cl><span class=s></span><span class=nv>$java</span> --version
+</span></span><span class=line><span class=ln>13</span><span class=cl>openjdk 21.0.3 2024-04-16 LTS
+</span></span><span class=line><span class=ln>14</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>15</span><span class=cl>
+</span></span><span class=line><span class=ln>16</span><span class=cl><span class=gu>### Postgres DB
+</span></span></span><span class=line><span class=ln>17</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>18</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>19</span><span class=cl><span class=s></span>docker run -p 5432:5432 --name pg-container -e <span class=nv>POSTGRES_PASSWORD</span><span class=o>=</span>password -d postgres:14
+</span></span><span class=line><span class=ln>20</span><span class=cl>docker ps
+</span></span><span class=line><span class=ln>21</span><span class=cl>docker <span class=nb>exec</span> -it pg-container psql -U postgres -W postgres
+</span></span><span class=line><span class=ln>22</span><span class=cl>CREATE USER <span class=nb>test</span> WITH PASSWORD <span class=s1>&#39;test@123&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=ln>23</span><span class=cl>CREATE DATABASE <span class=s2>&#34;test-db&#34;</span> WITH OWNER <span class=s2>&#34;test&#34;</span> ENCODING UTF8 TEMPLATE template0<span class=p>;</span>
+</span></span><span class=line><span class=ln>24</span><span class=cl>grant all PRIVILEGES ON DATABASE <span class=s2>&#34;test-db&#34;</span> to test<span class=p>;</span>
+</span></span><span class=line><span class=ln>25</span><span class=cl>
+</span></span><span class=line><span class=ln>26</span><span class=cl>docker stop pg-container
+</span></span><span class=line><span class=ln>27</span><span class=cl>docker start pg-container
+</span></span><span class=line><span class=ln>28</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>29</span><span class=cl>
+</span></span><span class=line><span class=ln>30</span><span class=cl><span class=gu>### Dev
+</span></span></span><span class=line><span class=ln>31</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>32</span><span class=cl>To run the backend in dev mode.
+</span></span><span class=line><span class=ln>33</span><span class=cl>
+</span></span><span class=line><span class=ln>34</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>35</span><span class=cl><span class=s></span>./gradlew clean build
+</span></span><span class=line><span class=ln>36</span><span class=cl>./gradlew bootRun
+</span></span><span class=line><span class=ln>37</span><span class=cl>
+</span></span><span class=line><span class=ln>38</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>39</span><span class=cl>
+</span></span><span class=line><span class=ln>40</span><span class=cl>Command to check port on Mac
+</span></span><span class=line><span class=ln>41</span><span class=cl>
+</span></span><span class=line><span class=ln>42</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>43</span><span class=cl><span class=s></span>lsof -i tcp:8080
+</span></span><span class=line><span class=ln>44</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>45</span><span class=cl>
+</span></span><span class=line><span class=ln>46</span><span class=cl><span class=gu>### Kubernetes
+</span></span></span><span class=line><span class=ln>47</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>48</span><span class=cl>Stop any existing postgres db
+</span></span><span class=line><span class=ln>49</span><span class=cl>
+</span></span><span class=line><span class=ln>50</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>51</span><span class=cl><span class=s></span>docker stop pg-container
+</span></span><span class=line><span class=ln>52</span><span class=cl>brew services stop postgresql@14
+</span></span><span class=line><span class=ln>53</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>54</span><span class=cl>
+</span></span><span class=line><span class=ln>55</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>56</span><span class=cl><span class=s></span>kubectl config use-context docker-desktop
+</span></span><span class=line><span class=ln>57</span><span class=cl>
+</span></span><span class=line><span class=ln>58</span><span class=cl>mkdir /tmp/data
+</span></span><span class=line><span class=ln>59</span><span class=cl> 
+</span></span><span class=line><span class=ln>60</span><span class=cl>./gradlew clean build
+</span></span><span class=line><span class=ln>61</span><span class=cl>docker build -f k8s/Dockerfile --force-rm -t project57:1.0.0 .
+</span></span><span class=line><span class=ln>62</span><span class=cl>kubectl apply -f k8s/deployment.yaml
+</span></span><span class=line><span class=ln>63</span><span class=cl>kubectl get pods -w
+</span></span><span class=line><span class=ln>64</span><span class=cl>
+</span></span><span class=line><span class=ln>65</span><span class=cl>kubectl logs -f service/project57-service
+</span></span><span class=line><span class=ln>66</span><span class=cl>
+</span></span><span class=line><span class=ln>67</span><span class=cl>kubectl delete -f k8s/deployment.yaml
+</span></span><span class=line><span class=ln>68</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>69</span><span class=cl>
 </span></span></code></pre></div><h2 id=references>References</h2><p><a href=https://resilience4j.readme.io/docs>https://resilience4j.readme.io/docs</a></p></div><div class=post_comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//gitorko.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></article><aside class=sidebar><section class=sidebar_inner><br><div class=search><input type=search class="search_field form_field" placeholder=Search... id=find autocomplete=off data-scope=post>
 <label for=find class=search_label><svg class="icon"><title>search</title><use xlink:href="#search"/></svg></label><div class="search_results results"></div></div><h2 class=mt-4>Featured Posts</h2><ul><li><a href=https://gitorko.github.io/post/spring-virtual-threads/spring-virtual-threads/ class=nav-link title="Spring Virtual Threads">Spring Virtual Threads</a></li><li><a href=https://gitorko.github.io/post/all-projects/all-projects/ class=nav-link title="All Project References">All Project References</a></li></ul><h2 class=mt-4>Recent Posts</h2><ul class=flex-column><li><a href=https://gitorko.github.io/post/spring-rsocket/ class=nav-link title="Spring - Rsocket">Spring - Rsocket</a></li><li><a href=https://gitorko.github.io/post/distributed-locking-apache-ignite/ class=nav-link title="Distributed Locking - Apache Ignite">Distributed Locking - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-apache-ignite/ class=nav-link title="Spring - Apache Ignite">Spring - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-observability/ class=nav-link title="Spring Boot - Observability">Spring Boot - Observability</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ class=nav-link title="Spring Webflux & R2DBC">Spring Webflux & R2DBC</a></li><li><a href=https://gitorko.github.io/post/machine-learning-deeplearning4j/ class=nav-link title="Machine Learning - deeplearning4j">Machine Learning - deeplearning4j</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-reactive-jdbc/ class=nav-link title="Spring Webflux & Reactive JDBC">Spring Webflux & Reactive JDBC</a></li><li><a href=https://gitorko.github.io/post/grokking-the-coding-interview/ class=nav-link title="Grokking the Coding Interview">Grokking the Coding Interview</a></li></ul><div><h2 class="mt-4 taxonomy" id=categories-section>Categories</h2><nav class=tags_nav><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" title=spring>SPRING
 <span class=button_tally>20</span>
