@@ -9,8 +9,8 @@
 <a href="https://twitter.com/intent/tweet?text=Spring%20Webflux%20%26%20R2DBC&url=https%3a%2f%2fgitorko.github.io%2fpost%2fspring-webflux-r2dbc%2f&tw_p=tweetbutton" class=twitter title="Share on Twitter" target=_blank rel=nofollow><svg class="icon"><title>twitter</title><use xlink:href="#twitter"/></svg>
 </a><a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fgitorko.github.io%2fpost%2fspring-webflux-r2dbc%2f&t=Spring%20Webflux%20%26%20R2DBC" class=facebook title="Share on Facebook" target=_blank rel=nofollow><svg class="icon"><title>facebook</title><use xlink:href="#facebook"/></svg>
 </a><a href=#linkedinshare id=linkedinshare class=linkedin title="Share on LinkedIn" rel=nofollow><svg class="icon"><title>linkedin</title><use xlink:href="#linkedin"/></svg>
-</a><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ title="Copy Link" class="link link_yank"><svg class="icon"><title>copy</title><use xlink:href="#copy"/></svg></a></div></span></div><div class=post_toc><h2>Overview</h2><nav id=TableOfContents><ul><li><a href=#spring-data-r2dbc>Spring Data R2DBC</a></li><li><a href=#code>Code</a></li><li><a href=#setup>Setup</a></li><li><a href=#postman>Postman</a></li><li><a href=#errors>Errors</a></li><li><a href=#references>References</a></li></ul></nav></div><div class=post_body><p>Webflux integration with reactive R2DBC with liquibase.
-R2DBC stands for Reactive Relational Database Connectivity, It provides a reactive driver to connect to relational database.</p><p>Github: <a href=https://github.com/gitorko/project65>https://github.com/gitorko/project65</a></p><h2 id=spring-data-r2dbc>Spring Data R2DBC</h2><p>Spring Data R2DBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of ORM frameworks. This makes Spring Data R2DBC a simple, limited, opinionated object mapper.</p><p>The following databases are supported via r2dbc libraries</p><ol><li>H2 (io.r2dbc:r2dbc-h2)</li><li>MariaDB (org.mariadb:r2dbc-mariadb)</li><li>Microsoft SQL Server (io.r2dbc:r2dbc-mssql)</li><li>MySQL (dev.miku:r2dbc-mysql)</li><li>jasync-sql MySQL (com.github.jasync-sql:jasync-r2dbc-mysql)</li><li>Postgres (io.r2dbc:r2dbc-postgresql)</li><li>Oracle (com.oracle.database.r2dbc:oracle-r2dbc)</li></ol><h2 id=code>Code</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln> 1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project65</span><span class=p>;</span><span class=w>
+</a><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ title="Copy Link" class="link link_yank"><svg class="icon"><title>copy</title><use xlink:href="#copy"/></svg></a></div></span></div><div class=post_toc><h2>Overview</h2><nav id=TableOfContents><ul><li><a href=#spring-data-r2dbc>Spring Data R2DBC</a><ul><li><a href=#code>Code</a></li><li><a href=#postman>Postman</a></li><li><a href=#setup>Setup</a></li><li><a href=#errors>Errors</a></li></ul></li><li><a href=#references>References</a></li></ul></nav></div><div class=post_body><p>Webflux integration with reactive R2DBC with liquibase.
+R2DBC stands for Reactive Relational Database Connectivity, It provides a reactive driver to connect to relational database.</p><p>Github: <a href=https://github.com/gitorko/project65>https://github.com/gitorko/project65</a></p><h2 id=spring-data-r2dbc>Spring Data R2DBC</h2><p>Spring Data R2DBC aims at being conceptually easy. In order to achieve this it does NOT offer caching, lazy loading, write behind or many other features of ORM frameworks. This makes Spring Data R2DBC a simple, limited, opinionated object mapper.</p><p>The following databases are supported via r2dbc libraries</p><ol><li>H2 (io.r2dbc:r2dbc-h2)</li><li>MariaDB (org.mariadb:r2dbc-mariadb)</li><li>Microsoft SQL Server (io.r2dbc:r2dbc-mssql)</li><li>MySQL (dev.miku:r2dbc-mysql)</li><li>jasync-sql MySQL (com.github.jasync-sql:jasync-r2dbc-mysql)</li><li>Postgres (io.r2dbc:r2dbc-postgresql)</li><li>Oracle (com.oracle.database.r2dbc:oracle-r2dbc)</li></ol><h3 id=code>Code</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln> 1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project65</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=w>
 </span></span></span><span class=line><span class=ln> 3</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>lombok.extern.slf4j.Slf4j</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln> 4</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>org.springframework.boot.SpringApplication</span><span class=p>;</span><span class=w>
@@ -158,34 +158,68 @@ R2DBC stands for Reactive Relational Database Connectivity, It provides a reacti
 </span></span></span><span class=line><span class=ln>13</span><span class=cl><span class=w>    </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=l>jdbc:postgresql://localhost:5432/test-db</span><span class=w>
 </span></span></span><span class=line><span class=ln>14</span><span class=cl><span class=w>    </span><span class=nt>user</span><span class=p>:</span><span class=w> </span><span class=l>test</span><span class=w>
 </span></span></span><span class=line><span class=ln>15</span><span class=cl><span class=w>    </span><span class=nt>password</span><span class=p>:</span><span class=w> </span><span class=l>test@123</span><span class=w>
-</span></span></span></code></pre></div><h2 id=setup>Setup</h2><h1 id=project-65>Project 65</h1><p>Spring Webflux & R2DBC</p><p><a href=https://gitorko.github.io/spring-webflux-r2dbc/>https://gitorko.github.io/spring-webflux-r2dbc/</a></p><h3 id=version>Version</h3><p>Check version</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl><span class=nv>$java</span> --version
-</span></span><span class=line><span class=ln>2</span><span class=cl>openjdk 17.0.3 2022-04-19 LTS
-</span></span></code></pre></div><h3 id=postgres-db>Postgres DB</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>docker run -p 5432:5432 --name pg-container -e <span class=nv>POSTGRES_PASSWORD</span><span class=o>=</span>password -d postgres:9.6.10
-</span></span><span class=line><span class=ln>2</span><span class=cl>docker ps
-</span></span><span class=line><span class=ln>3</span><span class=cl>docker <span class=nb>exec</span> -it pg-container psql -U postgres -W postgres
-</span></span><span class=line><span class=ln>4</span><span class=cl>CREATE USER <span class=nb>test</span> WITH PASSWORD <span class=s1>&#39;test@123&#39;</span><span class=p>;</span>
-</span></span><span class=line><span class=ln>5</span><span class=cl>CREATE DATABASE <span class=s2>&#34;test-db&#34;</span> WITH OWNER <span class=s2>&#34;test&#34;</span> ENCODING UTF8 TEMPLATE template0<span class=p>;</span>
-</span></span><span class=line><span class=ln>6</span><span class=cl>GRANT ALL PRIVILEGES ON DATABASE <span class=s2>&#34;test-db&#34;</span> to test<span class=p>;</span>
-</span></span><span class=line><span class=ln>7</span><span class=cl> 
-</span></span><span class=line><span class=ln>8</span><span class=cl>docker stop pg-container
-</span></span><span class=line><span class=ln>9</span><span class=cl>docker start pg-container
-</span></span></code></pre></div><p>Ensure you login with test user and create the table.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>docker <span class=nb>exec</span> -it pg-container psql -U <span class=nb>test</span> -W test-db
-</span></span><span class=line><span class=ln>2</span><span class=cl><span class=se>\d</span>t
-</span></span></code></pre></div><p>Create the table</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-sql data-lang=sql><span class=line><span class=ln>1</span><span class=cl><span class=k>CREATE</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=n>customer</span><span class=w> </span><span class=p>(</span><span class=w>
-</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>   </span><span class=n>id</span><span class=w>  </span><span class=nb>SERIAL</span><span class=w> </span><span class=k>PRIMARY</span><span class=w> </span><span class=k>KEY</span><span class=p>,</span><span class=w>
-</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>   </span><span class=n>name</span><span class=w> </span><span class=nb>VARCHAR</span><span class=p>(</span><span class=mi>50</span><span class=p>)</span><span class=w> </span><span class=k>NOT</span><span class=w> </span><span class=k>NULL</span><span class=p>,</span><span class=w>
-</span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>   </span><span class=n>age</span><span class=w> </span><span class=nb>INT</span><span class=w> </span><span class=k>NOT</span><span class=w> </span><span class=k>NULL</span><span class=w>
-</span></span></span><span class=line><span class=ln>5</span><span class=cl><span class=w></span><span class=p>);</span><span class=w>
-</span></span></span></code></pre></div><h3 id=dev>Dev</h3><p>To run the code.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>./gradlew clean build
-</span></span><span class=line><span class=ln>2</span><span class=cl>./gradlew bootRun
-</span></span></code></pre></div><h2 id=postman>Postman</h2><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1103 height=693 src=/post/spring-webflux-r2dbc/img01.png></picture></figure></p><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json>Postman Collection</a></p><h2 id=errors>Errors</h2><p>If you encounter any of the error mentioned below it could probably be because the data type in postgres cant be mapped by r2dbc.
+</span></span></span></code></pre></div><h3 id=postman>Postman</h3><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1103 height=693 src=/post/spring-webflux-r2dbc/img01.png></picture></figure></p><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project65/main/postman/Project65.postman_collection.json>Postman Collection</a></p><h3 id=setup>Setup</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-md data-lang=md><span class=line><span class=ln> 1</span><span class=cl><span class=gh># Project 65
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=gh></span>
+</span></span><span class=line><span class=ln> 3</span><span class=cl>Spring Webflux <span class=err>&amp;</span> R2DBC
+</span></span><span class=line><span class=ln> 4</span><span class=cl>
+</span></span><span class=line><span class=ln> 5</span><span class=cl>[<span class=nt>https://gitorko.github.io/spring-webflux-r2dbc/</span>](<span class=na>https://gitorko.github.io/spring-webflux-r2dbc/</span>)
+</span></span><span class=line><span class=ln> 6</span><span class=cl>
+</span></span><span class=line><span class=ln> 7</span><span class=cl><span class=gu>### Version
+</span></span></span><span class=line><span class=ln> 8</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl>Check version
+</span></span><span class=line><span class=ln>10</span><span class=cl>
+</span></span><span class=line><span class=ln>11</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>12</span><span class=cl><span class=s></span><span class=nv>$java</span> --version
+</span></span><span class=line><span class=ln>13</span><span class=cl>openjdk 17.0.3 2022-04-19 LTS
+</span></span><span class=line><span class=ln>14</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>15</span><span class=cl>
+</span></span><span class=line><span class=ln>16</span><span class=cl><span class=gu>### Postgres DB
+</span></span></span><span class=line><span class=ln>17</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>18</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>19</span><span class=cl><span class=s></span>docker run -p 5432:5432 --name pg-container -e <span class=nv>POSTGRES_PASSWORD</span><span class=o>=</span>password -d postgres:9.6.10
+</span></span><span class=line><span class=ln>20</span><span class=cl>docker ps
+</span></span><span class=line><span class=ln>21</span><span class=cl>docker <span class=nb>exec</span> -it pg-container psql -U postgres -W postgres
+</span></span><span class=line><span class=ln>22</span><span class=cl>CREATE USER <span class=nb>test</span> WITH PASSWORD <span class=s1>&#39;test@123&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=ln>23</span><span class=cl>CREATE DATABASE <span class=s2>&#34;test-db&#34;</span> WITH OWNER <span class=s2>&#34;test&#34;</span> ENCODING UTF8 TEMPLATE template0<span class=p>;</span>
+</span></span><span class=line><span class=ln>24</span><span class=cl>GRANT ALL PRIVILEGES ON DATABASE <span class=s2>&#34;test-db&#34;</span> to test<span class=p>;</span>
+</span></span><span class=line><span class=ln>25</span><span class=cl> 
+</span></span><span class=line><span class=ln>26</span><span class=cl>docker stop pg-container
+</span></span><span class=line><span class=ln>27</span><span class=cl>docker start pg-container
+</span></span><span class=line><span class=ln>28</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>29</span><span class=cl>
+</span></span><span class=line><span class=ln>30</span><span class=cl>Ensure you login with test user and create the table.
+</span></span><span class=line><span class=ln>31</span><span class=cl>
+</span></span><span class=line><span class=ln>32</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>33</span><span class=cl><span class=s></span>docker <span class=nb>exec</span> -it pg-container psql -U <span class=nb>test</span> -W test-db
+</span></span><span class=line><span class=ln>34</span><span class=cl><span class=se>\d</span>t
+</span></span><span class=line><span class=ln>35</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>36</span><span class=cl>
+</span></span><span class=line><span class=ln>37</span><span class=cl>Create the table
+</span></span><span class=line><span class=ln>38</span><span class=cl>
+</span></span><span class=line><span class=ln>39</span><span class=cl><span class=s>```sql
+</span></span></span><span class=line><span class=ln>40</span><span class=cl><span class=s></span><span class=k>CREATE</span><span class=w> </span><span class=k>TABLE</span><span class=w> </span><span class=n>customer</span><span class=w> </span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=ln>41</span><span class=cl><span class=w>   </span><span class=n>id</span><span class=w>  </span><span class=nb>SERIAL</span><span class=w> </span><span class=k>PRIMARY</span><span class=w> </span><span class=k>KEY</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=ln>42</span><span class=cl><span class=w>   </span><span class=n>name</span><span class=w> </span><span class=nb>VARCHAR</span><span class=p>(</span><span class=mi>50</span><span class=p>)</span><span class=w> </span><span class=k>NOT</span><span class=w> </span><span class=k>NULL</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=ln>43</span><span class=cl><span class=w>   </span><span class=n>age</span><span class=w> </span><span class=nb>INT</span><span class=w> </span><span class=k>NOT</span><span class=w> </span><span class=k>NULL</span><span class=w>
+</span></span></span><span class=line><span class=ln>44</span><span class=cl><span class=w></span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=ln>45</span><span class=cl><span class=w></span><span class=s>```</span>
+</span></span><span class=line><span class=ln>46</span><span class=cl>
+</span></span><span class=line><span class=ln>47</span><span class=cl><span class=gu>### Dev
+</span></span></span><span class=line><span class=ln>48</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>49</span><span class=cl>To run the code.
+</span></span><span class=line><span class=ln>50</span><span class=cl>
+</span></span><span class=line><span class=ln>51</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>52</span><span class=cl><span class=s></span>./gradlew clean build
+</span></span><span class=line><span class=ln>53</span><span class=cl>./gradlew bootRun
+</span></span><span class=line><span class=ln>54</span><span class=cl><span class=s>```</span>
+</span></span></code></pre></div><h3 id=errors>Errors</h3><p>If you encounter any of the error mentioned below it could probably be because the data type in postgres cant be mapped by r2dbc.
 Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=ln>1</span><span class=cl>org.springframework.data.mapping.MappingException: Could not read property public java.lang.String com.demo.project65.Customer.name from result set!
 </span></span><span class=line><span class=ln>2</span><span class=cl>org.springframework.data.r2dbc.function.convert.EntityRowMapper.readFrom(EntityRowMapper.java:103) ~[spring-data-r2dbc-1.0.0.M1.jar:1.0.0.M1]
 </span></span><span class=line><span class=ln>3</span><span class=cl>Caused by: java.lang.IllegalArgumentException: Cannot decode value of type java.lang.Object
 </span></span><span class=line><span class=ln>4</span><span class=cl>org.springframework.data.r2dbc.function.convert.EntityRowMapper.readFrom(EntityRowMapper.java:99) ~[spring-data-r2dbc-1.0.0.M1.jar:1.0.0.M1]
 </span></span></code></pre></div><p>If you encounter unit test failures because of r2dbc repository in @SpringBootTest then exclude the classes</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=ln>1</span><span class=cl>@EnableAutoConfiguration(exclude = {R2dbcAutoConfiguration.class, LiquibaseAutoConfiguration.class})
 </span></span></code></pre></div><h2 id=references>References</h2><p><a href=https://spring.io/projects/spring-data-r2dbc>https://spring.io/projects/spring-data-r2dbc</a></p></div><div class=post_comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//gitorko.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></article><aside class=sidebar><section class=sidebar_inner><br><div class=search><input type=search class="search_field form_field" placeholder=Search... id=find autocomplete=off data-scope=post>
-<label for=find class=search_label><svg class="icon"><title>search</title><use xlink:href="#search"/></svg></label><div class="search_results results"></div></div><h2 class=mt-4>Featured Posts</h2><ul><li><a href=https://gitorko.github.io/post/spring-virtual-threads/spring-virtual-threads/ class=nav-link title="Spring Virtual Threads">Spring Virtual Threads</a></li><li><a href=https://gitorko.github.io/post/all-projects/all-projects/ class=nav-link title="All Project References">All Project References</a></li></ul><h2 class=mt-4>Recent Posts</h2><ul class=flex-column><li><a href=https://gitorko.github.io/post/spring-rsocket/ class=nav-link title="Spring - Rsocket">Spring - Rsocket</a></li><li><a href=https://gitorko.github.io/post/distributed-locking-apache-ignite/ class=nav-link title="Distributed Locking - Apache Ignite">Distributed Locking - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-apache-ignite/ class=nav-link title="Spring - Apache Ignite">Spring - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-observability/ class=nav-link title="Spring Boot - Observability">Spring Boot - Observability</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ class=nav-link title="Spring Webflux & R2DBC">Spring Webflux & R2DBC</a></li><li><a href=https://gitorko.github.io/post/machine-learning-deeplearning4j/ class=nav-link title="Machine Learning - deeplearning4j">Machine Learning - deeplearning4j</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-reactive-jdbc/ class=nav-link title="Spring Webflux & Reactive JDBC">Spring Webflux & Reactive JDBC</a></li><li><a href=https://gitorko.github.io/post/grokking-the-coding-interview/ class=nav-link title="Grokking the Coding Interview">Grokking the Coding Interview</a></li></ul><div><h2 class="mt-4 taxonomy" id=categories-section>Categories</h2><nav class=tags_nav><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" title=spring>SPRING
+<label for=find class=search_label><svg class="icon"><title>search</title><use xlink:href="#search"/></svg></label><div class="search_results results"></div></div><h2 class=mt-4>Featured Posts</h2><ul><li><a href=https://gitorko.github.io/post/spring-virtual-threads/ class=nav-link title="Spring Virtual Threads">Spring Virtual Threads</a></li><li><a href=https://gitorko.github.io/post/all-projects/all-projects/ class=nav-link title="All Project References">All Project References</a></li></ul><h2 class=mt-4>Recent Posts</h2><ul class=flex-column><li><a href=https://gitorko.github.io/post/points-of-failure/ class=nav-link title="Points Of Failure in Distributed System">Points Of Failure in Distributed System</a></li><li><a href=https://gitorko.github.io/post/spring-rsocket/ class=nav-link title="Spring - Rsocket">Spring - Rsocket</a></li><li><a href=https://gitorko.github.io/post/distributed-locking-apache-ignite/ class=nav-link title="Distributed Locking - Apache Ignite">Distributed Locking - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-apache-ignite/ class=nav-link title="Spring - Apache Ignite">Spring - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-observability/ class=nav-link title="Spring Boot - Observability">Spring Boot - Observability</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ class=nav-link title="Spring Webflux & R2DBC">Spring Webflux & R2DBC</a></li><li><a href=https://gitorko.github.io/post/machine-learning-deeplearning4j/ class=nav-link title="Machine Learning - deeplearning4j">Machine Learning - deeplearning4j</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-reactive-jdbc/ class=nav-link title="Spring Webflux & Reactive JDBC">Spring Webflux & Reactive JDBC</a></li></ul><div><h2 class="mt-4 taxonomy" id=categories-section>Categories</h2><nav class=tags_nav><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" title=spring>SPRING
 <span class=button_tally>20</span>
 </a><a href=https://gitorko.github.io/categories/design-pattern/ class="post_tag button button_translucent" title=design-pattern>DESIGN-PATTERN
 <span class=button_tally>5</span>
@@ -209,9 +243,9 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/prometheus/ class="post_tag button button_translucent" title=prometheus>PROMETHEUS
 <span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" title=reports>REPORTS
+</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" title=redis>REDIS
 <span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" title=spring-reactor>SPRING-REACTOR
+</a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" title=reports>REPORTS
 <span class=button_tally>2</span></a><br><div class="post_tags_toggle button">All Categories</div><div class=post_tags><div class=tags_list><a href=https://gitorko.github.io/categories/actuator/ class="post_tag button button_translucent" data-position=1 title=actuator>ACTUATOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/algorithms/ class="post_tag button button_translucent" data-position=1 title=algorithms>ALGORITHMS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/angular/ class="post_tag button button_translucent" data-position=1 title=angular>ANGULAR<span class=button_tally>1</span>
@@ -231,8 +265,8 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/categories/helm/ class="post_tag button button_translucent" data-position=1 title=helm>HELM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/hugo/ class="post_tag button button_translucent" data-position=1 title=hugo>HUGO<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/java/ class="post_tag button button_translucent" data-position=1 title=java>JAVA<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/java21/ class="post_tag button button_translucent" data-position=1 title=java21>JAVA21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jdk/ class="post_tag button button_translucent" data-position=1 title=jdk>JDK<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/categories/jdk21/ class="post_tag button button_translucent" data-position=1 title=jdk21>JDK21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jenkins/ class="post_tag button button_translucent" data-position=2 title=jenkins>JENKINS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/jmeter/ class="post_tag button button_translucent" data-position=1 title=jmeter>JMETER<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jobrunr/ class="post_tag button button_translucent" data-position=1 title=jobrunr>JOBRUNR<span class=button_tally>1</span>
@@ -255,14 +289,14 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/categories/r2dbc/ class="post_tag button button_translucent" data-position=1 title=r2dbc>R2DBC<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/rabbitmq/ class="post_tag button button_translucent" data-position=3 title=rabbitmq>RABBITMQ<span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/categories/reactjs/ class="post_tag button button_translucent" data-position=1 title=reactjs>REACTJS<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" data-position=1 title=redis>REDIS<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" data-position=2 title=redis>REDIS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" data-position=2 title=reports>REPORTS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/rsocket/ class="post_tag button button_translucent" data-position=1 title=rsocket>RSOCKET<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/selenium/ class="post_tag button button_translucent" data-position=1 title=selenium>SELENIUM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/sleuth/ class="post_tag button button_translucent" data-position=1 title=sleuth>SLEUTH<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" data-position=20 title=spring>SPRING<span class=button_tally>20</span>
 </a><a href=https://gitorko.github.io/categories/spring-integration/ class="post_tag button button_translucent" data-position=1 title=spring-integration>SPRING-INTEGRATION<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" data-position=2 title=spring-reactor>SPRING-REACTOR<span class=button_tally>2</span>
+</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" data-position=1 title=spring-reactor>SPRING-REACTOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/spring-webflux/ class="post_tag button button_translucent" data-position=1 title=spring-webflux>SPRING-WEBFLUX<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/springboot/ class="post_tag button button_translucent" data-position=1 title=springboot>SPRINGBOOT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/sse/ class="post_tag button button_translucent" data-position=1 title=sse>SSE<span class=button_tally>1</span>
@@ -277,18 +311,20 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/categories/web/ class="post_tag button button_translucent" data-position=1 title=web>WEB<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/websocket/ class="post_tag button button_translucent" data-position=1 title=websocket>WEBSOCKET<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/zipkin/ class="post_tag button button_translucent" data-position=1 title=zipkin>ZIPKIN<span class=button_tally>1</span></a><div class=tags_sort><span title="sort alphabetically">[A~Z]</span><span title="sort by count">[0~9]</span></div><span class=tags_hide><svg class="icon"><use xlink:href="#closeme"/></svg></span></div></div></nav></div><div><h2 class="mt-4 taxonomy" id=tags-section>Tags</h2><nav class=tags_nav><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" title=spring>SPRING
-<span class=button_tally>20</span>
+<span class=button_tally>21</span>
 </a><a href=https://gitorko.github.io/tags/spring-boot/ class="post_tag button button_translucent" title=spring-boot>SPRING-BOOT
 <span class=button_tally>14</span>
 </a><a href=https://gitorko.github.io/tags/clarity/ class="post_tag button button_translucent" title=clarity>CLARITY
 <span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/jpa/ class="post_tag button button_translucent" title=jpa>JPA
 <span class=button_tally>5</span>
+</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" title=kubernetes>KUBERNETES
+<span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/design-pattern/ class="post_tag button button_translucent" title=design-pattern>DESIGN-PATTERN
 <span class=button_tally>4</span>
 </a><a href=https://gitorko.github.io/tags/angular/ class="post_tag button button_translucent" title=angular>ANGULAR
 <span class=button_tally>3</span>
-</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" title=kubernetes>KUBERNETES
+</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" title=postgres>POSTGRES
 <span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/webflux/ class="post_tag button button_translucent" title=webflux>WEBFLUX
 <span class=button_tally>3</span>
@@ -301,8 +337,6 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/tags/grafana/ class="post_tag button button_translucent" title=grafana>GRAFANA
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/ignite/ class="post_tag button button_translucent" title=ignite>IGNITE
-<span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/tags/interview/ class="post_tag button button_translucent" title=interview>INTERVIEW
 <span class=button_tally>2</span></a><br><div class="post_tags_toggle button">All Tags</div><div class=post_tags><div class=tags_list><a href=https://gitorko.github.io/tags/algorithms/ class="post_tag button button_translucent" data-position=1 title=algorithms>ALGORITHMS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/amqp/ class="post_tag button button_translucent" data-position=1 title=amqp>AMQP<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/angular/ class="post_tag button button_translucent" data-position=3 title=angular>ANGULAR<span class=button_tally>3</span>
@@ -344,6 +378,7 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/tags/jasper-report/ class="post_tag button button_translucent" data-position=1 title=jasper-report>JASPER-REPORT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/java-puzzles/ class="post_tag button button_translucent" data-position=1 title=java-puzzles>JAVA-PUZZLES<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/java8/ class="post_tag button button_translucent" data-position=1 title=java8>JAVA8<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/tags/jdk21/ class="post_tag button button_translucent" data-position=1 title=jdk21>JDK21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jenkins/ class="post_tag button button_translucent" data-position=1 title=jenkins>JENKINS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jib/ class="post_tag button button_translucent" data-position=1 title=jib>JIB<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jmeter/ class="post_tag button button_translucent" data-position=2 title=jmeter>JMETER<span class=button_tally>2</span>
@@ -355,7 +390,7 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/tags/kafka/ class="post_tag button button_translucent" data-position=1 title=kafka>KAFKA<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/kafka-stream/ class="post_tag button button_translucent" data-position=1 title=kafka-stream>KAFKA-STREAM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/kotlin/ class="post_tag button button_translucent" data-position=1 title=kotlin>KOTLIN<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" data-position=3 title=kubernetes>KUBERNETES<span class=button_tally>3</span>
+</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" data-position=5 title=kubernetes>KUBERNETES<span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/lambda/ class="post_tag button button_translucent" data-position=1 title=lambda>LAMBDA<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/machine-learning/ class="post_tag button button_translucent" data-position=1 title=machine-learning>MACHINE-LEARNING<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/micrometer/ class="post_tag button button_translucent" data-position=2 title=micrometer>MICROMETER<span class=button_tally>2</span>
@@ -371,7 +406,7 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/tags/pagination/ class="post_tag button button_translucent" data-position=1 title=pagination>PAGINATION<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/pessimistic-locking/ class="post_tag button button_translucent" data-position=1 title=pessimistic-locking>PESSIMISTIC-LOCKING<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/pipeline/ class="post_tag button button_translucent" data-position=1 title=pipeline>PIPELINE<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" data-position=2 title=postgres>POSTGRES<span class=button_tally>2</span>
+</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" data-position=3 title=postgres>POSTGRES<span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/price-time-algorithm/ class="post_tag button button_translucent" data-position=1 title=price-time-algorithm>PRICE-TIME-ALGORITHM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/projects/ class="post_tag button button_translucent" data-position=1 title=projects>PROJECTS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/prometheus/ class="post_tag button button_translucent" data-position=2 title=prometheus>PROMETHEUS<span class=button_tally>2</span>
@@ -386,11 +421,12 @@ Eg: CHAR is not supported, changing to VARCHAR will fix the issue.</p><div class
 </a><a href=https://gitorko.github.io/tags/resilience4j/ class="post_tag button button_translucent" data-position=1 title=resilience4j>RESILIENCE4J<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/rpc/ class="post_tag button button_translucent" data-position=1 title=rpc>RPC<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/rsocket/ class="post_tag button button_translucent" data-position=1 title=rsocket>RSOCKET<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/tags/scatter-gather-pattern/ class="post_tag button button_translucent" data-position=1 title=scatter-gather-pattern>SCATTER-GATHER-PATTERN<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/selenium/ class="post_tag button button_translucent" data-position=1 title=selenium>SELENIUM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/server-driven/ class="post_tag button button_translucent" data-position=1 title=server-driven>SERVER-DRIVEN<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/server-sent-event/ class="post_tag button button_translucent" data-position=1 title=server-sent-event>SERVER-SENT-EVENT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/sleuth/ class="post_tag button button_translucent" data-position=1 title=sleuth>SLEUTH<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" data-position=20 title=spring>SPRING<span class=button_tally>20</span>
+</a><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" data-position=21 title=spring>SPRING<span class=button_tally>21</span>
 </a><a href=https://gitorko.github.io/tags/spring-boot/ class="post_tag button button_translucent" data-position=14 title=spring-boot>SPRING-BOOT<span class=button_tally>14</span>
 </a><a href=https://gitorko.github.io/tags/spring-reactor/ class="post_tag button button_translucent" data-position=1 title=spring-reactor>SPRING-REACTOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/spring-security/ class="post_tag button button_translucent" data-position=2 title=spring-security>SPRING-SECURITY<span class=button_tally>2</span>

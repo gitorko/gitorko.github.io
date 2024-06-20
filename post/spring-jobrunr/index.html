@@ -10,7 +10,7 @@
 <a href="https://twitter.com/intent/tweet?text=Spring%20-%20JobRunr&url=https%3a%2f%2fgitorko.github.io%2fpost%2fspring-jobrunr%2f&tw_p=tweetbutton" class=twitter title="Share on Twitter" target=_blank rel=nofollow><svg class="icon"><title>twitter</title><use xlink:href="#twitter"/></svg>
 </a><a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fgitorko.github.io%2fpost%2fspring-jobrunr%2f&t=Spring%20-%20JobRunr" class=facebook title="Share on Facebook" target=_blank rel=nofollow><svg class="icon"><title>facebook</title><use xlink:href="#facebook"/></svg>
 </a><a href=#linkedinshare id=linkedinshare class=linkedin title="Share on LinkedIn" rel=nofollow><svg class="icon"><title>linkedin</title><use xlink:href="#linkedin"/></svg>
-</a><a href=https://gitorko.github.io/post/spring-jobrunr/ title="Copy Link" class="link link_yank"><svg class="icon"><title>copy</title><use xlink:href="#copy"/></svg></a></div></span></div><div class=post_toc><h2>Overview</h2><nav id=TableOfContents><ul><li><a href=#jobrunr>JobRunr</a></li><li><a href=#code>Code</a></li><li><a href=#setup>Setup</a></li><li><a href=#references>References</a></li></ul></nav></div><div class=post_body><p>Spring boot integration with JobRunr</p><p>Github: <a href=https://github.com/gitorko/project59>https://github.com/gitorko/project59</a></p><h2 id=jobrunr>JobRunr</h2><p>Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java applications using only Java 8 lambda's</p><ol><li>It lets you schedule background jobs using lambda.</li><li>The jobs can run on a distributed nodes, more node that join, the work gets distributed.</li><li>It serializes the lambda as JSON and stores it in db.</li><li>It also contains an automatic retry feature with an exponential back-off policy for failed jobs.</li><li>There is also a built-in dashboard that allows you to monitor all jobs.</li><li>It is self-maintaining, Successful jobs are automatically deleted after a configurable amount of time, so there is no need to perform manual storage cleanup.</li><li>The job details are stored in db.</li></ol><h2 id=code>Code</h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln> 1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project59</span><span class=p>;</span><span class=w>
+</a><a href=https://gitorko.github.io/post/spring-jobrunr/ title="Copy Link" class="link link_yank"><svg class="icon"><title>copy</title><use xlink:href="#copy"/></svg></a></div></span></div><div class=post_toc><h2>Overview</h2><nav id=TableOfContents><ul><li><a href=#jobrunr>JobRunr</a><ul><li><a href=#code>Code</a></li><li><a href=#setup>Setup</a></li></ul></li><li><a href=#references>References</a></li></ul></nav></div><div class=post_body><p>Spring boot integration with JobRunr</p><p>Github: <a href=https://github.com/gitorko/project59>https://github.com/gitorko/project59</a></p><h2 id=jobrunr>JobRunr</h2><p>Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java applications using only Java 8 lambda's</p><ol><li>It lets you schedule background jobs using lambda.</li><li>The jobs can run on a distributed nodes, more node that join, the work gets distributed.</li><li>It serializes the lambda as JSON and stores it in db.</li><li>It also contains an automatic retry feature with an exponential back-off policy for failed jobs.</li><li>There is also a built-in dashboard that allows you to monitor all jobs.</li><li>It is self-maintaining, Successful jobs are automatically deleted after a configurable amount of time, so there is no need to perform manual storage cleanup.</li><li>The job details are stored in db.</li></ol><h3 id=code>Code</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln> 1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project59</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=w>
 </span></span></span><span class=line><span class=ln> 3</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>java.time.LocalDateTime</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln> 4</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>java.time.format.DateTimeFormatter</span><span class=p>;</span><span class=w>
@@ -71,22 +71,49 @@
 </span></span></span><span class=line><span class=ln>22</span><span class=cl><span class=w>        </span><span class=n>log</span><span class=p>.</span><span class=na>info</span><span class=p>(</span><span class=s>&#34;doWork3: {}&#34;</span><span class=p>,</span><span class=w> </span><span class=n>job</span><span class=p>);</span><span class=w>
 </span></span></span><span class=line><span class=ln>23</span><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=ln>24</span><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></div><p>Open dashboard: <a href=http://localhost:8000/dashboard/>http://localhost:8000/dashboard/</a></p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1843 height=995 src=/post/spring-jobrunr/img01.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1842 height=954 src=/post/spring-jobrunr/img02.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1847 height=458 src=/post/spring-jobrunr/img03.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1847 height=391 src=/post/spring-jobrunr/img04.png></picture></figure></p><h2 id=setup>Setup</h2><h1 id=project-59>Project 59</h1><p>Spring Boot JobRunr</p><p><a href=https://gitorko.github.io/spring-jobrunr/>https://gitorko.github.io/spring-jobrunr/</a></p><h3 id=version>Version</h3><p>Check version</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl><span class=nv>$java</span> --version
-</span></span><span class=line><span class=ln>2</span><span class=cl>openjdk 17.0.3 2022-04-19 LTS
-</span></span></code></pre></div><h3 id=postgres-db>Postgres DB</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=ln>1</span><span class=cl>docker run -p 5432:5432 --name pg-container -e POSTGRES_PASSWORD=password -d postgres:9.6.10
-</span></span><span class=line><span class=ln>2</span><span class=cl>docker ps
-</span></span><span class=line><span class=ln>3</span><span class=cl>docker exec -it pg-container psql -U postgres -W postgres
-</span></span><span class=line><span class=ln>4</span><span class=cl>CREATE USER test WITH PASSWORD &#39;test@123&#39;;
-</span></span><span class=line><span class=ln>5</span><span class=cl>CREATE DATABASE &#34;test-db&#34; WITH OWNER &#34;test&#34; ENCODING UTF8 TEMPLATE template0;
-</span></span><span class=line><span class=ln>6</span><span class=cl>grant all PRIVILEGES ON DATABASE &#34;test-db&#34; to test;
-</span></span><span class=line><span class=ln>7</span><span class=cl>
-</span></span><span class=line><span class=ln>8</span><span class=cl>docker stop pg-container
-</span></span><span class=line><span class=ln>9</span><span class=cl>docker start pg-container
-</span></span></code></pre></div><h3 id=dev>Dev</h3><p>To run the code</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>./gradlew clean build
-</span></span><span class=line><span class=ln>2</span><span class=cl>./gradlew bootRun
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>curl --location --request GET <span class=s1>&#39;http://localhost:8080/api/500&#39;</span>
+</span></span></span></code></pre></div><p>Open dashboard: <a href=http://localhost:8000/dashboard/>http://localhost:8000/dashboard/</a></p><p><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1843 height=995 src=/post/spring-jobrunr/img01.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1842 height=954 src=/post/spring-jobrunr/img02.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1847 height=458 src=/post/spring-jobrunr/img03.png></picture></figure><figure><picture><img loading=lazy decoding=async alt class="image_figure image_internal image_processed" width=1847 height=391 src=/post/spring-jobrunr/img04.png></picture></figure></p><h3 id=setup>Setup</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-md data-lang=md><span class=line><span class=ln> 1</span><span class=cl><span class=gh># Project 59
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=gh></span>
+</span></span><span class=line><span class=ln> 3</span><span class=cl>Spring Boot JobRunr
+</span></span><span class=line><span class=ln> 4</span><span class=cl>
+</span></span><span class=line><span class=ln> 5</span><span class=cl>[<span class=nt>https://gitorko.github.io/spring-jobrunr/</span>](<span class=na>https://gitorko.github.io/spring-jobrunr/</span>)
+</span></span><span class=line><span class=ln> 6</span><span class=cl>
+</span></span><span class=line><span class=ln> 7</span><span class=cl><span class=gu>### Version
+</span></span></span><span class=line><span class=ln> 8</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln> 9</span><span class=cl>Check version
+</span></span><span class=line><span class=ln>10</span><span class=cl>
+</span></span><span class=line><span class=ln>11</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>12</span><span class=cl><span class=s></span><span class=nv>$java</span> --version
+</span></span><span class=line><span class=ln>13</span><span class=cl>openjdk 17.0.3 2022-04-19 LTS
+</span></span><span class=line><span class=ln>14</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>15</span><span class=cl>
+</span></span><span class=line><span class=ln>16</span><span class=cl><span class=gu>### Postgres DB
+</span></span></span><span class=line><span class=ln>17</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>18</span><span class=cl><span class=s>```
+</span></span></span><span class=line><span class=ln>19</span><span class=cl><span class=s></span>docker run -p 5432:5432 --name pg-container -e POSTGRES_PASSWORD=password -d postgres:9.6.10
+</span></span><span class=line><span class=ln>20</span><span class=cl>docker ps
+</span></span><span class=line><span class=ln>21</span><span class=cl>docker exec -it pg-container psql -U postgres -W postgres
+</span></span><span class=line><span class=ln>22</span><span class=cl>CREATE USER test WITH PASSWORD &#39;test@123&#39;;
+</span></span><span class=line><span class=ln>23</span><span class=cl>CREATE DATABASE &#34;test-db&#34; WITH OWNER &#34;test&#34; ENCODING UTF8 TEMPLATE template0;
+</span></span><span class=line><span class=ln>24</span><span class=cl>grant all PRIVILEGES ON DATABASE &#34;test-db&#34; to test;
+</span></span><span class=line><span class=ln>25</span><span class=cl>
+</span></span><span class=line><span class=ln>26</span><span class=cl>docker stop pg-container
+</span></span><span class=line><span class=ln>27</span><span class=cl>docker start pg-container
+</span></span><span class=line><span class=ln>28</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>29</span><span class=cl>
+</span></span><span class=line><span class=ln>30</span><span class=cl><span class=gu>### Dev
+</span></span></span><span class=line><span class=ln>31</span><span class=cl><span class=gu></span>
+</span></span><span class=line><span class=ln>32</span><span class=cl>To run the code
+</span></span><span class=line><span class=ln>33</span><span class=cl>
+</span></span><span class=line><span class=ln>34</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>35</span><span class=cl><span class=s></span>./gradlew clean build
+</span></span><span class=line><span class=ln>36</span><span class=cl>./gradlew bootRun
+</span></span><span class=line><span class=ln>37</span><span class=cl><span class=s>```</span>
+</span></span><span class=line><span class=ln>38</span><span class=cl>
+</span></span><span class=line><span class=ln>39</span><span class=cl><span class=s>```bash
+</span></span></span><span class=line><span class=ln>40</span><span class=cl><span class=s></span>curl --location --request GET <span class=s1>&#39;http://localhost:8080/api/500&#39;</span>
+</span></span><span class=line><span class=ln>41</span><span class=cl><span class=s>```</span>
 </span></span></code></pre></div><h2 id=references>References</h2><p><a href=https://www.jobrunr.io/en/>https://www.jobrunr.io/en/</a></p></div><div class=post_comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//gitorko.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></article><aside class=sidebar><section class=sidebar_inner><br><div class=search><input type=search class="search_field form_field" placeholder=Search... id=find autocomplete=off data-scope=post>
-<label for=find class=search_label><svg class="icon"><title>search</title><use xlink:href="#search"/></svg></label><div class="search_results results"></div></div><h2 class=mt-4>Featured Posts</h2><ul><li><a href=https://gitorko.github.io/post/spring-virtual-threads/spring-virtual-threads/ class=nav-link title="Spring Virtual Threads">Spring Virtual Threads</a></li><li><a href=https://gitorko.github.io/post/all-projects/all-projects/ class=nav-link title="All Project References">All Project References</a></li></ul><h2 class=mt-4>Recent Posts</h2><ul class=flex-column><li><a href=https://gitorko.github.io/post/spring-rsocket/ class=nav-link title="Spring - Rsocket">Spring - Rsocket</a></li><li><a href=https://gitorko.github.io/post/distributed-locking-apache-ignite/ class=nav-link title="Distributed Locking - Apache Ignite">Distributed Locking - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-apache-ignite/ class=nav-link title="Spring - Apache Ignite">Spring - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-observability/ class=nav-link title="Spring Boot - Observability">Spring Boot - Observability</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ class=nav-link title="Spring Webflux & R2DBC">Spring Webflux & R2DBC</a></li><li><a href=https://gitorko.github.io/post/machine-learning-deeplearning4j/ class=nav-link title="Machine Learning - deeplearning4j">Machine Learning - deeplearning4j</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-reactive-jdbc/ class=nav-link title="Spring Webflux & Reactive JDBC">Spring Webflux & Reactive JDBC</a></li><li><a href=https://gitorko.github.io/post/grokking-the-coding-interview/ class=nav-link title="Grokking the Coding Interview">Grokking the Coding Interview</a></li></ul><div><h2 class="mt-4 taxonomy" id=categories-section>Categories</h2><nav class=tags_nav><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" title=spring>SPRING
+<label for=find class=search_label><svg class="icon"><title>search</title><use xlink:href="#search"/></svg></label><div class="search_results results"></div></div><h2 class=mt-4>Featured Posts</h2><ul><li><a href=https://gitorko.github.io/post/spring-virtual-threads/ class=nav-link title="Spring Virtual Threads">Spring Virtual Threads</a></li><li><a href=https://gitorko.github.io/post/all-projects/all-projects/ class=nav-link title="All Project References">All Project References</a></li></ul><h2 class=mt-4>Recent Posts</h2><ul class=flex-column><li><a href=https://gitorko.github.io/post/points-of-failure/ class=nav-link title="Points Of Failure in Distributed System">Points Of Failure in Distributed System</a></li><li><a href=https://gitorko.github.io/post/spring-rsocket/ class=nav-link title="Spring - Rsocket">Spring - Rsocket</a></li><li><a href=https://gitorko.github.io/post/distributed-locking-apache-ignite/ class=nav-link title="Distributed Locking - Apache Ignite">Distributed Locking - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-apache-ignite/ class=nav-link title="Spring - Apache Ignite">Spring - Apache Ignite</a></li><li><a href=https://gitorko.github.io/post/spring-observability/ class=nav-link title="Spring Boot - Observability">Spring Boot - Observability</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-r2dbc/ class=nav-link title="Spring Webflux & R2DBC">Spring Webflux & R2DBC</a></li><li><a href=https://gitorko.github.io/post/machine-learning-deeplearning4j/ class=nav-link title="Machine Learning - deeplearning4j">Machine Learning - deeplearning4j</a></li><li><a href=https://gitorko.github.io/post/spring-webflux-reactive-jdbc/ class=nav-link title="Spring Webflux & Reactive JDBC">Spring Webflux & Reactive JDBC</a></li></ul><div><h2 class="mt-4 taxonomy" id=categories-section>Categories</h2><nav class=tags_nav><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" title=spring>SPRING
 <span class=button_tally>20</span>
 </a><a href=https://gitorko.github.io/categories/design-pattern/ class="post_tag button button_translucent" title=design-pattern>DESIGN-PATTERN
 <span class=button_tally>5</span>
@@ -110,9 +137,9 @@
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/prometheus/ class="post_tag button button_translucent" title=prometheus>PROMETHEUS
 <span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" title=reports>REPORTS
+</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" title=redis>REDIS
 <span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" title=spring-reactor>SPRING-REACTOR
+</a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" title=reports>REPORTS
 <span class=button_tally>2</span></a><br><div class="post_tags_toggle button">All Categories</div><div class=post_tags><div class=tags_list><a href=https://gitorko.github.io/categories/actuator/ class="post_tag button button_translucent" data-position=1 title=actuator>ACTUATOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/algorithms/ class="post_tag button button_translucent" data-position=1 title=algorithms>ALGORITHMS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/angular/ class="post_tag button button_translucent" data-position=1 title=angular>ANGULAR<span class=button_tally>1</span>
@@ -132,8 +159,8 @@
 </a><a href=https://gitorko.github.io/categories/helm/ class="post_tag button button_translucent" data-position=1 title=helm>HELM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/hugo/ class="post_tag button button_translucent" data-position=1 title=hugo>HUGO<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/java/ class="post_tag button button_translucent" data-position=1 title=java>JAVA<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/java21/ class="post_tag button button_translucent" data-position=1 title=java21>JAVA21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jdk/ class="post_tag button button_translucent" data-position=1 title=jdk>JDK<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/categories/jdk21/ class="post_tag button button_translucent" data-position=1 title=jdk21>JDK21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jenkins/ class="post_tag button button_translucent" data-position=2 title=jenkins>JENKINS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/jmeter/ class="post_tag button button_translucent" data-position=1 title=jmeter>JMETER<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/jobrunr/ class="post_tag button button_translucent" data-position=1 title=jobrunr>JOBRUNR<span class=button_tally>1</span>
@@ -156,14 +183,14 @@
 </a><a href=https://gitorko.github.io/categories/r2dbc/ class="post_tag button button_translucent" data-position=1 title=r2dbc>R2DBC<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/rabbitmq/ class="post_tag button button_translucent" data-position=3 title=rabbitmq>RABBITMQ<span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/categories/reactjs/ class="post_tag button button_translucent" data-position=1 title=reactjs>REACTJS<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" data-position=1 title=redis>REDIS<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/categories/redis/ class="post_tag button button_translucent" data-position=2 title=redis>REDIS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/reports/ class="post_tag button button_translucent" data-position=2 title=reports>REPORTS<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/categories/rsocket/ class="post_tag button button_translucent" data-position=1 title=rsocket>RSOCKET<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/selenium/ class="post_tag button button_translucent" data-position=1 title=selenium>SELENIUM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/sleuth/ class="post_tag button button_translucent" data-position=1 title=sleuth>SLEUTH<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/spring/ class="post_tag button button_translucent" data-position=20 title=spring>SPRING<span class=button_tally>20</span>
 </a><a href=https://gitorko.github.io/categories/spring-integration/ class="post_tag button button_translucent" data-position=1 title=spring-integration>SPRING-INTEGRATION<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" data-position=2 title=spring-reactor>SPRING-REACTOR<span class=button_tally>2</span>
+</a><a href=https://gitorko.github.io/categories/spring-reactor/ class="post_tag button button_translucent" data-position=1 title=spring-reactor>SPRING-REACTOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/spring-webflux/ class="post_tag button button_translucent" data-position=1 title=spring-webflux>SPRING-WEBFLUX<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/springboot/ class="post_tag button button_translucent" data-position=1 title=springboot>SPRINGBOOT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/sse/ class="post_tag button button_translucent" data-position=1 title=sse>SSE<span class=button_tally>1</span>
@@ -178,18 +205,20 @@
 </a><a href=https://gitorko.github.io/categories/web/ class="post_tag button button_translucent" data-position=1 title=web>WEB<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/websocket/ class="post_tag button button_translucent" data-position=1 title=websocket>WEBSOCKET<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/categories/zipkin/ class="post_tag button button_translucent" data-position=1 title=zipkin>ZIPKIN<span class=button_tally>1</span></a><div class=tags_sort><span title="sort alphabetically">[A~Z]</span><span title="sort by count">[0~9]</span></div><span class=tags_hide><svg class="icon"><use xlink:href="#closeme"/></svg></span></div></div></nav></div><div><h2 class="mt-4 taxonomy" id=tags-section>Tags</h2><nav class=tags_nav><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" title=spring>SPRING
-<span class=button_tally>20</span>
+<span class=button_tally>21</span>
 </a><a href=https://gitorko.github.io/tags/spring-boot/ class="post_tag button button_translucent" title=spring-boot>SPRING-BOOT
 <span class=button_tally>14</span>
 </a><a href=https://gitorko.github.io/tags/clarity/ class="post_tag button button_translucent" title=clarity>CLARITY
 <span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/jpa/ class="post_tag button button_translucent" title=jpa>JPA
 <span class=button_tally>5</span>
+</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" title=kubernetes>KUBERNETES
+<span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/design-pattern/ class="post_tag button button_translucent" title=design-pattern>DESIGN-PATTERN
 <span class=button_tally>4</span>
 </a><a href=https://gitorko.github.io/tags/angular/ class="post_tag button button_translucent" title=angular>ANGULAR
 <span class=button_tally>3</span>
-</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" title=kubernetes>KUBERNETES
+</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" title=postgres>POSTGRES
 <span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/webflux/ class="post_tag button button_translucent" title=webflux>WEBFLUX
 <span class=button_tally>3</span>
@@ -202,8 +231,6 @@
 </a><a href=https://gitorko.github.io/tags/grafana/ class="post_tag button button_translucent" title=grafana>GRAFANA
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/ignite/ class="post_tag button button_translucent" title=ignite>IGNITE
-<span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/tags/interview/ class="post_tag button button_translucent" title=interview>INTERVIEW
 <span class=button_tally>2</span></a><br><div class="post_tags_toggle button">All Tags</div><div class=post_tags><div class=tags_list><a href=https://gitorko.github.io/tags/algorithms/ class="post_tag button button_translucent" data-position=1 title=algorithms>ALGORITHMS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/amqp/ class="post_tag button button_translucent" data-position=1 title=amqp>AMQP<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/angular/ class="post_tag button button_translucent" data-position=3 title=angular>ANGULAR<span class=button_tally>3</span>
@@ -245,6 +272,7 @@
 </a><a href=https://gitorko.github.io/tags/jasper-report/ class="post_tag button button_translucent" data-position=1 title=jasper-report>JASPER-REPORT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/java-puzzles/ class="post_tag button button_translucent" data-position=1 title=java-puzzles>JAVA-PUZZLES<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/java8/ class="post_tag button button_translucent" data-position=1 title=java8>JAVA8<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/tags/jdk21/ class="post_tag button button_translucent" data-position=1 title=jdk21>JDK21<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jenkins/ class="post_tag button button_translucent" data-position=1 title=jenkins>JENKINS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jib/ class="post_tag button button_translucent" data-position=1 title=jib>JIB<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/jmeter/ class="post_tag button button_translucent" data-position=2 title=jmeter>JMETER<span class=button_tally>2</span>
@@ -256,7 +284,7 @@
 </a><a href=https://gitorko.github.io/tags/kafka/ class="post_tag button button_translucent" data-position=1 title=kafka>KAFKA<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/kafka-stream/ class="post_tag button button_translucent" data-position=1 title=kafka-stream>KAFKA-STREAM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/kotlin/ class="post_tag button button_translucent" data-position=1 title=kotlin>KOTLIN<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" data-position=3 title=kubernetes>KUBERNETES<span class=button_tally>3</span>
+</a><a href=https://gitorko.github.io/tags/kubernetes/ class="post_tag button button_translucent" data-position=5 title=kubernetes>KUBERNETES<span class=button_tally>5</span>
 </a><a href=https://gitorko.github.io/tags/lambda/ class="post_tag button button_translucent" data-position=1 title=lambda>LAMBDA<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/machine-learning/ class="post_tag button button_translucent" data-position=1 title=machine-learning>MACHINE-LEARNING<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/micrometer/ class="post_tag button button_translucent" data-position=2 title=micrometer>MICROMETER<span class=button_tally>2</span>
@@ -272,7 +300,7 @@
 </a><a href=https://gitorko.github.io/tags/pagination/ class="post_tag button button_translucent" data-position=1 title=pagination>PAGINATION<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/pessimistic-locking/ class="post_tag button button_translucent" data-position=1 title=pessimistic-locking>PESSIMISTIC-LOCKING<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/pipeline/ class="post_tag button button_translucent" data-position=1 title=pipeline>PIPELINE<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" data-position=2 title=postgres>POSTGRES<span class=button_tally>2</span>
+</a><a href=https://gitorko.github.io/tags/postgres/ class="post_tag button button_translucent" data-position=3 title=postgres>POSTGRES<span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/price-time-algorithm/ class="post_tag button button_translucent" data-position=1 title=price-time-algorithm>PRICE-TIME-ALGORITHM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/projects/ class="post_tag button button_translucent" data-position=1 title=projects>PROJECTS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/prometheus/ class="post_tag button button_translucent" data-position=2 title=prometheus>PROMETHEUS<span class=button_tally>2</span>
@@ -287,11 +315,12 @@
 </a><a href=https://gitorko.github.io/tags/resilience4j/ class="post_tag button button_translucent" data-position=1 title=resilience4j>RESILIENCE4J<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/rpc/ class="post_tag button button_translucent" data-position=1 title=rpc>RPC<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/rsocket/ class="post_tag button button_translucent" data-position=1 title=rsocket>RSOCKET<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/tags/scatter-gather-pattern/ class="post_tag button button_translucent" data-position=1 title=scatter-gather-pattern>SCATTER-GATHER-PATTERN<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/selenium/ class="post_tag button button_translucent" data-position=1 title=selenium>SELENIUM<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/server-driven/ class="post_tag button button_translucent" data-position=1 title=server-driven>SERVER-DRIVEN<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/server-sent-event/ class="post_tag button button_translucent" data-position=1 title=server-sent-event>SERVER-SENT-EVENT<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/sleuth/ class="post_tag button button_translucent" data-position=1 title=sleuth>SLEUTH<span class=button_tally>1</span>
-</a><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" data-position=20 title=spring>SPRING<span class=button_tally>20</span>
+</a><a href=https://gitorko.github.io/tags/spring/ class="post_tag button button_translucent" data-position=21 title=spring>SPRING<span class=button_tally>21</span>
 </a><a href=https://gitorko.github.io/tags/spring-boot/ class="post_tag button button_translucent" data-position=14 title=spring-boot>SPRING-BOOT<span class=button_tally>14</span>
 </a><a href=https://gitorko.github.io/tags/spring-reactor/ class="post_tag button button_translucent" data-position=1 title=spring-reactor>SPRING-REACTOR<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/spring-security/ class="post_tag button button_translucent" data-position=2 title=spring-security>SPRING-SECURITY<span class=button_tally>2</span>
