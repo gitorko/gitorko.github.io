@@ -31,7 +31,7 @@ Create 10 telnet connections that connect to the tomcat server and then invoke t
 for ((i=1;i<=10;i++));
 do
   echo $i
-  telnet 127.0.0.1 31000 &
+  telnet 127.0.0.1 8080 &
 done
 ```
  
@@ -57,13 +57,13 @@ If a function takes too long to complete it will block the tomcat thread which w
 Create 10 threads that take very long to complete
 
 ```bash
-ab -n 10 -c 1 http://localhost:31000/api/echo1/jack
+ab -n 10 -c 1 http://localhost:8080/api/echo1/jack
 ```
 
 Now with all tomcat threads busy trigger the echo2 request api that will timeout in 1 sec.
 
 ```bash
-curl --location 'http://localhost:31000/api/echo2/jack'
+curl --location 'http://localhost:8080/api/echo2/jack'
 ```
 
 This shows that a bad api `echo1` can affect the good api `echo2`. The `echo1` api would still need to be fixed however now since `echo2` timed out you will be able to handle it with a circuit breaker pattern instead of having `echo2` never return.
@@ -191,12 +191,12 @@ We set timeout on the transaction to ensure that slow query doesn't impact the e
 
 
 ```bash
-ab -n 10 -c 10 http://localhost:31000/api/db-call-1
+ab -n 10 -c 10 http://localhost:8080/api/db-call-1
 ```
 
 
 ```bash
-ab -n 10 -c 10 http://localhost:31000/api/db-call-2
+ab -n 10 -c 10 http://localhost:8080/api/db-call-2
 ```
 
 ```
@@ -248,7 +248,7 @@ Only the resource limits defined determine when the pod gets killed.
 {{% /notice %}}
 
 ```
-Exception in thread "http-nio-31000-exec-1" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "http-nio-8080-exec-1" java.lang.OutOfMemoryError: Java heap space
 ```
 
 ### Response Payload Size
