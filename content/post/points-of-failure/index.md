@@ -257,7 +257,7 @@ Exception in thread "http-nio-8080-exec-1" java.lang.OutOfMemoryError: Java heap
 Your rest api returns list of customer records, However as more customers are added in production the size of response becomes bigger & bigger and slows down the request-response times.
 {{% /notice %}}
 
-Always add pagination support and avoid returning all the data in a single response. Data may grow later causing response size to get bigger over a period of time.
+Always add **pagination** support and avoid returning all the data in a single response. Data may grow later causing response size to get bigger over a period of time.
 
 Enable gzip compression which also reduce the size of response payload. 
 
