@@ -6,7 +6,7 @@ date: '2024-06-09'
 aliases: [/spring-boot-observability/, /spring-observability/]
 author: 'Arjun Surendra'
 categories: [MicroMeter, Grafana, Prometheus, Actuator, Observability, Tracing]
-tags: [spring, spring-boot, prometheus, grafana, jmx, micrometer, observability, tracing]
+tags: [spring, spring-boot, prometheus, grafana, jmx, micrometer, observability, tracing, spring-security]
 toc: true
 ---
 

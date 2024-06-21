@@ -6,7 +6,7 @@ date: '2024-06-20'
 aliases: [/points-of-failure/, /distributed-system-essentials/]
 author: 'Arjun Surendra'
 categories: [Distributed-System]
-tags: [fail-fast, resilience4j, kubernetes, spring, postgres]
+tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-limit, spring-boot]
 toc: true
 ---
 
@@ -104,10 +104,10 @@ java.util.concurrent.TimeoutException: TimeLimiter 'project57-tl' recorded a tim
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 ```
 
-Spring also provides `spring.mvc.async.request-timeout` that you can explore to accomplish the same.
+Spring also provides `spring.mvc.async.request-timeout` that ensures REST APIs can timeout after the configurable amount of time.
 
 {{% notice info "Note" %}}
-Always assume the functions/api will take forever and may never complete, design system accordingly.
+Always assume the functions/api will take forever and may never complete, design system accordingly by fencing the methods.
 {{% /notice %}}
 
 ### Request Thread Pool & Connections
@@ -134,9 +134,17 @@ server.tomcat.threads.max=10
 server.tomcat.max-connections=1000
 ```
 
+Throughput (requests served per second) of a single server depends on following
+
+1. Number of tomcat threads 
+2. Server hardware (CPU, Memory, SSD, Network Bandwidth) 
+3. Type of task (IO intensive vs CPU intensive)
+
+If you have 200 threads (BIO) and all request response on average take 1 second (latency) to complete then your server can handle 200 requests per second.
+When there are IO intensive tasks which cause threads to wait and context switching takes place, throughput calculation becomes tricky and needs to be approximated.
+
 {{% notice info "Note" %}}
-Throughput - The number of tomcat threads and the server hardware determine how many requests can be served in a given time interval.
-If you have 200 threads (BIO) and all request response on average take 1 second to complete then your server can handle 200 requests per second. When there is IO involved and context switching takes place throughput calculation becomes tricky.
+Benchmark the system on a varied load to arrive at the peek throughput the system can handle.
 {{% /notice %}}
 
 ### Keep-Alive
@@ -180,6 +188,8 @@ java.net.SocketTimeoutException: Read timed out
 	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:304) ~[na:na]
 	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:346) ~[na:na]
 ```
+
+If you are using WebClient then use Mono.timeout() or Flux.timeout() methods
 
 {{% notice info "Note" %}}
 Always assume that all external API calls never return and design accordingly.
@@ -232,16 +242,16 @@ Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection i
 Always assume that you will run out of database connections due to a run away or storm of requests and design accordingly.
 {{% /notice %}}
 
-### Slow Query
+### Long-Running Database Query
 
 {{% notice note "Problem" %}}
-Users are reporting slowness in a db fetch api that fetches data from multiple tables via join. Your DBA also confirms that query is too slow. What do you do?
+DBA call you up and informs you that there is a long-running query in your service. What do you do?
 {{% /notice %}}
 
-Slow queries often slow down the entire system. 
+Long-running queries often slow down the entire system.
 To test this we explicitly slow down a query with pg_sleep function.
 
-We set timeout on the transaction `@Transactional(timeout = 5)` to ensure that slow query doesn't impact the entire system, after 5 seconds if the query doesnt return result an exception is thrown.
+We set timeout on the transaction `@Transactional(timeout = 5)` to ensure that long-running query doesn't impact the entire system, after 5 seconds if the query doesn't return result an exception is thrown.
 
 Fail-Fast is always preferred than slowing down the entire service.
 
@@ -256,10 +266,10 @@ org.postgresql.util.PSQLException: ERROR: canceling statement due to user reques
 ```
 
 {{% notice info "Note" %}}
-Always assume that all DB calls never return or are very slow and design accordingly.
+Always assume that all DB calls never return or are long-running and design accordingly.
 {{% /notice %}}
 
-You can further look at optimizing the query with help of indexes or introducing caching.
+You can further look at optimizing the query with help of indexes to avoid **full table scan** or introducing caching.
 
 You can enable `show-sql` to view all the db queries
 
@@ -285,7 +295,7 @@ resources:
       memory: "250Mi"
     limits:
       cpu: "2"
-      memory: "380Mi"
+      memory: "500Mi"
 ```
 
 Now when you invoke the api that causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.
@@ -351,28 +361,193 @@ eg: `/api/v1/customers` being the old api and `/api/v2/customers` being the new 
 Backward compatibility is very important, specially when services rollback to older versions in distributed systems. Always work with versioned API if there are major changes or new features being introduced.
 {{% /notice %}}
 
+### Bulk Head Pattern
+
+{{% notice note "Problem" %}}
+Thread pools are shared, a runway function is occupying the thread pool 100% and not letting other tasks execute. What do you do?
+{{% /notice %}}
+
+Bulkhead defines maximum number of concurrent calls allowed to be executed in a given timeframe. This prevents failures in a system/API from affecting other systems/APIs
+
+![](img05.png)
+
+The `@Bulkhead` is the annotation used to enable bulkhead on an API call. This can be applied at the method level or a class level. If applied at the class level, it applies to all public methods.
+
+1. `max-concurrent-calls` - Number of concurrent calls allowed
+2. `max-wait-duration` - Wait for 10ms before failing in case of the limit breach
+
+```bash
+ab -n 10 -c 10 http://localhost:8080/api/job10/10
+```
+
+```
+Complete requests:      10
+Failed requests:        7
+   (Connect: 0, Receive: 0, Length: 7, Exceptions: 0)
+Non-2xx responses:      7
+```
+
+**Rate Limit vs Bulk Head**
+
+1. rate-limit - Allow this api to run only 10 requests per min.
+2. bulk-head - Allow this api to use only 10 threads from the pool per min to run. Rest of threads will be available for other API.
+
 ### Rate Limiter
 
 {{% notice note "Problem" %}}
-A particular customer of your service is over using the API to the extent that other users are unable to get a response on the API
+A particular api of your service is overused due to a wrong retry logic in a client which just keeps spamming your server on that single api.
 {{% /notice %}}
 
-Look at implementing rate limiting per customer. Rate limiting can be implemented at gateway level or at application level.
+Look at implementing rate limiting. Rate limiting can be implemented at gateway level or at application level. It helps prevent Denial of Service attacks.
+
+For rate limiting implementation at gateway level refer
 
 [http://gitorko.github.io/post/spring-traefik-rate-limit](http://gitorko.github.io/post/spring-traefik-rate-limit)
+
+The `@RateLimiter` is the annotation used to rate-limit an API call and applied at the method or class levels. If applied at the class level, it applies to all public methods
+
+1. `timeout-duration` - default wait time a thread waits for a permission
+2. `limit-refresh-period` - time window to count the requests
+3. `limit-for-period` - number of requests or method invocations are allowed in the above limit-refresh-period
+
+```bash
+ab -n 10 -c 10 http://localhost:8080/api/job11/1
+```
+
+```
+Complete requests:      10
+Failed requests:        5
+```
+
+{{% notice info "Note" %}}
+Always assume that your api will be invoked by clients more than they are intended to be invoked due to wrong retry configuration.
+{{% /notice %}}
 
 ### Retry
 
 ### Circuit Breaker Pattern
 
-### Bulk Head Pattern
-
-![](img05.png)
+### Health Check
 
 ### Observability
 
-### Chaos Monkey
+### Logging
 
+{{% notice note "Problem" %}}
+Kubernetes pods are ephemeral, you dont have access to history logs that are written to console.
+{{% /notice %}}
+
+1. Enable file logging
+2. Enable rolling of log file
+3. Enable trace-id in log file
+4. Enable GC logging
+5. Enable async logging (does come with risk of loosing few log messages)
+
+On kubernetes write the log to a persistent volume else you will loose the logs on pod restart
+
+```bash
+logging:
+  file:
+    name: project57-app.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: logs/%d{yyyy-MM, aux}/app.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      total-size-cap: 10GB
+      max-history: 10
+  level:
+    root: info
+```
+
+### JVM tuning
+
+{{% notice note "Problem" %}}
+Users are reporting that once in a while the API response is really long and it returns back to normal response time in a short while. What do you do?
+{{% /notice %}}
+
+Garbage collection can impact response times as GC is stop of the world event. When major GC happens it pauses all threads which might impact response time for critical api.
+
+Tune your JVM and enable logging and monitoring (actuator + prometheus) on the GC
+
+1. `-Xms, -Xmx` - Places boundaries on the heap size to increase the predictability of garbage collection. The heap size is limited in replica servers so that even Full GCs do not trigger SIP retransmissions. -Xms sets the starting size to prevent pauses caused by heap expansion.
+2. `-XX:+UseG1GC` - Use the Garbage First (G1) Collector.
+3. `-XX:MaxGCPauseMillis` -  Sets a target for the maximum GC pause time. This is a soft goal, and the JVM will make its best effort to achieve it.
+4. `-XX:ParallelGCThreads` - Sets the number of threads used during parallel phases of the garbage collectors. The default value varies with the platform on which the JVM is running.
+5. `-XX:ConcGCThreads` - Number of threads concurrent garbage collectors will use. The default value varies with the platform on which the JVM is running.
+6. `-XX:InitiatingHeapOccupancyPercent` - Percentage of the (entire) heap occupancy to start a concurrent GC cycle. GCs that trigger a concurrent GC cycle based on the occupancy of the entire heap and not just one of the generations, including G1, use this option. A value of 0 denotes 'do constant GC cycles'. The default value is 45.
+7. `-XX:HeapDumpOnOutOfMemoryError` - Will dump the heap to file in case of out of memory error.
+
+```bash
+'-server'
+'-Xms250m',
+'-Xmx500m',
+'-XX:+HeapDumpOnOutOfMemoryError'
+'-XX:+UseG1GC',
+'-XX:MaxGCPauseMillis=200',
+'-XX:ParallelGCThreads=20',
+'-XX:ConcGCThreads=5',
+'-XX:InitiatingHeapOccupancyPercent=70',
+'-Xlog:gc*=info:file=project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m
+```
+
+![](img08.png)
+
+### Server Startup Time
+
+{{% notice note "Problem" %}}
+Your notice your server startup time is slow, it takes 10 sec for the server to startup. What do you do?
+{{% /notice %}}
+
+You can enable lazy initialization, Spring won’t create all beans on startup it will inject no dependencies until that bean is needed
+
+You can check if autoconfigured beans are being set and disable them if not required.
+
+```bash
+logging.level.org.springframework.boot.autoconfigure=DEBUG
+```
+
+Disable JMX beans to save on time
+
+```bash
+spring.jmx.enabled=false
+```
+
+```bash
+spring.main.lazy-initialization=true
+```
+
+Ahead of Time (AOT) Compilation creates a native binary image that doesn't require Java to run.
+It will increase startup time and reduce memory footprint.
+It optimizes by doing static analysis, removal of unused code, creating fixed classpath, etc.
+
+### Security
+
+{{% notice note "Problem" %}}
+You have ensured that you don't print any customer information in logs, however the heapdump file that was shared in a ticket now exposes passwords to any user without access. What do you do?
+{{% /notice %}}
+
+You have ensured that 
+
+1. No credit card numbers in logs.
+2. No passwords in logs.
+3. No User personal information in logs.
+4. No personal email in the logs.
+5. Permissions to production is restricted to few people by Authentication & Authorization.
+6. Salt has been added to password before storing it.
+
+However heap dump file is one area that can leak passwords if the file is shared.
+
+Trigger a password generation request and at the same time take a heap dump. You will see the password in plain text.
+
+```bash
+curl --location 'http://localhost:8080/api/job15/60'
+```
+
+![](img09.png)
+
+{{% notice info "Note" %}}
+Heap dump files also need to protected with password similar to production data access.
+{{% /notice %}}
 
 ### Other Failures
 
@@ -387,6 +562,9 @@ Other aspects of distributed system to consider for points of failure
 7. Cache invalidation/eviction (TTL) failure
 8. Load Balancer failures
 9. Datacenter failure for one region
+10. Chaos Monkey testing
+11. CDN usage
+12. Audit Logging
 
 ## Code
 
