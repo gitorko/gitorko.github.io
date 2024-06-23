@@ -10,8 +10,10 @@ tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-lim
 toc: true
 ---
 
-We will look at the different points at which an application can fail in a distributed system and how to address failures.
-We will deliberately fail the application at these points to determine what the error looks like and how to handle it. To know how to build a good distributed system you need to understand where it can fail.
+We will look at some of the best practices to be used during development of distributed systems. 
+A distributed system should always assume that things will fail and design accordingly, we will look at the various points of failure and how to address it.
+
+We will deliberately fail the application at these points to determine what the error looks like and how to handle it.
 
 Github: [https://github.com/gitorko/project57](https://github.com/gitorko/project57)
 
@@ -22,33 +24,48 @@ Github: [https://github.com/gitorko/project57](https://github.com/gitorko/projec
 ### Blocking calls
 
 {{% notice note "Problem" %}}
-Your service is not responding as there are some requests that are taking very long to complete. They are waiting on IO operations. What do you do?
+Your service is not responding as there are some requests that are taking very long to complete. 
+They are waiting on IO operations. What do you do?
 {{% /notice %}}
 
+Invoke this rest api that takes 60 secs to complete the job.
+
 ```bash
-curl --location 'http://localhost:8080/api/job1/60'
+curl --location 'http://localhost:8080/api/blocking-job/60'
 ```
-Determine if compute intensive or IO intensive task and delegate the execution to a thread pool so that the core tomcat threads are free to serve requests. The default tomcat threads are 200 and any blocking that happens will affect the whole service.
-
-There 2 types of protocol a tomcat server can be configured for
-
-1. BIO (Blocking IO) - In the case of BIO the threads are not free till the response is sent back. (one thread per connection)
-2. NIO (Non-Blocking IO) - In the case of NIO the threads are free to serve other requests while the incoming request is waiting for IO to complete. (many more connections than threads)
-
-Either use JDK21 virtual threads or a framework like reactor which supports NIO (non-blocking IO)
 
 ![](img06.png)
 
+Determine if CPU intensive or IO intensive task and delegate the execution to a thread pool so that the core tomcat threads are free to serve requests. The default tomcat threads are 200 and any blocking that happens will affect the whole service.
+
+There 2 types of protocol a tomcat server can be configured for
+
+1. BIO (Blocking IO) - The threads are not free till the response is sent back. (one thread per connection)
+2. NIO (Non-Blocking IO) - The threads are free to serve other requests while the incoming request is waiting for IO to complete. (more connections than threads)
+
+Invoke this rest api that takes 60 secs to complete the job but delegates the job to another thread.
+
 ```bash
-curl --location 'http://localhost:8080/api/job2/60'
+curl --location 'http://localhost:8080/api/async-job/60'
 ```
 
 ![](img07.png)
 
+You can also use JDK21 virtual threads or a framework like reactor which supports NIO (non-blocking IO)
+
+By enabling virtual threads in spring you can achieve higher throughput
+
+```bash
+spring.threads.virtual.enabled=true
+```
+
+![](img10.png)
+
 ### Denial-of-Service (DOS) Attacks
 
 {{% notice note "Problem" %}}
-Your server is receiving a lot of bad TCP connections. A bad downstream client is making bad tcp connections that doesn't do anything, valid users are getting **Denial-of-Service**. What do you do?
+Your server is receiving a lot of bad TCP connections. 
+A bad downstream client is making bad tcp connections that doesn't do anything, valid users are getting **Denial-of-Service**. What do you do?
 {{% /notice %}}
 
 Create 10 telnet connections that connect to the tomcat server and then invoke the rest api to getTime which will not return anything as it will wait till the TCP connection is free.
@@ -65,29 +82,35 @@ done
 curl --location 'http://localhost:8080/api/time'
 ```
 
-The connection timeout means - If the client is not sending data after establishing the TCP handshake for 'N' seconds then close the connection. The default timeout is 2 minutes
+The connection timeout means - If the client is not sending data after establishing the TCP handshake for 'N' seconds then close the connection. 
+The default timeout is 2 minutes
 
 ```bash
 server.tomcat.connection-timeout=500
 ```
 
 {{% notice warning "Note" %}}
-Many developers will assume that this connection timeout actually closes the connection when a long running task takes more than 'N' seconds. This is not true.
+Many developers will assume that this connection timeout actually closes the connection when a long-running task takes more than 'N' seconds. 
+This is not true.
 It only closes connection if the client doesn't send anything for 'N' seconds.
 {{% /notice %}}
 
 ### Time Limiter
 
 {{% notice note "Problem" %}}
-A new team member has updated an API and introduced a bug and the function is very slow or never returns a response. System users are complaining of a slow system?
+A new team member has updated an API and introduced a bug and the function is very slow or never returns a response. 
+System users are complaining of a slow system?
 {{% /notice %}}
 
-Always prefer **fail-fast** instead of a slow system **fail-later**. By failing fast the downstream consumers of your service can use circuit breaker pattern to handle the outages gracefully instead of dealing with a slow api.
+Always prefer **fail-fast** instead of a slow system **fail-later**. 
+By failing fast the downstream consumers of your service can use **circuit breaker** pattern to handle the outages gracefully instead of dealing with a slow api.
 
 If a function takes too long to complete it will block the tomcat thread which will further degrade the system performance. Use Resilience4j `@TimeLimiter` to explicitly timeout long running jobs, this way runaway functions cant impact your entire system.
 
+Invoke this rest api that takes 10 secs to complete the job but timeout happens in 5 sec.
+
 ```bash
-curl --location 'http://localhost:8080/api/job3/10'
+curl --location 'http://localhost:8080/api/timeout-job/10'
 ```
 
 You will see the error related to timeout
@@ -113,14 +136,18 @@ Always assume the functions/api will take forever and may never complete, design
 ### Request Thread Pool & Connections
 
 {{% notice note "Problem" %}}
-Users are reporting slow connection / timeout when connecting to your server? How many concurrent requests can your server handle?
+During peak traffic users are reporting slow connection / timeout when connecting to your server? How many concurrent requests can your server handle?
 {{% /notice %}}
 
 The number of tomcat threads determine how many thread can handle the incoming requests. By default, this number is 200.
 
-```bash
+```yaml
 # Applies for BIO
-server.tomcat.threads.max=200
+server:
+  tomcat:
+    threads:
+      max: 10
+    max-connections: 10
 ```
 
 Max number of connections the server can accept and process, for BIO (Blocking IO) tomcat the `server.tomcat.threads.max` is equal to `server.tomcat.max-connections`
@@ -128,13 +155,16 @@ You cant have more connections than the threads.
 
 For NIO tomcat, the number of threads can be less and the max-connections can be more. Since the threads not blocked while waiting for IO to complete then can open up more connections and server other requests.
 
-```bash
+```yaml
 # Applies only for NIO
-server.tomcat.threads.max=10
-server.tomcat.max-connections=1000
+server:
+  tomcat:
+    threads:
+      max: 10
+    max-connections: 1000
 ```
 
-Throughput (requests served per second) of a single server depends on following
+**Throughput** (requests served per second) of a single server depends on following
 
 1. Number of tomcat threads 
 2. Server hardware (CPU, Memory, SSD, Network Bandwidth) 
@@ -155,13 +185,15 @@ Network admin calls you to tell that many TCP connections are being created to t
 
 TCP connections take time to be established, `keep-alive` keeps the connection alive for some more time incase the client want to send more data again in the new future. 
 
+```yaml
+server:
+  tomcat:
+    max-keep-alive-requests: 10
+    keep-alive-timeout: 10
+```
+
 1. `max-keep-alive-requests` - Max number of HTTP requests that can be pipelined before connection is closed.
 2. `keep-alive-timeout` - Keeps the TCP connection for sometime to avoid doing a handshake again if request from same client is sent.
-
-```bash
-server.tomcat.max-keep-alive-requests = 100
-server.tomcat.keep-alive-timeout =  10
-```
 
 ### Rest Client Connection Timeout
 
@@ -177,6 +209,12 @@ If you dont set this then your server which is a client will wait forever to get
 setConnectTimeout(5_000);
 # If unable to read data from external api call then give up after 5 seconds.
 setReadTimeout(5_000);
+```
+
+Invoke this rest api that takes 10 secs as the external api is slow to complete the job but timeout happens in 5 sec.
+
+```bash
+curl --location 'http://localhost:8080/api/external-api-job/10'
 ```
 
 You will see below error when timeouts are set
@@ -198,24 +236,32 @@ Always assume that all external API calls never return and design accordingly.
 ### Database Connection Pool
 
 {{% notice note "Problem" %}}
-Users are reporting slowness in api that fetch relatively small data from database. What do you do?
+You are noticing database connection timeout. What do you do?
 {{% /notice %}}
 
 Spring boot provides Hikari connection pool by default. If there are run away SQL connections then service can quickly run out of connection in the pool and slow down the entire system.
 
-We define the max pool size for connection
-
-```bash
-spring.hikari.maximumPoolSize: 5
+```yaml
+spring:
+  datasource:
+    hikari:
+      maximumPoolSize: 5
+      connectionTimeout: 1000
+      idleTimeout: 60
+      maxLifetime: 180
 ```
 
 By setting the connectionTimeout we ensure that when the connection pool is full then we timeout after 1 second instead of waiting forever to get a new connection.
 
+Fail-Fast is always preferred than slowing down the entire service.
+
+Invoke this rest api that creates 10 new threads that request for DB connection while the pool only has 5.
+
 ```bash
-spring.hikari.connectionTimeout=1000
+curl --location 'http://localhost:8080/api/async-db-job/10'
 ```
 
-Fail-Fast is always preferred than slowing down the entire service.
+You will see the below error
 
 ```
 Caused by: org.hibernate.exception.JDBCConnectionException: Unable to acquire JDBC Connection [HikariPool-1 - Connection is not available, request timed out after 1001ms (total=5, active=5, idle=0, waiting=0)] [n/a]
@@ -238,8 +284,19 @@ Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection i
 	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144) ~[HikariCP-5.1.0.jar:na]
 ```
 
+The configuration `spring.hikari.connectionTimeout` applies for new async thread pool. 
+However, the tomcat thread pool will always wait in blocking state to get a connection from the pool.
+
+Invoke this rest api that runs 10 long-running db query job but will not timeout and wait in blocking state.
+
+```bash
+ab -n 10 -c 10 http://localhost:8080/api/db-long-query-job/5
+```
+
+JPA also enables first level cache by default.
+
 {{% notice info "Note" %}}
-Always assume that you will run out of database connections due to a run away or storm of requests and design accordingly.
+Always assume that you will run out of database connections due to a bad api and set connection timeout for both the connection pool and thread pool to prevent them from waiting forever to get connections.
 {{% /notice %}}
 
 ### Long-Running Database Query
@@ -273,20 +330,23 @@ You can further look at optimizing the query with help of indexes to avoid **ful
 
 You can enable `show-sql` to view all the db queries
 
-```bash
-spring.jpa.show-sql=true
+```yaml
+spring:
+  jpa:
+    show-sql: true
 ```
 
 ### Memory Leak & CPU Spike
 
 {{% notice note "Problem" %}}
-You have developed your service on your laptop and tested in local kubernetes instance. 
-Your kubernetes admin calls you to inform that on production kubernetes your pods are restarting frequently. What do you do?
+You tested your service on your laptop and local kubernetes instance. 
+In production the admin informs you that your pods are restarting frequently. What do you do?
 {{% /notice %}}
 
 Memory leaks are always hard to debug, a badly written method can cause spike in heap memory usage causing lot of GC (garbage collection) which are **stop of the world events**. 
 
-With kubernetes you can define resource limits that kill the pod if tries to use more resources than allocated.
+With kubernetes you can define resource limits that kill the pod if tries to use more resources than allocated. 
+Limit define the limits for the container, requests define limit for single container as there can be multiple containers in single pod.
 
 ```yaml
 resources:
@@ -298,7 +358,13 @@ resources:
       memory: "500Mi"
 ```
 
-Now when you invoke the api that causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.
+Invoke this rest api that creates a memory leak in the jvm.
+
+```bash
+curl --location 'http://localhost:8080/api/memory-leak-job/999'
+```
+
+This causes a memory spike, the pod will be killed (OOMKilled) and a new pod brought up.
 
 ![](img01.png)
 
@@ -321,33 +387,43 @@ Exception in thread "http-nio-8080-exec-1" java.lang.OutOfMemoryError: Java heap
 Your rest api returns list of customer records, However as more customers are added in production the size of response becomes bigger & bigger and slows down the request-response times.
 {{% /notice %}}
 
+```bash
+curl --location 'http://localhost:8080/api/customer'
+```
+
 Always add **pagination** support and avoid returning all the data in a single response. Data may grow later causing response size to get bigger over a period of time.
+
+```bash
+curl --location 'http://localhost:8080/api/customer-page'
+```
 
 Enable gzip compression which also reduce the size of response payload. 
 
-```bash
-server.compression.enabled=true
- 
-# Minimum response when compression will kick in
-server.compression.min-response-size=512
- 
-# Mime types that should be compressed
-server.compression.mime-types=text/xml, text/plain, application/json
+```yaml
+server:
+  compression:
+    enabled: true
+    # Minimum response when compression will kick in
+    min-response-size: 512
+    # Mime types that should be compressed
+    mime-types: text/xml, text/plain, application/json
 ```
 
 You can also consider using **GraphQL** so that client can request for only the data it needs
 
 You can also change the protocol to http2 to get more benefits like multiplexing many requests over single tcp connection.
 
-```bash
-server.http2.enabled=true
+```yaml
+server:
+  http2:
+    enabled: true
 ```
 
 {{% notice info "Note" %}}
 Always try to reduce the size of the response payload, send only the data required instead of the whole payload. Use pagination for data records and gzip payload to reduce the size.
 {{% /notice %}}
 
-### API versioning
+### API versioning & Feature Flag
 
 {{% notice note "Problem" %}}
 A new team member has updated an existing API & introduced a new feature that was used by many downstream applications, however a bug got introduced and now all the downstream api are failing.
@@ -357,8 +433,17 @@ Always look at versioning your api instead of updating existing api that are use
 
 eg: `/api/v1/customers` being the old api and `/api/v2/customers` being the new api
 
+Use feature flag that can be toggled on/off if any issues arise.
+
+```yaml
+management:
+  endpoint:
+    refresh:
+      enabled: true
+```
+
 {{% notice info "Note" %}}
-Backward compatibility is very important, specially when services rollback to older versions in distributed systems. Always work with versioned API if there are major changes or new features being introduced.
+Backward compatibility is very important, specially when services rollback to older versions in distributed systems. Always work with versioned API or feature flag if there are major changes or new features being introduced.
 {{% /notice %}}
 
 ### Bulk Head Pattern
@@ -373,11 +458,20 @@ Bulkhead defines maximum number of concurrent calls allowed to be executed in a 
 
 The `@Bulkhead` is the annotation used to enable bulkhead on an API call. This can be applied at the method level or a class level. If applied at the class level, it applies to all public methods.
 
+```yaml
+resilience4j:
+  bulkhead:
+    instances:
+      project57-b1:
+        max-concurrent-calls: 2
+        max-wait-duration: 10ms
+```
+
 1. `max-concurrent-calls` - Number of concurrent calls allowed
 2. `max-wait-duration` - Wait for 10ms before failing in case of the limit breach
 
 ```bash
-ab -n 10 -c 10 http://localhost:8080/api/job10/10
+ab -n 10 -c 10 http://localhost:8080/api/bulk-head-job
 ```
 
 ```
@@ -406,12 +500,21 @@ For rate limiting implementation at gateway level refer
 
 The `@RateLimiter` is the annotation used to rate-limit an API call and applied at the method or class levels. If applied at the class level, it applies to all public methods
 
+```yaml
+resilience4j:
+  ratelimiter:
+    instances:
+      project57-r1:
+        limit-for-period: 5
+        limit-refresh-period: 1s
+        timeout-duration: 0s
+```
 1. `timeout-duration` - default wait time a thread waits for a permission
 2. `limit-refresh-period` - time window to count the requests
 3. `limit-for-period` - number of requests or method invocations are allowed in the above limit-refresh-period
 
 ```bash
-ab -n 10 -c 10 http://localhost:8080/api/job11/1
+ab -n 10 -c 10 http://localhost:8080/api/rate-limit-job
 ```
 
 ```
@@ -424,6 +527,33 @@ Always assume that your api will be invoked by clients more than they are intend
 {{% /notice %}}
 
 ### Retry
+
+{{% notice note "Problem" %}}
+One of the downstream service had a minor glitch (restart) and your rest call failed the first time it got a bad response. What do you do?
+{{% /notice %}}
+
+Rest calls often fail in distributed environment. You need to retry `@Retry` the api with exponential backoff and max attempts to avoid overwhelming the server
+
+```yaml
+resilience4j:
+  retry:
+    instances:
+      project57-y1:
+        max-attempts: 3
+        waitDuration: 10s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - org.springframework.web.client.HttpClientErrorException
+        ignoreExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+```
+
+Invoke this rest api that fails the first 2 times and succeeds on the 3rd attempt.
+
+```bash
+curl --location 'http://localhost:8080/api/retry-job'
+```
 
 ### Circuit Breaker Pattern
 
@@ -444,6 +574,7 @@ Kubernetes pods are ephemeral, you dont have access to history logs that are wri
 5. Enable async logging (does come with risk of loosing few log messages)
 
 On kubernetes write the log to a persistent volume else you will loose the logs on pod restart
+You can use FluentD collect logs.
 
 ```bash
 logging:
@@ -502,18 +633,24 @@ You can enable lazy initialization, Spring won’t create all beans on startup i
 
 You can check if autoconfigured beans are being set and disable them if not required.
 
-```bash
-logging.level.org.springframework.boot.autoconfigure=DEBUG
+```yaml
+logging:
+  level:
+    org.springframework.boot.autoconfigure: DEBUG
 ```
 
 Disable JMX beans to save on time
 
-```bash
-spring.jmx.enabled=false
+```yaml
+spring:
+  jmx:
+    enabled: false
 ```
 
-```bash
-spring.main.lazy-initialization=true
+```yaml
+spring:
+  main:
+    lazy-initialization: true
 ```
 
 Ahead of Time (AOT) Compilation creates a native binary image that doesn't require Java to run.
@@ -593,3 +730,5 @@ Import the postman collection to postman
 ## References
 
 [https://resilience4j.readme.io/docs](https://resilience4j.readme.io/docs)
+
+[https://www.fluentd.org/](https://www.fluentd.org/)
