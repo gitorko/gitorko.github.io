@@ -557,6 +557,43 @@ curl --location 'http://localhost:8080/api/retry-job'
 
 ### Circuit Breaker Pattern
 
+The circuit breaker pattern protects a downstream service by restricting the upstream service from calling the downstream service during a partial or complete downtime.
+
+The `@CircuitBreaker` will close the circuit so that downstream client dont keep calling the same api again & again when it is having issues.
+
+```yaml
+resilience4j:
+  circuitbreaker:
+    instances:
+      project57-c1:
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: count_based
+```
+
+Invoke the below api to open and close the circuit. If more failures are seen circuit is opened which mean no traffic can flow. 
+
+A CircuitBreaker can be in three states:
+
+1. `CLOSED` – API working fine
+2. `OPEN` –  API experiencing issues, all requests to it are short-circuited
+3. `HALF_OPEN` – API experiencing issues and some traffic will be allowed periodically to check if server recovered
+
+In half open mode only few requests are allowed to check if service recovered.
+In closed state it will send 503 Service Unavailable error.
+
+```bash
+curl --location 'http://localhost:8080/api/circuit-breaker-job/true'
+```
+
+```bash
+curl --location 'http://localhost:8080/api/circuit-breaker-job/false'
+```
+
 ### Health Check
 
 ### Observability
