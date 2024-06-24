@@ -2,7 +2,7 @@
 title: 'Spring - EhCache'
 description: 'Spring - EhCache'
 summary: 'Spring Boot integration with EhCache 3'
-date: '2022-08-04'
+date: '2024-06-23'
 aliases: [/spring-ehcache/]
 author: 'Arjun Surendra'
 categories: [Caching]
@@ -10,16 +10,20 @@ tags: [spring, spring-boot, ehcache]
 toc: true
 ---
 
-Spring Boot integration with EhCache 3
+Spring Boot 3 with EhCache 3
 
 Github: [https://github.com/gitorko/project98](https://github.com/gitorko/project98)
 
 ## EhCache
 
-EhCache is an open-source cache library. It supports cache in memory and disk, It supports eviction policies such as LRU, LFU, FIFO. Ehcache uses Last Recently Used (LRU) eviction strategy for memory & Last Frequently Used (LFU) as the eviction strategy for disk store.
+EhCache is an open-source cache library. Ehcache version 3 provides an implementation of a JSR-107 cache manager. 
+It supports cache in memory and disk, It supports eviction policies such as LRU, LFU, FIFO. Ehcache uses Last Recently Used (LRU) eviction strategy for memory & Last Frequently Used (LFU) as the eviction strategy for disk store.
 
-Ehcache Caching Tiers - Caching layer can consist of more than one memory area. When using more than one memory area, the areas are arranged as hierarchical tiers. 
-The lowest tier is called the Authority Tier and the other tiers are called the Near Cache. Most frequently used data is stored in the fastest caching tier (top layer)
+**HashMap vs Cache**
+
+Disadvantage of using hashmap over cache is that hashmap can cause memory overflow without eviction & doesn't support write to disk.
+
+Ehcache will only evict elements when putting elements and your cache is above threshold. Otherwise, accessing those expired elements will result in them being expired (and removed from the Cache). There is no thread that collects and removes expired elements from the Cache in the background.
 
 ### Types of store
 
@@ -29,6 +33,30 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 2. Off-Heap Store -  primary memory (RAM) to store cache entries, cache entries will be moved to the on-heap memory automatically before they can be used.
 3. Disk Store - uses a hard disk to store cache entries. SSD type disk would perform better.
 4. Clustered Store - stores cache entries on the remote server
+
+Memory areas supported by Ehcache:
+
+1. On-Heap Store: Uses the Java heap memory to store cache entries and shares the memory with the application. The cache is also scanned by the garbage collection. This memory is very fast, but also very limited.
+2. Off-Heap Store: Uses the RAM to store cache entries. This memory is not subject to garbage collection. Still quite fast memory, but slower than the on-heap memory, because the cache entries have to be moved to the on-heap memory before they can be used.
+3. Disk Store: Uses the hard disk to store cache entries. Much slower than RAM. It is recommended to use a dedicated SSD that is only used for caching.
+
+**@Cacheable vs @CachePut** 
+
+`@Cacheable` will skip running the method, whereas `@CachePut` will actually run the method and then put its results in the cache.
+
+You can also use `CacheEventListener` to track events like CREATED, UPDATED, EXPIRED, REMOVED.
+
+Ehcache uses Last Recently Used (LRU) as the default eviction strategy for the memory stores when the cache is full. 
+If a disk store is used and this is full it uses Last Frequently Used (LFU) as the eviction strategy.
+
+You can enable spring actuator and look at the cache metrics
+
+The `@CacheConfig` annotation allows us to define certain cache configurations at the class level. This is useful if certain cache settings are common for all methods.
+
+
+```bash
+@CacheConfig(cacheNames = "customerCache")
+```
 
 ### Types of caching
 
@@ -42,10 +70,16 @@ The lowest tier is called the Authority Tier and the other tiers are called the 
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CountryCache.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CountryCacheListener.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/Main.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/resources/ehcache.xml" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/config/CacheConfig.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/listener/CountryCacheListener.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CountryService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/CustomerService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project98/main/src/main/java/com/demo/project98/service/NumberService.java" >}}
 
 Notice the SQL is printed each time a db call happens, if the data is cached no DB call is made.
 
