@@ -6,123 +6,83 @@ date: '2019-06-11'
 aliases: [/spring-jpa-n-plus-1/]
 author: 'Arjun Surendra'
 categories: [Spring, JPA]
-tags: [spring, jpa]
+tags: [spring, jpa, h2]
 toc: true
 ---
 
-The N+1 query problem occurs when the framework executes N additional SQL statements to fetch the same data that could have been retrieved when executing the primary SQL query.
+The N+1 query problem occurs when the framework executes N additional SQL statements to load lazily fetched objects, this happens when you use FetchType.LAZY for your entity associations.
 
 Github: [https://github.com/gitorko/project66](https://github.com/gitorko/project66)
 
 ## N+1 problem
 
-N+1 problem is a performance issue in ORM that fires multiple select queries 
-By default fetch is FetchType.LAZY in hibernate, changing to FetchType.EAGER wont guarantee a fix either also eager fetch will fetch more data than needed.
-The @ManyToOne and @OneToOne associations use FetchType.EAGER by default.
+By default, fetch is `FetchType.LAZY` in hibernate, changing to `FetchType.EAGER` won't guarantee a fix for N+1 issue either, eager fetch will fetch more data than needed.
+The `@ManyToOne` and `@OneToOne` associations use `FetchType.EAGER` by default.
+
+**Different ways to solve N+1 Problem**
+
+1. `FetchType.EAGER` - Fetches more data that you need
+2. Join fetch - joins the two tables & initializes the objects. It works with both JOIN and LEFT JOIN statements.
+3. JPA EntityGraphs - allows partial or specified fetching of objects, specify a fetch plan by EntityGraphs in order to determine which fields or properties should be fetched together
+4. Batching - `@BatchSize(size = 10)`
+5. Subselect - `@Fetch(FetchMode.SUBSELECT)`
+5. Spring Data JDBC supports Single Query Loading
+
+**Fetch Graph vs Load Graph**
+
+There are two types of EntityGraphs, Fetch and Load, they define if the entities not specified by attributeNodes of EntityGraphs should be fetched lazily or eagerly.
+
+1. FETCH - default graph type. When it is selected, the attributes that are specified by attribute nodes of the entity graph are treated as FetchType.EAGER and attributes that are not specified are treated as FetchType.LAZY
+2. LOAD - attributes that are specified by attribute nodes of the entity graph are treated as FetchType.EAGER
+
+More complex and reusable graphs we can describe a fetch plan with its paths and boundaries with @NamedEntityGraph annotation in the entity class.
 
 ### Code
+
+N+1 query that executes N times
+
+```sql
+select c1_0.post1_id,c1_1.id,c1_1.comment from "post1_comments" c1_0 join "post-comment1" c1_1 on c1_1.id=c1_0."comments_id" where c1_0.post1_id=?
+```
+
+Sql with left join
+
+```sql
+select p1_0.id,c1_0.post1_id,c1_1.id,c1_1.comment,p1_0.title from post1 p1_0 left join "post1_comments" c1_0 on p1_0.id=c1_0.post1_id left join "post-comment1" c1_1 on c1_1.id=c1_0."comments_id"
+```
+
+Sql with join
+```sql
+select p1_0.id,c1_0.post1_id,c1_1.id,c1_1.comment,p1_0.title from post1 p1_0 join "post1_comments" c1_0 on p1_0.id=c1_0.post1_id join "post-comment1" c1_1 on c1_1.id=c1_0."comments_id"
+```
+
+Entity Graph
+
+```sql
+ select p1_0.id,c1_0.post4_id,c1_1.id,c1_1.comment,p1_0.title from post4 p1_0 left join "post4_comments" c1_0 on p1_0.id=c1_0.post4_id left join "post-comment4" c1_1 on c1_1.id=c1_0."comments_id"
+```
+
+Batch
+
+```sql
+select c1_0.post2_id,c1_1.id,c1_1.comment from "post2_comments" c1_0 join "post-comment2" c1_1 on c1_1.id=c1_0."comments_id" where c1_0.post2_id in (?,?,?,?,?,?,?,?,?,?)
+```
+
+Sub-Select
+
+```sql
+select c1_0.post3_id,c1_1.id,c1_1.comment from "post3_comments" c1_0 join "post-comment3" c1_1 on c1_1.id=c1_0."comments_id" where c1_0.post3_id in (select p1_0.id from post3 p1_0)
+```
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project66/main/src/main/java/com/demo/project66/Main.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project66/main/src/main/resources/application.yaml" >}}
 
-You will see a sql query being fired to fetch each post comment object.
+### Postman
 
-```
-Hibernate: select post0_.id as id1_0_, post0_.title as title2_0_ from post post0_
-My Post 1
-Hibernate: select comments0_.post_id as post_id1_1_0_, comments0_.comments_id as comments2_1_0_, postcommen1_.id as id1_2_1_, postcommen1_.comment as comment2_2_1_ from post_comments comments0_ inner join post_comment postcommen1_ on comments0_.comments_id=postcommen1_.id where comments0_.post_id=?
-PostComment(id=2, comment=Comment 1 for 1)
-PostComment(id=3, comment=Comment 2 for 1)
-PostComment(id=4, comment=Comment 3 for 1)
-My Post 2
-Hibernate: select comments0_.post_id as post_id1_1_0_, comments0_.comments_id as comments2_1_0_, postcommen1_.id as id1_2_1_, postcommen1_.comment as comment2_2_1_ from post_comments comments0_ inner join post_comment postcommen1_ on comments0_.comments_id=postcommen1_.id where comments0_.post_id=?
-PostComment(id=6, comment=Comment 1 for 2)
-PostComment(id=7, comment=Comment 2 for 2)
-PostComment(id=8, comment=Comment 3 for 2)
-My Post 3
-Hibernate: select comments0_.post_id as post_id1_1_0_, comments0_.comments_id as comments2_1_0_, postcommen1_.id as id1_2_1_, postcommen1_.comment as comment2_2_1_ from post_comments comments0_ inner join post_comment postcommen1_ on comments0_.comments_id=postcommen1_.id where comments0_.post_id=?
-PostComment(id=10, comment=Comment 1 for 3)
-PostComment(id=11, comment=Comment 2 for 3)
-PostComment(id=12, comment=Comment 3 for 3)
-My Post 4
-Hibernate: select comments0_.post_id as post_id1_1_0_, comments0_.comments_id as comments2_1_0_, postcommen1_.id as id1_2_1_, postcommen1_.comment as comment2_2_1_ from post_comments comments0_ inner join post_comment postcommen1_ on comments0_.comments_id=postcommen1_.id where comments0_.post_id=?
-PostComment(id=14, comment=Comment 1 for 4)
-PostComment(id=15, comment=Comment 2 for 4)
-PostComment(id=16, comment=Comment 3 for 4)
-My Post 5
-Hibernate: select comments0_.post_id as post_id1_1_0_, comments0_.comments_id as comments2_1_0_, postcommen1_.id as id1_2_1_, postcommen1_.comment as comment2_2_1_ from post_comments comments0_ inner join post_comment postcommen1_ on comments0_.comments_id=postcommen1_.id where comments0_.post_id=?
-PostComment(id=18, comment=Comment 1 for 5)
-PostComment(id=19, comment=Comment 2 for 5)
-PostComment(id=20, comment=Comment 3 for 5)
+Import the postman collection to postman
 
-```
-
-Now use the 'findAllFixed' method you will see that only 1 query is fired. You can also use the @EntityGraph function to achieve the same result.
-
-```
-Hibernate: select post0_.id as id1_0_0_, postcommen2_.id as id1_2_1_, post0_.title as title2_0_0_, postcommen2_.comment as comment2_2_1_, comments1_.post_id as post_id1_1_0__, comments1_.comments_id as comments2_1_0__ from post post0_ left outer join post_comments comments1_ on post0_.id=comments1_.post_id left outer join post_comment postcommen2_ on comments1_.comments_id=postcommen2_.id
-My Post 1
-PostComment(id=2, comment=Comment 1 for 1)
-PostComment(id=3, comment=Comment 2 for 1)
-PostComment(id=4, comment=Comment 3 for 1)
-My Post 1
-PostComment(id=2, comment=Comment 1 for 1)
-PostComment(id=3, comment=Comment 2 for 1)
-PostComment(id=4, comment=Comment 3 for 1)
-My Post 1
-PostComment(id=2, comment=Comment 1 for 1)
-PostComment(id=3, comment=Comment 2 for 1)
-PostComment(id=4, comment=Comment 3 for 1)
-My Post 2
-PostComment(id=6, comment=Comment 1 for 2)
-PostComment(id=7, comment=Comment 2 for 2)
-PostComment(id=8, comment=Comment 3 for 2)
-My Post 2
-PostComment(id=6, comment=Comment 1 for 2)
-PostComment(id=7, comment=Comment 2 for 2)
-PostComment(id=8, comment=Comment 3 for 2)
-My Post 2
-PostComment(id=6, comment=Comment 1 for 2)
-PostComment(id=7, comment=Comment 2 for 2)
-PostComment(id=8, comment=Comment 3 for 2)
-My Post 3
-PostComment(id=10, comment=Comment 1 for 3)
-PostComment(id=11, comment=Comment 2 for 3)
-PostComment(id=12, comment=Comment 3 for 3)
-My Post 3
-PostComment(id=10, comment=Comment 1 for 3)
-PostComment(id=11, comment=Comment 2 for 3)
-PostComment(id=12, comment=Comment 3 for 3)
-My Post 3
-PostComment(id=10, comment=Comment 1 for 3)
-PostComment(id=11, comment=Comment 2 for 3)
-PostComment(id=12, comment=Comment 3 for 3)
-My Post 4
-PostComment(id=14, comment=Comment 1 for 4)
-PostComment(id=15, comment=Comment 2 for 4)
-PostComment(id=16, comment=Comment 3 for 4)
-My Post 4
-PostComment(id=14, comment=Comment 1 for 4)
-PostComment(id=15, comment=Comment 2 for 4)
-PostComment(id=16, comment=Comment 3 for 4)
-My Post 4
-PostComment(id=14, comment=Comment 1 for 4)
-PostComment(id=15, comment=Comment 2 for 4)
-PostComment(id=16, comment=Comment 3 for 4)
-My Post 5
-PostComment(id=18, comment=Comment 1 for 5)
-PostComment(id=19, comment=Comment 2 for 5)
-PostComment(id=20, comment=Comment 3 for 5)
-My Post 5
-PostComment(id=18, comment=Comment 1 for 5)
-PostComment(id=19, comment=Comment 2 for 5)
-PostComment(id=20, comment=Comment 3 for 5)
-My Post 5
-PostComment(id=18, comment=Comment 1 for 5)
-PostComment(id=19, comment=Comment 2 for 5)
-PostComment(id=20, comment=Comment 3 for 5)
-```
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project66/main/postman/Project66.postman_collection.json)
 
 ### Setup
 

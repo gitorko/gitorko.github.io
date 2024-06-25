@@ -328,12 +328,34 @@ Always assume that all DB calls never return or are long-running and design acco
 
 You can further look at optimizing the query with help of indexes to avoid **full table scan** or introducing caching.
 
-You can enable `show-sql` to view all the db queries
+You can enable `show-sql` to view all the db queries however this will print to console without logging framework hence **not recommended**
 
 ```yaml
 spring:
   jpa:
     show-sql: true
+```
+
+To pretty print SQL
+
+```yaml
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+```
+
+To print the SQL in logging framework use
+
+```yaml
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
 ```
 
 ### Memory Leak & CPU Spike
@@ -609,6 +631,26 @@ Kubernetes pods are ephemeral, you dont have access to history logs that are wri
 3. Enable trace-id in log file
 4. Enable GC logging
 5. Enable async logging (does come with risk of loosing few log messages)
+
+File logging
+
+```yaml
+logging:
+  file:
+    name: logs/project57-app-${HOSTNAME}.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: logs/%d{yyyy-MM, aux}/project57-app-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 100MB
+      total-size-cap: 10GB
+      max-history: 10
+```
+
+GC logging
+
+```bash
+'-Xlog:gc*=info:file=logs/project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m',
+```
 
 On kubernetes write the log to a persistent volume else you will loose the logs on pod restart
 You can use FluentD collect logs.
