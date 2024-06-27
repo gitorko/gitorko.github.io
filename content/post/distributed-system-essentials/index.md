@@ -1,12 +1,12 @@
 ---
-title: 'Distributed System Essentials'
-description: 'Distributed System Essentials'
-summary: 'Distributed System Essentials'
+title: 'Best Practices for Building Distributed Systems'
+description: 'Best Practices for Building Distributed Systems'
+summary: 'Best Practices for Building Distributed Systems'
 date: '2024-06-20'
 aliases: [/points-of-failure/, /distributed-system-essentials/]
 author: 'Arjun Surendra'
 categories: [Distributed-System]
-tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-limit, spring-boot]
+tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-limit, circuit-breaker, spring-boot]
 toc: true
 ---
 
@@ -53,7 +53,17 @@ curl --location 'http://localhost:8080/api/async-job/60'
 
 You can also use JDK21 virtual threads or a framework like reactor which supports NIO (non-blocking IO)
 
-By enabling virtual threads in spring you can achieve higher throughput
+By enabling virtual threads in spring you can achieve higher throughput, If your code calls a blocking I/O operation in a virtual thread, the runtime suspends the virtual thread until it can be resumed later.
+This way, the hardware is utilized to an almost optimal level, resulting in high levels of concurrency and, therefore, high throughput.
+
+**Pitfalls to avoid in Virtual Threads**
+
+1. Exceptions - Stack traces are separate, and any Exception thrown in a virtual thread only includes its own stack frames.
+2. Thread-local - Reduce usage as each thread will end up creating its own thread local unlike before.
+3. Synchronized blocks/methods - Virtual thread gets BLOCKED because of synchronized method (or block), it will not relinquish its control over the underlying OS thread, use ReentrantLock.
+4. Thread pools - Avoid thread pool to limit resource access, eg: A thread pool of size 10 can create more than 10 concurrent threads due to virtual threads hence use semaphore if you want to limit conncurrent requests based on pool size.
+
+![](virtual-threads-jvm.png)
 
 ```bash
 spring.threads.virtual.enabled=true
@@ -618,7 +628,24 @@ curl --location 'http://localhost:8080/api/circuit-breaker-job/false'
 
 ### Health Check
 
-### Observability
+### Observability & Monitoring
+
+{{% notice note "Problem" %}}
+Your customer reaches out each time there is an issue. Is there an active way to monitor your system instead of waiting for customer to report the issue? What do you do?
+{{% /notice %}}
+
+1. **Monitoring** - ensures the system is healthy. You can monitor CPU usage, memory usage, request rates, and error rates.
+2. **Observability** - helps you understand issues and derive insights.
+
+You can use active monitoring setup which will proactively look for issues that happen in your system so that you can address them.
+
+Observability is the ability to observe the internal state of a running system from the outside. Observability has 3 pillars
+
+1. Logging - Logging Correlation IDs - Correlation IDs provide a helpful way to link lines in your log files to spans/traces.
+2. Metrics - Custom metrics to monitor time taken, count invocations etc.
+3. Distributed Tracing - Micrometer Tracing library is a facade for popular tracer libraries. eg: OpenTelemetry, OpenZipkin Brave
+
+[https://gitorko.github.io/post/spring-observability/](https://gitorko.github.io/post/spring-observability/)
 
 ### Logging
 
@@ -742,7 +769,7 @@ It optimizes by doing static analysis, removal of unused code, creating fixed cl
 You have ensured that you don't print any customer information in logs, however the heapdump file that was shared in a ticket now exposes passwords to any user without access. What do you do?
 {{% /notice %}}
 
-You have ensured that 
+Some of the basic security checks
 
 1. No credit card numbers in logs.
 2. No passwords in logs.
@@ -750,6 +777,18 @@ You have ensured that
 4. No personal email in the logs.
 5. Permissions to production is restricted to few people by Authentication & Authorization.
 6. Salt has been added to password before storing it.
+7. Url don't have password or secure information in parameter as url get logged.
+8. Custom exceptions are thrown to customer and dont expose the backend exception to the end user.
+9. Cross site scripting is blocked.
+10. SQL injection attacks are blocked.
+11. Vulnerability scan are done and libraries updated to use latest fix.
+12. Input is always validated
+13. API keys / token is used to allow authenticated & authorized use of api
+14. Password are stored in encrypted format not in plain text, use Vault
+15. Allow listings (white listing) defines IP from which request can originate
+16. HTTPS upto gateway and HTTP can be used internally within network 
+17. Audit logging trail is present to identify who changed what at what time. Use event sourcing where update events are queued and written to a secondary db/table.
+18. Data retention is planned to delete data which is no longer required.
 
 However heap dump file is one area that can leak passwords if the file is shared.
 
@@ -767,11 +806,11 @@ Heap dump files also need to protected with password similar to production data 
 
 ### Other Failures
 
-Other aspects of distributed system to consider for points of failure
+Distributed system can fail at various points, other areas of failure that can happen and need to be factored in design are
 
-1. Primary DB failure - Active-Active setup vs Active-Passive setup
+1. Primary DB failure or data corruption - Active-Active setup vs Active-Passive setup
 2. Secondary DB replication failure
-3. Queue failures
+3. Queue failures - message loss during restart
 4. Network failures
 5. External Systems can go down
 6. Service nodes can go down so your service must be resilient to this
@@ -779,8 +818,9 @@ Other aspects of distributed system to consider for points of failure
 8. Load Balancer failures
 9. Datacenter failure for one region
 10. Chaos Monkey testing
-11. CDN usage
-12. Audit Logging
+11. CDN failure
+12. Audit Logging failure
+13. Network failure
 
 ## Code
 
