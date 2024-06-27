@@ -785,14 +785,14 @@ spring:
 It will increase startup time and reduce memory footprint.
 It optimizes by doing static analysis, removal of unused code, creating fixed classpath, etc.
 
-
-Reducing docker jvm image can also be done
+Since Java 11, there is no pre-bundled JRE provided. As a result, basic Dockerfiles without any optimization can result in large image sizes. To reduce size of docker image
 
 1. Use Minimal Base Images
 2. Use Docker Multistage Builds
 3. Minimize the Number of Layers
 4. Use jlink to build custom JRE
 5. Create .dockerignore to leave out readme files.
+6. Use jdeps to strip dependencies not used.
 
 ### Security
 
