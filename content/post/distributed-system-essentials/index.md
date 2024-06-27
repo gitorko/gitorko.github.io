@@ -10,10 +10,9 @@ tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-lim
 toc: true
 ---
 
-We will look at some of the best practices to be used during development of distributed systems. 
-A distributed system should always assume that things will fail and design accordingly, we will look at the various points of failure and how to address it.
+We will look at some of the best practices to be used during development of a distributed system. 
 
-We will deliberately fail the application at these points to determine what the error looks like and how to handle it.
+A distributed system should always assume that things will fail and should be designed with **fault tolerance** (ability to deal with faults) & **resiliency** (ability to recover) in mind.
 
 Github: [https://github.com/gitorko/project57](https://github.com/gitorko/project57)
 
@@ -40,8 +39,8 @@ Determine if CPU intensive or IO intensive task and delegate the execution to a 
 
 There 2 types of protocol a tomcat server can be configured for
 
-1. BIO (Blocking IO) - The threads are not free till the response is sent back. (one thread per connection)
-2. NIO (Non-Blocking IO) - The threads are free to serve other requests while the incoming request is waiting for IO to complete. (more connections than threads)
+1. **BIO (Blocking IO)** - The threads are not free till the response is sent back. (one thread per connection)
+2. **NIO (Non-Blocking IO)** - The threads are free to serve other requests while the incoming request is waiting for IO to complete. (more connections than threads)
 
 Invoke this rest api that takes 60 secs to complete the job but delegates the job to another thread.
 
@@ -51,10 +50,11 @@ curl --location 'http://localhost:8080/api/async-job/60'
 
 ![](img07.png)
 
-You can also use JDK21 virtual threads or a framework like reactor which supports NIO (non-blocking IO)
+1. **Spring Reactor**  - Reactor is a non-blocking reactive programming model with back-pressure support, which supports NIO (non-blocking IO)
+2. **Virtual Threads** - Light-weight threads that were introduced in JDK21 
 
 By enabling virtual threads in spring you can achieve higher throughput, If your code calls a blocking I/O operation in a virtual thread, the runtime suspends the virtual thread until it can be resumed later.
-This way, the hardware is utilized to an almost optimal level, resulting in high levels of concurrency and, therefore, high throughput.
+The hardware is utilized to an almost optimal level, resulting in high levels of concurrency and, therefore, high throughput.
 
 **Pitfalls to avoid in Virtual Threads**
 
@@ -63,10 +63,41 @@ This way, the hardware is utilized to an almost optimal level, resulting in high
 3. Synchronized blocks/methods - Virtual thread gets BLOCKED because of synchronized method (or block), it will not relinquish its control over the underlying OS thread, use ReentrantLock.
 4. Thread pools - Avoid thread pool to limit resource access, eg: A thread pool of size 10 can create more than 10 concurrent threads due to virtual threads hence use semaphore if you want to limit conncurrent requests based on pool size.
 
+```bash
+Runnable fn = () -> {
+  // your code
+};
+
+Thread thread = new Thread(fn).start();
+
+Thread thread = Thread.ofPlatform().start(runnable);
+                      
+Thread thread = Thread.ofVirtual(fn).start();
+
+var executorService = Executors.newVirtualThreadPerTaskExecutor();
+executorService.submit(() -> {
+  // your code
+});
+```
+
+
 ![](virtual-threads-jvm.png)
 
 ```bash
 spring.threads.virtual.enabled=true
+```
+
+Since the number of virtual threads created can be unlimited to ensure max concurrent requests use
+
+```bash
+spring:
+  task:
+    execution:
+      simple:
+        concurrency-limit: 10
+    scheduling:
+      simple:
+        concurrency-limit: 10
 ```
 
 ![](img10.png)
@@ -658,19 +689,23 @@ Kubernetes pods are ephemeral, you dont have access to history logs that are wri
 3. Enable trace-id in log file
 4. Enable GC logging
 5. Enable async logging (does come with risk of loosing few log messages)
+6. Logs must contain pod name to determine which instance the error occurred on
+7. Log file name must contain pod name
 
 File logging
 
 ```yaml
 logging:
   file:
-    name: logs/project57-app-${HOSTNAME}.log
+    name: project57-app-${HOSTNAME}.log
   logback:
     rollingpolicy:
       file-name-pattern: logs/%d{yyyy-MM, aux}/project57-app-${HOSTNAME}.%d{yyyy-MM-dd}.%i.log
       max-file-size: 100MB
       total-size-cap: 10GB
       max-history: 10
+  level:
+    root: info
 ```
 
 GC logging
@@ -679,22 +714,9 @@ GC logging
 '-Xlog:gc*=info:file=logs/project57-gc.log:time,uptime,level,tags:filecount=5,filesize=100m',
 ```
 
-On kubernetes write the log to a persistent volume else you will loose the logs on pod restart
-You can use FluentD collect logs.
+On kubernetes write the log to a persistent volume else you will loose the logs on pod restart.
 
-```bash
-logging:
-  file:
-    name: project57-app.log
-  logback:
-    rollingpolicy:
-      file-name-pattern: logs/%d{yyyy-MM, aux}/app.%d{yyyy-MM-dd}.%i.log
-      max-file-size: 100MB
-      total-size-cap: 10GB
-      max-history: 10
-  level:
-    root: info
-```
+You can use FluentD or Promtail log brokers that collect and send logs to an Elasticsearch/Loki storage.
 
 ### JVM tuning
 
@@ -702,7 +724,7 @@ logging:
 Users are reporting that once in a while the API response is really long and it returns back to normal response time in a short while. What do you do?
 {{% /notice %}}
 
-Garbage collection can impact response times as GC is stop of the world event. When major GC happens it pauses all threads which might impact response time for critical api.
+Garbage collection can impact response times as GC is stop of the world event. When major GC happens it pauses all threads which might impact response time for time sensitive api.
 
 Tune your JVM and enable logging and monitoring (actuator + prometheus) on the GC
 
@@ -759,9 +781,18 @@ spring:
     lazy-initialization: true
 ```
 
-Ahead of Time (AOT) Compilation creates a native binary image that doesn't require Java to run.
+**GraalVM** uses Ahead of Time (AOT) Compilation creates a native binary image that doesn't require Java to run.
 It will increase startup time and reduce memory footprint.
 It optimizes by doing static analysis, removal of unused code, creating fixed classpath, etc.
+
+
+Reducing docker jvm image can also be done
+
+1. Use Minimal Base Images
+2. Use Docker Multistage Builds
+3. Minimize the Number of Layers
+4. Use jlink to build custom JRE
+5. Create .dockerignore to leave out readme files.
 
 ### Security
 
