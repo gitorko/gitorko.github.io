@@ -30,7 +30,13 @@ They are waiting on IO operations. What do you do?
 Invoke this rest api that takes 60 secs to complete the job.
 
 ```bash
-curl --location 'http://localhost:8080/api/blocking-job/60'
+for ((i=1;i<=10;i++));
+do
+  echo $i
+  curl --location 'http://localhost:8080/api/blocking-job/60' &
+done
+
+curl --location 'http://localhost:8080/api/time'
 ```
 
 ![](img06.png)
