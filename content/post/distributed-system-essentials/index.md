@@ -43,15 +43,41 @@ curl --location 'http://localhost:8080/api/time'
 
 Determine if CPU intensive or IO intensive task and delegate the execution to a thread pool so that the core tomcat threads are free to serve requests. The default tomcat threads are 250 and any blocking that happens will affect the whole service.
 
-There 2 types of protocol a tomcat server can be configured for
+There 2 types of protocol/connectors a tomcat server can be configured for
 
 1. **BIO (Blocking IO)** - The threads are not free till the response is sent back. (one thread per connection)
 2. **NIO (Non-Blocking IO)** - The threads are free to serve other requests while the incoming request is waiting for IO to complete. (more connections than threads)
+
+In the BIO configuration, there are 2 types of threads
+
+1. Acceptors — To accept incoming requests and to add in a queue. Acceptors discard any request when the queue if full, default is 100.
+2. Workers — To pick requests from the acceptor queue and process each request in its own thread stack
+
+Accept queue size
+
+```yaml
+server:
+  tomcat:
+    accept-count: 100
+```
+
+You will see the below error when the tomcat rejects the request due to queue being full
+
+```bash
+Response code:Non HTTP response code: org.apache.http.conn.HttpHostConnectException
+Response message:Non HTTP response message: Connect to localhost:8080 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Operation timed out
+```
 
 Invoke this rest api that takes 60 secs to complete the job but delegates the job to another thread.
 
 ```bash
 curl --location 'http://localhost:8080/api/async-job/60'
+```
+
+The below error is seen when the client has closed the connection but server is still processing the thread and tries to return a response on the connection.
+
+```bash
+w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.context.request.async.AsyncRequestNotUsableException: ServletOutputStream failed to flush: ServletOutputStream failed to flush: java.io.IOException: Broken pipe]
 ```
 
 ![](img07.png)
@@ -174,7 +200,14 @@ java.util.concurrent.TimeoutException: TimeLimiter 'project57-tl' recorded a tim
 	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
 ```
 
-Spring also provides `spring.mvc.async.request-timeout` that ensures REST APIs can timeout after the configurable amount of time.
+Spring also uses `spring.mvc.async.request-timeout` that ensures REST APIs can timeout after the configurable amount of time. Default is 30 seconds.
+
+```bash
+spring:
+  mvc:
+    async:
+      request-timeout: 30000
+```
 
 {{% notice info "Note" %}}
 Always assume the functions/api will take forever and may never complete, design system accordingly by fencing the methods.

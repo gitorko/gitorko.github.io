@@ -1,12 +1,12 @@
 ---
-title: 'Spring Events'
+title: 'Spring Events - Modulith'
 description: 'Spring Events'
 summary: 'Spring events provides event handling mechanism in spring'
 date: '2020-08-07'
 aliases: [/spring-events/]
 author: 'Arjun Surendra'
-categories: [Spring]
-tags: [spring]
+categories: [Spring, Spring-Modulith, Spring-Events]
+tags: [spring, spring-modulith]
 toc: true
 ---
 
@@ -16,15 +16,34 @@ Github: [https://github.com/gitorko/project73](https://github.com/gitorko/projec
 
 ## Spring Events
 
-Spring events lets you create and consume events within an application thus providing loose coupling. 
-Let's say you have 2 async functions that needs co-ordinate. When async1 is complete you need async2 to pick up the processed data and process it. You could use an external queue like rabbitmq, or you could write a producer consumer. Spring events lets you handle such a task easily. 
-Do note that this will be in-memory so if the server restarts all events will be lost.
+Spring events ensures loose coupling in an application, it allows inter-module interaction.
+Instead of injecting different `@Service` beans and invoking them in the directly you now publish an event and all other places that need to process it will implement a listener.
+
+Service can be developed without all the implementations. 
+Eg: Audit logging service is being developed and not ready, hence instead of being blocked on developing the core customer service class, just publish an event and when the service is ready add a listener to process that event. 
+
+Spring events are in-memory so if the server restarts all events published will be lost. 
+With Spring Modulith library you can now persist such event and process them after a restart.
+A module can access the content of any other module but can't access sub-packages of other modules.
+
+By default `@EventListener` run on the same thread as the caller, to run it asynchronously use `@Async`
+
+`@ApplicationModuleListener` by default comes with `@Transactional`, `@Async` & `@TransactionalEventListener` annotation enabled.
+
+To process the events on restart enable this flag.
+
+```yaml
+spring:
+  modulith:
+    republish-outstanding-events-on-restart: true
+```
 
 ### Code
 
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/ApplicationEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/AuditEventListener.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/CustomEventListener.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/pojo/CustomEvent.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/service/CustomAsync.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/ObjectEventListener.java" >}}
 
 ### Setup
 
@@ -33,3 +52,4 @@ Do note that this will be in-memory so if the server restarts all events will be
 ## References
 
 [https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2)
+[https://spring.io/projects/spring-modulith](https://spring.io/projects/spring-modulith)
