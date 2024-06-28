@@ -280,7 +280,9 @@ Always assume that all external API calls never return and design accordingly.
 You are noticing database connection timeout. What do you do?
 {{% /notice %}}
 
-Spring boot provides Hikari connection pool by default. If there are run away SQL connections then service can quickly run out of connection in the pool and slow down the entire system.
+Use a connection pool if you are interacting with database as it will prevent the connection from getting open & closed which is a costly operation. The connection in the pool will be reused.
+
+Spring boot provides Hikari connection pool. If there are run away SQL connections then service can quickly run out of connection in the pool and slow down the entire system.
 
 ```yaml
 spring:
@@ -334,7 +336,8 @@ Invoke this rest api that runs 10 long-running db query job but will not timeout
 ab -n 10 -c 10 http://localhost:8080/api/db-long-query-job/5
 ```
 
-JPA also enables first level cache by default.
+JPA also enables first level cache by default inside a transactions/session. After transaction is done the entity is garbage collected. 
+For cache across sessions use second level cache.
 
 {{% notice info "Note" %}}
 Always assume that you will run out of database connections due to a bad api and set connection timeout for both the connection pool and thread pool to prevent them from waiting forever to get connections.
@@ -482,9 +485,21 @@ server:
     enabled: true
 ```
 
+**HTTP caching** -  You can also avoid sending response if the payload hasn't changed since last modified time.
+If the response contains `Last-Modified` or `ETag` the client can re-use the previous payload as nothing has changed.
+
+**Last-Modified**
+Client will send the last modified `If-Modified-Since` header field and if payload hasnt changed server will return 304 Not Modified
+
+**Etag** 
+1. Shallow Hashing - Client sends the previous ETag and server generates the whole payload and then create a ETag and matches if it is same. If yes then return 304 Not Modified.
+2. Deep Hashing - Client sends previous Etag and server compares it against the latest ETag it holds in cache. If same then returns 304  Not Modified
+
 {{% notice info "Note" %}}
 Always try to reduce the size of the response payload, send only the data required instead of the whole payload. Use pagination for data records and gzip payload to reduce the size.
 {{% /notice %}}
+
+If there is an api being called every second then it makes sends to either use **Web Sockets** or **Server Send Events (SSE)** which can stream data and avoid the costly request-response. 
 
 ### API versioning & Feature Flag
 
@@ -678,6 +693,29 @@ Observability is the ability to observe the internal state of a running system f
 
 [https://gitorko.github.io/post/spring-observability/](https://gitorko.github.io/post/spring-observability/)
 
+### Exception Handling
+
+{{% notice note "Problem" %}}
+You errors are returning 500 Internal Server error, downstream services are not able to determine reason for the error.
+{{% /notice %}}
+
+Use `@RestController` to return custom error responses. 
+If you have generic exception then use `@Order` to determine which exception gets returned first in a nested exception.
+
+To get more details in the error response enable these
+
+```yaml
+server:
+  error:
+    include-binding-errors: always
+    include-exception: false
+    include-message: always
+    include-path: always
+    include-stacktrace: never
+```
+
+Be aware that if you are using dev tools `org.springframework.boot:spring-boot-devtools` the error response will be detailed by default and will not behave same in production unless the above properties are configured.
+
 ### Logging
 
 {{% notice note "Problem" %}}
@@ -805,7 +843,7 @@ Some of the basic security checks
 1. No credit card numbers in logs.
 2. No passwords in logs.
 3. No User personal information in logs.
-4. No personal email in the logs.
+4. No PII (Personal Identifiable Information) in logs
 5. Permissions to production is restricted to few people by Authentication & Authorization.
 6. Salt has been added to password before storing it.
 7. Url don't have password or secure information in parameter as url get logged.
