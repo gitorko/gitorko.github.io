@@ -35,7 +35,7 @@ curl --location 'http://localhost:8080/api/blocking-job/60'
 
 ![](img06.png)
 
-Determine if CPU intensive or IO intensive task and delegate the execution to a thread pool so that the core tomcat threads are free to serve requests. The default tomcat threads are 200 and any blocking that happens will affect the whole service.
+Determine if CPU intensive or IO intensive task and delegate the execution to a thread pool so that the core tomcat threads are free to serve requests. The default tomcat threads are 250 and any blocking that happens will affect the whole service.
 
 There 2 types of protocol a tomcat server can be configured for
 
