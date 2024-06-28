@@ -699,7 +699,7 @@ Observability is the ability to observe the internal state of a running system f
 You errors are returning 500 Internal Server error, downstream services are not able to determine reason for the error.
 {{% /notice %}}
 
-Use `@RestController` to return custom error responses. 
+Use `@RestControllerAdvice` to return custom error responses. 
 If you have generic exception then use `@Order` to determine which exception gets returned first in a nested exception.
 
 To get more details in the error response enable these
