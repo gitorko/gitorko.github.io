@@ -260,3 +260,5 @@ You can also download the various tools needed to work with java
 ## References
 
 [https://www.youtube.com/watch?v=XXOaCV5xm9s&ab_channel=Geekific](https://www.youtube.com/watch?v=XXOaCV5xm9s&ab_channel=Geekific)
+[https://www.youtube.com/watch?v=2PIBF92iOvQ&ab_channel=Java](https://www.youtube.com/watch?v=2PIBF92iOvQ&ab_channel=Java)
+[https://www.youtube.com/watch?v=wpkbJGRCwRo&ab_channel=Java](https://www.youtube.com/watch?v=wpkbJGRCwRo&ab_channel=Java)
