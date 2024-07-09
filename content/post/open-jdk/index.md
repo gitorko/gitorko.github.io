@@ -181,9 +181,8 @@ Types of garbage collector:
 4. `-XX:+UseG1GC` - G1 (Garbage first) garbage collector. Entire heap is divided to multiple regions that can be resized. A region can be either young or old. Identifies the regions with the most garbage and performs garbage collection on that region first, it is called Garbage First The pause time is predictable as regions are small.
 5. `-XX:+UseEpsilonGC` - Epsilon collector - Do nothing collector. JVM shutsdown once heap is full. Used for zero pause time application provided memory is planned.
 6. `-XX:+UseShenandoahGC` - Shenandoah collector - Similar to G1, but runs concurrently with application. CPU intensive.
-7. `-XX:+UseZGC` - ZGC collector - Suitable for low pause time (2 ms pauses) and large heap. GC performed while application running.
-8. `-XX:+UseZGC -XX:+ZGenerational` Generation ZGC - ZGC splits the heap into two logical generations: one for recently allocated objects and another for long-lived objects. The GC can focus on collecting younger and more promising objects more often without increasing pause time, keeping them under 1 millisecond
-
+7. `-XX:+UseZGC` - ZGC collector - Suitable for low pause time (2 ms pauses) and large heap. GC performed while application running. Treats the entire heap as a single generation, performing garbage collection uniformly across all objects. Cant specify pause time.
+8. `-XX:+UseZGC -XX:+ZGenerational` Generation ZGC - ZGC splits the heap into two logical generations young and old. The GC can focus on collecting younger and more promising objects more often without increasing pause time, keeping them under 1 millisecond
 
 | Garbage Collectors | When to use                                                                                                                       |
 |:-------------------|:----------------------------------------------------------------------------------------------------------------------------------|
@@ -213,6 +212,41 @@ These native libraries can be loaded through JNI.
 2. **NoClassDefFoundError** - Compiler has successfully compiled the class, but the Class Loader is not able to locate the class file at the runtime.
 3. **OutOfMemoryError** - Cannot allocate an object because it is out of memory, and no more memory could be made available by the garbage collector.
 4. **StackOverflowError** - Ran out of space while creating new stack frames while processing a thread.
+
+### JVM Flags
+
+1. Throughput  - Throughput refers to the amount of time spent on actual application work versus the total time spent on garbage collection activities. High Throughput indicates that the application spends more time executing its tasks rather than performing GC
+2. Latency - Latency in GC refers to the pause times experienced by the application during garbage collection activities. Low Latency indicates that GC pauses are short and predictable, allowing the application to quickly resume its tasks
+
+| Flags                                                     | Purpose                                                                                                                                                                            |
+|:----------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-XX:+UseStringDeduplication`                             | All string in java are stored in string pool but if you used the new operator then string are created on heap. To remove duplicate string in heap during GC you can use this flag. |
+| `-XX:+SoftMaxHeapSize`                                    | Set in Gen ZGC it allows GC to operate within this limit and will goto max only to prevent application from stalling.                                                              |
+| `-XX:+AlwaysPreTouch`                                     | Heap preparation is done at startup.                                                                                                                                               |
+| `-Xmx=<size>` `-Xms=<size>`                               | The max heap size & min heap size can be set to same size to avoid latency caused when returning unused memory to RAM by the JVM                                                   |
+| `-XX:-ZUncommit`                                          | Prevents unused memory from being returned to the RAM by the JVM                                                                                                                   |
+| `-XX:ZUncommitDelay=<time>`                               | Delay before unused memory returned to the RAM by the JVM                                                                                                                          |
+| `-XX:+UseTransparentHugePages`                            | If you have large objects then dedicated section of the heap is used to store them. OS should support Transparent Huge Pages (THP)                                                 |
+| `-XX:MaxGCPauseMillis`                                    | Provides max tolerable pause time for GC in G1                                                                                                                                     |
+| `-XX:+UseAOT`                                             | Enables AOT compilation                                                                                                                                                            |
+| `-XX:ParallelGCThreads`                                   | Parallel GC Threads                                                                                                                                                                |
+| `-XX:ConcGCThreads`                                       | Concurrent GC Threads                                                                                                                                                              |
+| `-Xss`                                                    | Thread stack size                                                                                                                                                                  |
+| `-XX:+DisableExplicitGC`                                  | Disable GC                                                                                                                                                                         |
+| `-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=<file>` | Heap Dump on OutOfMemoryError                                                                                                                                                      |
+| `-XX:MetaspaceSize=<size>` `-XX:MaxMetaspaceSize=<size>`  | Metaspace size                                                                                                                                                                     |
+| `-XX:G1HeapRegionSize=<size>`                             | G1 region size                                                                                                                                                                     | 
+| `-XX:ZAllocationSpikeTolerance=<value>`                   | How much ZGC should over-provision memory to handle allocation spikes                                                                                                              |
+| `-Xlog:gc*`                                               | GC logging                                                                                                                                                                         |
+| `-XX:ZGenYoungSize=<size>`                                | Gen-ZGC Young Generation Size                                                                                                                                                      |
+| `-XX:ZGenYoungSize=<size>`                                | Gen-ZGC Old Generation Size                                                                                                                                                        |
+| `-XX:ZGenMaxYoungGCCollectionTimeMillis=<time>`           | Max Young GC Pause Time                                                                                                                                                            |
+
+
+### JIT (Just in Time Compilation) vs AOT (Ahead of Time Compilation)
+
+JIT happens at runtime, jvm determines hotspot in code that are frequently executed and compiles to native code. eg: HotSpot JVM
+AOT happens before runtime, bytecode is compiled to native code based on static analysis before program is executed. eg: GraalVM
 
 ## Distributions
 
@@ -262,3 +296,7 @@ You can also download the various tools needed to work with java
 [https://www.youtube.com/watch?v=XXOaCV5xm9s&ab_channel=Geekific](https://www.youtube.com/watch?v=XXOaCV5xm9s&ab_channel=Geekific)
 [https://www.youtube.com/watch?v=2PIBF92iOvQ&ab_channel=Java](https://www.youtube.com/watch?v=2PIBF92iOvQ&ab_channel=Java)
 [https://www.youtube.com/watch?v=wpkbJGRCwRo&ab_channel=Java](https://www.youtube.com/watch?v=wpkbJGRCwRo&ab_channel=Java)
+
+[https://docs.oracle.com/en/java/javase/21/gctuning/z-garbage-collector.html#GUID-8637B158-4F35-4E2D-8E7B-9DAEF15BB3CD](https://docs.oracle.com/en/java/javase/21/gctuning/z-garbage-collector.html#GUID-8637B158-4F35-4E2D-8E7B-9DAEF15BB3CD)
+[https://wiki.openjdk.org/display/zgc/Main](https://wiki.openjdk.org/display/zgc/Main)
+[https://inside.java/2023/11/28/gen-zgc-explainer/](https://inside.java/2023/11/28/gen-zgc-explainer/)

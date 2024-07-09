@@ -191,3 +191,16 @@ What is the problem with this program?
 **Solution**
 
 **Race condition**, two threads can try to update at the same time leading to data corruption. Using the atomic putIfAbsent should fix it.
+
+
+## Puzzle: 15 (String pool)
+
+What is the output of this program?
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main//src/test/java/com/demo/basics/puzzle/_016_string_pool/StringPoolPuzzle.java" >}}
+
+String class is immutable. 
+When we create string with `new String()` separate memory is allocated on heap for each string literal. Thus, two new string objects are created in the memory i.e. str1 and str2. that holds different references
+When we create String without `new String()` it gets created in string pool which holds same reference.
+Then `intern()` method moves the string from heap to string pool. If the same string already exists on string pool then the reference is returned.
+
