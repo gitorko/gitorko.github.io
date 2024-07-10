@@ -91,9 +91,13 @@ The hardware is utilized to an almost optimal level, resulting in high levels of
 **Pitfalls to avoid in Virtual Threads**
 
 1. Exceptions - Stack traces are separate, and any Exception thrown in a virtual thread only includes its own stack frames.
-2. Thread-local - Reduce usage as each thread will end up creating its own thread local unlike before.
-3. Synchronized blocks/methods - Virtual thread gets BLOCKED because of synchronized method (or block), it will not relinquish its control over the underlying OS thread, use ReentrantLock.
-4. Thread pools - Avoid thread pool to limit resource access, eg: A thread pool of size 10 can create more than 10 concurrent threads due to virtual threads hence use semaphore if you want to limit conncurrent requests based on pool size.
+2. Thread-local - Reduce usage as each thread will end up creating its own thread local unlike before where there are limited threads in pool, virtual threads can be many as they are cheap to create.
+3. Synchronized blocks/methods - When there is synchronized method or block used the virtual thread is pinned to a platform thread, it will not relinquish its control. This means it will hold the platform thread which can cause performance issues if there is IO happening inside the synchronized block. Use ReentrantLock instead of synchronized. 
+4. Native code - When native code is used virtual threads get **pinned** to platform threads, it will not relinquish its control. This may be problematic if IO happens for longer time there by blocking/holding the platform thread.
+5. Thread pools - Avoid thread pool to limit resource access, eg: A thread pool of size 10 can create more than 10 concurrent threads due to virtual threads hence use semaphore if you want to limit concurrent requests based on pool size.
+6. Spring - In sprint context use `concurrency-limit` to limit number of thread pool and avoid runway of virtual threads.
+7. Performance - Platform threads are better when CPU intensive tasks are executed compared to virtual threads. Virtual threads benefit only when there is IO.
+8. Context switching - When virtual threads have blocking operation they yield and JVM moves the stack to heap memory. The stack is put back only when its time to execute the thread again. This is still cheaper than creating a new platform thread though.
 
 ```bash
 Runnable fn = () -> {
@@ -106,8 +110,10 @@ Thread thread = Thread.ofPlatform().start(runnable);
                       
 Thread thread = Thread.ofVirtual(fn).start();
 
-var executorService = Executors.newVirtualThreadPerTaskExecutor();
-executorService.submit(() -> {
+Thread.startVirtualThread(fn);
+
+var executors = Executors.newVirtualThreadPerTaskExecutor();
+executors.submit(() -> {
   // your code
 });
 ```
@@ -244,6 +250,8 @@ server:
     max-connections: 1000
 ```
 
+Protocol limits the max connections per machine to 65,536, which is max ports available in TCP.
+
 **Throughput** (requests served per second) of a single server depends on following
 
 1. Number of tomcat threads 
@@ -252,6 +260,21 @@ server:
 
 If you have 200 threads (BIO) and all request response on average take 1 second (latency) to complete then your server can handle 200 requests per second.
 When there are IO intensive tasks which cause threads to wait and context switching takes place, throughput calculation becomes tricky and needs to be approximated.
+
+Ideal number of threads that can be picked depend on
+
+```bash
+                       Number of CPU Cores
+Number of Threads <= -----------------------
+                       1 - Blocking Factor
+```
+
+1. For computation intensive job Blocking Factor (BF) is 0.
+2. For IO intensive job Blocking Factor (BF) is between 0 & 1 (0 < BF < 1)
+
+* If BF is 0, for computation intensive job Number of threads == Number of CPU cores. If 4 core CPU then 4 threads.
+* If BF is 0.9 then for 4 core CPU machine the threads allowed (10 * no of cores) are 40.
+* If BF is 0.5 then for 4 core CPU machine the threads allowed (2 * no of cores) are 8.
 
 {{% notice info "Note" %}}
 Benchmark the system on a varied load to arrive at the peek throughput the system can handle.

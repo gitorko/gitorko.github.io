@@ -16,7 +16,18 @@ Github: [https://github.com/gitorko/project83](https://github.com/gitorko/projec
 
 ## Spring Reactor
 
-Methods demonstrating how to use spring reactor
+Spring Reactor is a library for building non-blocking, reactive applications in Java.
+Reactor is used in Spring WebFlux, which is the reactive web framework included in Spring 5.
+
+**Features**
+
+1. Reactive Streams: Reactor is based on the Reactive Streams specification, which defines a standard for asynchronous stream processing with non-blocking backpressure.
+2. Mono and Flux: Mono represents a single value or an empty result (similar to Optional). Flux represents a stream of 0 to N elements.
+3. Functional API: Reactor provides a rich set of operators that allow you to manipulate, transform, and compose reactive streams in a functional style.
+4. Non-blocking: Reactor is designed to work in a non-blocking manner, making it suitable for applications that need to handle a large number of concurrent I/O operations.
+5. Backpressure: Reactor supports backpressure, a mechanism to ensure that a producer does not overwhelm a consumer with too much data.
+
+### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project83/main/src/test/java/com/demo/project83/ReactorTest.java" >}}
 

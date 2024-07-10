@@ -48,7 +48,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project79  | https://github.com/gitorko/project79  | Spring Boot MVC Web project Thymeleaf, Login, Charts                                   |
 | project80  | https://github.com/gitorko/project80  | Spring Boot & Kafka                                                                    |
 | project81  | https://github.com/gitorko/project81  |                                                                                        |
-| project82  | https://github.com/gitorko/project82  | Spring Data JPA                                                                        |
+| project82  | https://github.com/gitorko/project82  | Spring Data JPA Essentials                                                             |
 | project83  | https://github.com/gitorko/project83  | Spring Reactor, Functional Programming, Completable Future Basics                      |
 | project84  | https://github.com/gitorko/project84  | Jenkins Pipeline + Data processing                                                     |
 | project85  | https://github.com/gitorko/project85  | Model Mapper                                                                           |
