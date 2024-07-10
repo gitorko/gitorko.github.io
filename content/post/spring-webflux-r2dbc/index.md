@@ -6,7 +6,7 @@ date: '2024-04-30'
 aliases: [/spring-webflux-r2dbc/]
 author: 'Arjun Surendra'
 categories: [Spring, R2DBC]
-tags: [r2dbc, webflux]
+tags: [r2dbc, webflux, auditing]
 toc: true
 ---
 
