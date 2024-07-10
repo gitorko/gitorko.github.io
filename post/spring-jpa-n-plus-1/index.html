@@ -43,11 +43,16 @@ The <code>@ManyToOne</code> and <code>@OneToOne</code> associations use <code>Fe
 </span></span></span><span class=line><span class=ln>24</span><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
 </span></span></span><span class=line><span class=ln>25</span><span class=cl><span class=w>
 </span></span></span><span class=line><span class=ln>26</span><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln>1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>jpa</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>hibernate</span><span class=p>:</span><span class=w>
-</span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>      </span><span class=nt>ddl-auto</span><span class=p>:</span><span class=w> </span><span class=l>create-drop</span><span class=w>
-</span></span></span><span class=line><span class=ln>5</span><span class=cl><span class=w>    </span><span class=nt>show-sql</span><span class=p>:</span><span class=w> </span><span class=kc>true</span></span></span></code></pre></div><h3 id=postman>Postman</h3><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project66/main/postman/Project66.postman_collection.json>Postman Collection</a></p><h3 id=setup>Setup</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-md data-lang=md><span class=line><span class=ln> 1</span><span class=cl><span class=gh># Project 66
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln> 1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=w>  </span><span class=nt>jpa</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln> 3</span><span class=cl><span class=w>    </span><span class=nt>hibernate</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln> 4</span><span class=cl><span class=w>      </span><span class=nt>ddl-auto</span><span class=p>:</span><span class=w> </span><span class=l>create-drop</span><span class=w>
+</span></span></span><span class=line><span class=ln> 5</span><span class=cl><span class=w>    </span><span class=nt>show-sql</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></span></span><span class=line><span class=ln> 6</span><span class=cl><span class=w></span><span class=nt>logging</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln> 7</span><span class=cl><span class=w>  </span><span class=nt>level</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln> 8</span><span class=cl><span class=w>    </span><span class=nt>org.springframework.orm.jpa</span><span class=p>:</span><span class=w> </span><span class=l>DEBUG</span><span class=w>
+</span></span></span><span class=line><span class=ln> 9</span><span class=cl><span class=w>    </span><span class=nt>org.hibernate.event.internal</span><span class=p>:</span><span class=w> </span><span class=l>TRACE</span><span class=w>
+</span></span></span><span class=line><span class=ln>10</span><span class=cl><span class=w>    </span><span class=nt>org.hibernate.internal.SessionImpl</span><span class=p>:</span><span class=w> </span><span class=l>TRACE</span></span></span></code></pre></div><h3 id=postman>Postman</h3><p>Import the postman collection to postman</p><p><a href=https://raw.githubusercontent.com/gitorko/project66/main/postman/Project66.postman_collection.json>Postman Collection</a></p><h3 id=setup>Setup</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-md data-lang=md><span class=line><span class=ln> 1</span><span class=cl><span class=gh># Project 66
 </span></span></span><span class=line><span class=ln> 2</span><span class=cl><span class=gh></span>
 </span></span><span class=line><span class=ln> 3</span><span class=cl>Spring Data JPA N+1
 </span></span><span class=line><span class=ln> 4</span><span class=cl>
@@ -185,17 +190,18 @@ The <code>@ManyToOne</code> and <code>@OneToOne</code> associations use <code>Fe
 <span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/webflux/ class="post_tag button button_translucent" title=webflux>WEBFLUX
 <span class=button_tally>3</span>
+</a><a href=https://gitorko.github.io/tags/auditing/ class="post_tag button button_translucent" title=auditing>AUDITING
+<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/bootstrap/ class="post_tag button button_translucent" title=bootstrap>BOOTSTRAP
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/chart.js/ class="post_tag button button_translucent" title=chart.js>CHART.JS
 <span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/docker/ class="post_tag button button_translucent" title=docker>DOCKER
-<span class=button_tally>2</span>
-</a><a href=https://gitorko.github.io/tags/grafana/ class="post_tag button button_translucent" title=grafana>GRAFANA
 <span class=button_tally>2</span></a><br><div class="post_tags_toggle button">All Tags</div><div class=post_tags><div class=tags_list><a href=https://gitorko.github.io/tags/algorithms/ class="post_tag button button_translucent" data-position=1 title=algorithms>ALGORITHMS<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/amqp/ class="post_tag button button_translucent" data-position=1 title=amqp>AMQP<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/angular/ class="post_tag button button_translucent" data-position=3 title=angular>ANGULAR<span class=button_tally>3</span>
 </a><a href=https://gitorko.github.io/tags/apache-superset/ class="post_tag button button_translucent" data-position=1 title=apache-superset>APACHE-SUPERSET<span class=button_tally>1</span>
+</a><a href=https://gitorko.github.io/tags/auditing/ class="post_tag button button_translucent" data-position=2 title=auditing>AUDITING<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/azul/ class="post_tag button button_translucent" data-position=1 title=azul>AZUL<span class=button_tally>1</span>
 </a><a href=https://gitorko.github.io/tags/bootstrap/ class="post_tag button button_translucent" data-position=2 title=bootstrap>BOOTSTRAP<span class=button_tally>2</span>
 </a><a href=https://gitorko.github.io/tags/bulkhead/ class="post_tag button button_translucent" data-position=1 title=bulkhead>BULKHEAD<span class=button_tally>1</span>
