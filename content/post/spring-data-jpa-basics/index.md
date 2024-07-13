@@ -29,6 +29,18 @@ Spring Data JPA offers a repository abstraction that allows developers to intera
 5. Custom Query Methods: Allows custom JPQL (Java Persistence Query Language) and SQL queries.
 6. Integration with Spring: Seamlessly integrates with the Spring Framework, including transaction management and dependency injection.
 
+
+| Annotation  | Description                                                                                                                                                                                          |
+|:------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| @ManyToOne  | Most natural way to map a foreign key relation                                                                                                                                                       |
+| @OneToMany  | Parent entity to map collection of child entities. If bi-directional then child entity has @ManyToOne. If child entities can grow then will affect performance. Use only when child entities are few |
+| @OneToOne   | Creates a foreign key in parent table that refers to the primary key of child table.                                                                                                                 |
+| @MapsId     | Single key acts as primary key & foreign key, with single key you can now fetch data from both table with same key.                                                                                  |
+| @ManyToMany | Two parents on one child, avoid doing CascadeType.ALL, dont do orphan removal.                                                                                                                       |
+| mappedBy    | Present in parent, Tells hibernate that the child side is in charge of handling bi-directional association. mappedBy & @JoinColumn cant be present in the same class.                                |
+
+For bi-directional associations where the child is in charge of handling association, you must still write setter methods in parent to sync both sides. Otherwise, you risk very subtle state propagation issues. 
+
 ### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project82/main/src/test/java/com/demo/project82/StudentTest.java" >}}
@@ -41,3 +53,4 @@ Spring Data JPA offers a repository abstraction that allows developers to intera
 
 [https://vladmihalcea.com/blog/](https://vladmihalcea.com/blog/)
 [https://thorben-janssen.com/ultimate-guide-association-mappings-jpa-hibernate/](https://thorben-janssen.com/ultimate-guide-association-mappings-jpa-hibernate/)
+[https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html)
