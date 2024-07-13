@@ -1,8 +1,8 @@
 ---
-title: 'Optimistic vs Pessimistic Locking'
-description: 'Optimistic vs Pessimistic Locking'
-summary: 'Optimistic vs Pessimistic Locking implementation'
-date: '2019-12-24'
+title: 'Spring JPA - Optimistic vs Pessimistic Locking'
+description: 'Spring JPA -  Optimistic vs Pessimistic Locking'
+summary: 'Spring JPA - Optimistic vs Pessimistic Locking'
+date: '2024-06-12'
 aliases: [/optimistic-pessimistic-locking/]
 author: 'Arjun Surendra'
 categories: [Locking]
@@ -12,74 +12,136 @@ toc: true
 
 When an app is deployed on more than one server how to you ensure that 2 threads dont modify the same record in db? If the operation was performed on a single JVM you could look at locking but since there are many jvm the locking has to be done at database level.
 
-Github: [https://github.com/gitorko/project67](https://github.com/gitorko/project67)
+Github: [https://github.com/gitorko/project82](https://github.com/gitorko/project82)
 
 ## Locking
 
-Lets say we have a ticket booking service with a table holding all the free tickets and multiple servers running our app. How do we ensure that 2 users cant book the same seat? Since the app runs on different JVM we cant syncronize or use jvm locks.
+Locking ensures that the row is not concurrently updated by 2 different threads which might corrupt the data.
 
-Hibernate provides two approaches to handle concurrency at database level:
+**Problem:**
 
-1. Pessimistic Locking - The lock is now applied by the database at row level or table level. If the lock is a WRITE lock it prevents other threads from modifying the data. eg: SELECT * from TABLE where id = 1 for update;
-2. Optimistic Locking - A version field is introduced to the database table, The JPA ensures that version check is done before saving data, if the version has changed the update will throw Error. Scalability is high with this approach.
+Thread A: Reads row with amount 100$ in Transaction T1
+Thread B: Reads row with amount 100$ in Transaction T2
+Thread A: Adds 10$, new amount is 110$
+Thread B: Adds 10$, new amount is still 110$ instead of 120$.
+
+**Solution 1 (Optimistic Locking):**
+
+Thread A: Reads row with amount 100$ in Transaction T1
+Thread B: Reads row with amount 100$ in Transaction T2
+Thread A: Adds 10$, new amount is 110$
+Thread B: Adds 10$ and tries to save but sees that the record is not the same record that it read. So fails & does retry.
+
+**Solution 2 (Pessimistic Locking):**
+
+Thread A: Reads row with amount 100$ in Transaction T1, it holds a row level lock.
+Thread B: Reads row in Transaction T2 but is blocked as T1 holds a lock, So it waits till timeout happens & retry.
+Thread A: Adds 10$, new amount is 110$
+Thread B: Reads row with updated amount 110$ and updates to 120$
+
+**Types of locking**
+
+1. Pessimistic Locking - Locks held at row level or table level. Not ideal of high performance & cant scale.
+2. Optimistic Locking - Version field is added to the table, JPA ensures that version check is done before saving data, if the version has changed then update will throw Error. Ideal for high performance & can scale.
 
 ### Pessimistic locking
 
-Three Pessimistic LockModeTypes are supported in JPA.
-
-1. PESSIMISTIC_READ - Rows are locked and can be read by other transactions, but they cannot be deleted or modified. PESSIMISTIC_READ guarantees repeatable reads.
-2. PESSIMISTIC_WRITE - Rows are locked and cannot be read, modified or deleted by other transactions. For PESSIMISTIC_WRITE no phantom reads can occur and access to data must be serialized.
-3. PESSIMISTIC_FORCE_INCREMENT - Rows are locked and cannot be modified or deleted. For versioned entities, their version number is incremented as soon as the query executes.
-
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/src/main/java/com/demo/project67/pessimistic/PessimisticMain.java" >}}
-
-Run the code and you will see that only one person is able to book the ticket. Notice the 'for update' in the sql query that is fired which will lock the row.
-
-```bash
-Booking seat: 1 By: Joe
-Booking seat: 1 By: Jack
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_ from ticket ticket0_ where ticket0_.seat_number=? and ticket0_.on_day=? for update
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_ from ticket ticket0_ where ticket0_.seat_number=? and ticket0_.on_day=? for update
-Hibernate: update ticket set booked_by=?, on_day=?, seat_number=? where id=?
-Booking for Jack success: true
-Booking for Joe success: false
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_ from ticket ticket0_
-Ticket(id=1, seatNumber=1, onDay=2020-08-17, bookedBy=Jack)
-Ticket(id=2, seatNumber=2, onDay=2020-08-17, bookedBy=null)
-Ticket(id=3, seatNumber=3, onDay=2020-08-17, bookedBy=null)
-```
+1. `LockModeType.PESSIMISTIC_READ` - Rows are locked and can be read by other transactions, but they cannot be deleted or modified. PESSIMISTIC_READ guarantees repeatable reads.
+2. `LockModeType.PESSIMISTIC_WRITE` - Rows are locked and cannot be read, modified or deleted by other transactions. For PESSIMISTIC_WRITE no phantom reads can occur and access to data must be serialized.
+3. `LockModeType.PESSIMISTIC_FORCE_INCREMENT` - Rows are locked and cannot be read, modified or deleted by other transactions. it forces an increment of the version attribute
 
 ### Optimistic locking
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/src/main/java/com/demo/project67/optimistic/OptimisticMain.java" >}}
+1. `LockModeType.OPTIMISTIC` - Checks the version attribute of the entity before committing the transaction to ensure no other transaction has modified the entity.
+2. `LockModeType.OPTIMISTIC_FORCE_INCREMENT` - Forces a version increment of the entity, even if the entity has not been modified during the update.
 
-Run the code and you will see that only one person is able to book the ticket. Notice the exception of 'StaleObjectStateException' thrown.
+## Transaction Isolation
 
+Transaction isolation levels in JPA define the degree to which the operations within a transaction are isolated from the operations in other concurrent transactions
+JPA, typically using the underlying database and JDBC settings
+
+1. `Isolation.READ_UNCOMMITTED` Read Uncommitted - The lowest level of isolation. Transactions can read uncommitted changes made by other transactions.
+2. `Isolation.READ_COMMITTED` Read Committed - Transactions can only read committed changes made by other transactions.
+3. `Isolation.REPEATABLE_READ` Repeatable Read - If a transaction reads a row, it will get the same data if it reads the row again within the same transaction.
+4. `Isolation.SERIALIZABLE` Serializable - The highest level of isolation. Transactions are completely isolated from one another.
+
+**Data Consistency**
+
+1. Dirty reads: read UNCOMMITED data from another transaction.
+2. Non-repeatable reads: read COMMITTED data from an UPDATE query from another transaction.
+3. Phantom reads: read COMMITTED data from an INSERT or DELETE query from another transaction.
+
+**Dirty Read**
+
+| NAME | AGE |
+|:-----|:----|
+| Bob  | 35  |
+
+| TRANSACTION T1                                 | TRANSACTION T2                                |
+|:-----------------------------------------------|:----------------------------------------------|
+| select age from table where name = 'Bob'; (35) |                                               |
+|                                                | update table set age = 40 where name = 'Bob'; |
+| select age from table where name = 'Bob'; (40) |                                               |
+|                                                | commit;                                       |
+
+Non-Repeatable Read
+
+| NAME | AGE |
+|:-----|:----|
+| Bob  | 35  |
+
+| TRANSACTION T1                                 | TRANSACTION T2                                |
+|:-----------------------------------------------|:----------------------------------------------|
+| select age from table where name = 'Bob'; (35) |                                               |
+|                                                | update table set age = 40 where name = 'Bob'; |
+|                                                | commit;                                       |
+| select age from table where name = 'Bob'; (40) |                                               |
+
+Phantom Read
+
+| NAME | AGE |
+|:-----|:----|
+| Bob  | 35  |
+
+| TRANSACTION T1                                 | TRANSACTION T2                         |
+|:-----------------------------------------------|:---------------------------------------|
+| select count(*) from table where age = 35; (1) |                                        |
+|                                                | insert into table values ('jack', 35); |
+|                                                | commit;                                |
+| select count(*) from table where age = 35; (2) |                                        |
+
+| Isolation Level  | Dirty | Non-Repeatable Reads | Phantom Reads | 
+|:-----------------|:------|:---------------------|:--------------|
+| Read Uncommitted | Yes   | Yes                  | Yes           |
+| Read Committed   | No    | Yes                  | Yes           |
+| Read Committed   | No    | No                   | Yes           |
+| Serializable     | No    | No                   | No            |
+
+```yaml
+spring:
+  jpa:
+    properties:
+      hibernate:
+        connection:
+          isolation: 2
 ```
-Booking seat: 1 By: Joe
-Booking seat: 1 By: Jack
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_, ticket0_.version as version5_0_ from ticket ticket0_ where ticket0_.seat_number=? and ticket0_.on_day=?
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_, ticket0_.version as version5_0_ from ticket ticket0_ where ticket0_.seat_number=? and ticket0_.on_day=?
-Hibernate: select ticket0_.id as id1_0_0_, ticket0_.booked_by as booked_b2_0_0_, ticket0_.on_day as on_day3_0_0_, ticket0_.seat_number as seat_num4_0_0_, ticket0_.version as version5_0_0_ from ticket ticket0_ where ticket0_.id=?
-Hibernate: select ticket0_.id as id1_0_0_, ticket0_.booked_by as booked_b2_0_0_, ticket0_.on_day as on_day3_0_0_, ticket0_.seat_number as seat_num4_0_0_, ticket0_.version as version5_0_0_ from ticket ticket0_ where ticket0_.id=?
-Hibernate: update ticket set booked_by=?, on_day=?, seat_number=?, version=? where id=? and version=?
-Hibernate: update ticket set booked_by=?, on_day=?, seat_number=?, version=? where id=? and version=?
-Booking for Joe success: true
-Hibernate: select ticket0_.id as id1_0_0_, ticket0_.booked_by as booked_b2_0_0_, ticket0_.on_day as on_day3_0_0_, ticket0_.seat_number as seat_num4_0_0_, ticket0_.version as version5_0_0_ from ticket ticket0_ where ticket0_.id=?
-Object of class [com.demo.project67.optimistic.Ticket] with identifier [1]: optimistic locking failed; nested exception is org.hibernate.StaleObjectStateException: Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect) : [com.demo.project67.optimistic.Ticket#1]
-Booking for Jack success: false
-Hibernate: select ticket0_.id as id1_0_, ticket0_.booked_by as booked_b2_0_, ticket0_.on_day as on_day3_0_, ticket0_.seat_number as seat_num4_0_, ticket0_.version as version5_0_ from ticket ticket0_
-Ticket(id=1, seatNumber=1, onDay=2020-08-17, bookedBy=Joe, version=1)
-Ticket(id=2, seatNumber=2, onDay=2020-08-17, bookedBy=null, version=0)
-Ticket(id=3, seatNumber=3, onDay=2020-08-17, bookedBy=null, version=0)
+
+```bash
+@Transactional(isolation = Isolation.SERIALIZABLE)
 ```
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/src/main/resources/application.yaml" >}}
+```sql
+SHOW default_transaction_isolation;
+```
+
+### Code
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project82/main/src/main/java/com/demo/project82/Main.java" >}}
 
 ### Setup
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project67/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project82/main/README.md" >}}
 
 ## References
 
-Spring Data JPA : [https://spring.io/projects/spring-data-jpa](https://spring.io/projects/spring-data-jpa)
+[https://spring.io/projects/spring-data-jpa](https://spring.io/projects/spring-data-jpa)

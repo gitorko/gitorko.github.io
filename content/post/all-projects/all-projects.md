@@ -33,7 +33,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project64  | https://github.com/gitorko/project64  | Spring WebFlux Reactive JDBC                                                           |
 | project65  | https://github.com/gitorko/project65  | Spring Webflux & R2DBC                                                                 |
 | project66  | https://github.com/gitorko/project66  | Spring Data JPA N+1                                                                    |
-| project67  | https://github.com/gitorko/project67  | Optimistic vs Pessimistic Locking                                                      |
+| project67  | https://github.com/gitorko/project67  |                                                                                        |
 | project68  | https://github.com/gitorko/project68  | Spring Boot Micrometer - Prometheus, Wavefront                                         |
 | project69  | https://github.com/gitorko/project69  | HTML reports with freemarker                                                           |
 | project70  | https://github.com/gitorko/project70  | Jasper Report with Spring                                                              |

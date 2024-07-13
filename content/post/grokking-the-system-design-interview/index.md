@@ -210,68 +210,9 @@ Problems with saga
 1. Hard to debug & test.
 2. Risk of cyclic dependency between saga participants.
 
-### 5. Isolation Levels
+### 5. Locking & Isolation Levels
 
-Data Consistency 
-
-1. Dirty reads: read UNCOMMITED data from another transaction.
-2. Non-repeatable reads: read COMMITTED data from an UPDATE query from another transaction.
-3. Phantom reads: read COMMITTED data from an INSERT or DELETE query from another transaction.
-
-Dirty Read
-
-| NAME | AGE |
-|:-----|:----|
-| Bob  | 35  |
-
-| TRANSACTION T1                                 | TRANSACTION T2                                |
-|:-----------------------------------------------|:----------------------------------------------|
-| select age from table where name = 'Bob'; (35) |                                               |
-|                                                | update table set age = 40 where name = 'Bob'; |
-| select age from table where name = 'Bob'; (40) |                                               |
-|                                                | commit;                                       |
-
-Non-Repeatable Read
-
-| NAME | AGE |
-|:-----|:----|
-| Bob  | 35  |
-
-| TRANSACTION T1                                 | TRANSACTION T2                                |
-|:-----------------------------------------------|:----------------------------------------------|
-| select age from table where name = 'Bob'; (35) |                                               |
-|                                                | update table set age = 40 where name = 'Bob'; |
-|                                                | commit;                                       |
-| select age from table where name = 'Bob'; (40) |                                               |
-
-Phantom Read
-
-| NAME | AGE |
-|:-----|:----|
-| Bob  | 35  |
-
-| TRANSACTION T1                                 | TRANSACTION T2                         |
-|:-----------------------------------------------|:---------------------------------------|
-| select count(*) from table where age = 35; (1) |                                        |
-|                                                | insert into table values ('jack', 35); |
-|                                                | commit;                                |
-| select count(*) from table where age = 35; (2) |                                        |
-
-To prevent the following read issues, 4 isolation levels are provided
-
-| ISOLATION-LEVEL         | DIRTY-READ | NON-REPEATABLE-READ | PHANTOM-READ |
-|:------------------------|:-----------|:--------------------|:-------------|
-| **READ_UNCOMMITED**     | YES        | YES                 | YES          |
-| **READ_COMMITED**       | NO         | YES                 | YES          |
-| **READ_REPEATABLE**     | NO         | NO                  | YES          |
-| **READ_SERIALIZABLE**   | NO         | NO                  | NO           |
-
-
-In Spring JPA you can use isolation level on transactions or the whole session.
-
-```
-@Transactional(isolation = Isolation.SERIALIZABLE)
-```
+[https://gitorko.github.io/post/optimistic-pessimistic-locking](https://gitorko.github.io/post/optimistic-pessimistic-locking)
 
 ### 6. Indexing
 

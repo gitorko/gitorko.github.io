@@ -11,7 +11,7 @@ toc: true
 draft: false
 ---
 
-Spring JPA examples on how to create domain clasess that map to database.
+Introduction to Spring JPA with examples. Create domain classes that map to database & write JPA queries to fetch the data.
 
 Github: [https://github.com/gitorko/project82](https://github.com/gitorko/project82)
 
@@ -29,17 +29,20 @@ Spring Data JPA offers a repository abstraction that allows developers to intera
 5. Custom Query Methods: Allows custom JPQL (Java Persistence Query Language) and SQL queries.
 6. Integration with Spring: Seamlessly integrates with the Spring Framework, including transaction management and dependency injection.
 
-
-| Annotation  | Description                                                                                                                                                                                          |
-|:------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| @ManyToOne  | Most natural way to map a foreign key relation                                                                                                                                                       |
-| @OneToMany  | Parent entity to map collection of child entities. If bi-directional then child entity has @ManyToOne. If child entities can grow then will affect performance. Use only when child entities are few |
-| @OneToOne   | Creates a foreign key in parent table that refers to the primary key of child table.                                                                                                                 |
-| @MapsId     | Single key acts as primary key & foreign key, with single key you can now fetch data from both table with same key.                                                                                  |
-| @ManyToMany | Two parents on one child, avoid doing CascadeType.ALL, dont do orphan removal.                                                                                                                       |
-| mappedBy    | Present in parent, Tells hibernate that the child side is in charge of handling bi-directional association. mappedBy & @JoinColumn cant be present in the same class.                                |
+| Annotation    | Description                                                                                                                                                                                          |
+|:--------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@ManyToOne`  | Most natural way to map a foreign key relation                                                                                                                                                       |
+| `@OneToMany`  | Parent entity to map collection of child entities. If bi-directional then child entity has @ManyToOne. If child entities can grow then will affect performance. Use only when child entities are few |
+| `@OneToOne`   | Creates a foreign key in parent table that refers to the primary key of child table.                                                                                                                 |
+| `@MapsId`     | Single key acts as primary key & foreign key, with single key you can now fetch data from both table with same key.                                                                                  |
+| `@ManyToMany` | Two parents on one child, avoid doing CascadeType.ALL, dont do orphan removal.                                                                                                                       |
+| `mappedBy`    | Present in parent, Tells hibernate that the child side is in charge of handling bi-directional association. mappedBy & @JoinColumn cant be present in the same class.                                |
 
 For bi-directional associations where the child is in charge of handling association, you must still write setter methods in parent to sync both sides. Otherwise, you risk very subtle state propagation issues. 
+
+Locking
+
+[https://gitorko.github.io/post/optimistic-pessimistic-locking](https://gitorko.github.io/post/optimistic-pessimistic-locking)
 
 ### Code
 
