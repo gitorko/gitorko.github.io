@@ -326,7 +326,7 @@ Characteristics of microservices
 4. Communication: Communicate with each other using lightweight protocols such as HTTP/REST, gRPC, or message queues.
 5. Fault Tolerance: Failure in one service does not necessarily cause the entire system to fail. Improves resiliency.
 
-### 10. Caching
+### 10. Caching Points
 
 Advantages of Caching
 
@@ -357,15 +357,9 @@ Different places to cache
 
 [https://youtu.be/ccemOqDrc2I](https://youtu.be/ccemOqDrc2I)
 
-### 12. Cache Store
+### 12. Caching
 
-![](cache-store.png)
-
-1. On-Heap Store - stores cache entries in Java heap memory
-2. Off-Heap Store - primary memory (RAM) to store cache entries, cache entries will be moved to the on-heap memory
-   automatically before they can be used.
-3. Disk Store - uses a hard disk to store cache entries. SSD type disk would perform better.
-4. Clustered Store - stores cache entries on the remote server
+{{< embed "content/post/spring-ehcache/common.md" >}}
 
 ### 13. Cache Eviction Policies
 
@@ -376,22 +370,9 @@ Different places to cache
 5. LFU (Least Frequently Used) - replaces least frequently used elements based on count. eg: frequently accessed item based on count remain in cache
 6. RR (Random Replacement) - replaces elements randomly.
 
-### 14. Caching Strategy
+### 14. Virtual Thread JDK21
 
-Read heavy caching strategies
-
-1. Read-Cache-Aside - Application queries the cache. If the data is found, it returns the data directly. If not it
-   fetches the data from the SoR (store-of-record), stores it into the cache, and then returns.
-2. Read-Through - Application queries the cache, cache service queries the SoR if not present and updates the cache and
-   returns.
-
-Write heavy caching strategies
-
-1. Write-Around - Application writes to db and to the cache.
-2. Write-Behind / Write-Back - Application writes to cache. Cache is pushed to SoR after some delay periodically.
-3. Write-Through - Application writes to cache, cache service immediately writes to SoR.
-
-![](cache-strategy.png)
+{{< embed "content/post/distributed-system-essentials/virtual-threads.md" >}}
 
 ### 15. High Availability Deployment
 
@@ -1453,7 +1434,6 @@ The release of new features of one frontend does not affect the other.
 * Hyperlog
 * Elasticsearch
 * OAuth 2.0
-* Java Fibers - Project Loom
 * RPC, gRPC
 * Rest vs SOAP vs GraphQL
 * Scatter Gather Pattern
