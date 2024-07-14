@@ -210,9 +210,9 @@ Problems with saga
 1. Hard to debug & test.
 2. Risk of cyclic dependency between saga participants.
 
-### 5. Locking & Isolation Levels
+### 5. Locking & Transaction Isolation
 
-[https://gitorko.github.io/post/optimistic-pessimistic-locking](https://gitorko.github.io/post/optimistic-pessimistic-locking)
+{{< embed "content/post/optimistic-pessimistic-locking/common.md" >}}
 
 ### 6. Indexing
 
@@ -1201,18 +1201,7 @@ grid/node then add neighbouring grids/nodes.
 
 ![](quad-tree.png)
 
-### 54. Optimistic vs Pessimistic Locking
-
-Locking is required to prevent the row from being updated by 2 threads concurrently there by corrupting the data.
-
-1. Pessimistic Locking - The lock is now applied by the database at row level or table level. If the lock is a WRITE
-   lock it prevents other threads from modifying the data. eg: SELECT * from TABLE where id = 1 for update;
-2. Optimistic Locking - A version field is introduced to the database table, The JPA ensures that version check is done
-   before saving data, if the version has changed the update will throw Error. Scalability is high with this approach.
-
-[https://gitorko.github.io/post/optimistic-pessimistic-locking/](https://gitorko.github.io/post/optimistic-pessimistic-locking/)
-
-### 55. Event sourcing
+### 54. Event sourcing
 
 Instead of storing the update to an object/record, change the db to append only. Every change to the object/record is
 stored as a new entry in append fashion.
@@ -1229,7 +1218,7 @@ latest customer record.
 3. Maintain full audit trails and history.
 4. Slower to generate the materialized view.
 
-### 56. Attack surfaces
+### 55. Attack surfaces
 
 To avoid security breaches, the objective of all systems must be to reduce the number of attack surfaces. More the
 components in your system, more the attack surfaces that need to be hardened.
@@ -1259,7 +1248,7 @@ components in your system, more the attack surfaces that need to be hardened.
 13. Backup & Checkpoint - Always ensure proper backups are available in case data needs reconciliation. Checkpoint run
     at short interval capturing the snapshot of the current system.
 
-### 57. Kubernetes
+### 56. Kubernetes
 
 Kubernetes is a platform for managing containerized workloads.
 
@@ -1273,7 +1262,7 @@ Kubernetes is a platform for managing containerized workloads.
 
 [https://gitorko.github.io/post/kubernetes-basics/](https://gitorko.github.io/post/kubernetes-basics/)
 
-### 58. Indexing - Btree, B+tree, BitMap
+### 57. Indexing - Btree, B+tree, BitMap
 
 Indexes help find the required data in large data set. Full table scan are costly hence reducing the search space is always preferred.
 
@@ -1295,7 +1284,7 @@ B+tree (Max Degree 3)
 [https://www.cs.usfca.edu/~galles/visualization/BTree.html](https://www.cs.usfca.edu/~galles/visualization/BTree.html)
 [https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html](https://www.cs.usfca.edu/~galles/visualization/BPlusTree.html)
 
-### 59. Data Race & Race conditions
+### 58. Data Race & Race conditions
 
 **Data Race** - Multiple threads access shared variable at same time without synchronization & at least one thread is
 writing, can cause corruption. Eg: Addition to long/double which are 64 bits.
@@ -1311,7 +1300,7 @@ Race conditions can be of 2 types
 
 [https://youtu.be/KGnXr62bgHM](https://youtu.be/KGnXr62bgHM)
 
-### 60. Merkel Tree
+### 59. Merkel Tree
 
 Merkle tree also known as **hash tree** is a data structure used for data verification and synchronization.
 It's a tree data structure where each non-leaf node is a hash of its child nodes.
@@ -1329,7 +1318,7 @@ original merkle tree as the hash on corrupted side doesn't match.
 
 ![](merkel-tree.png)
 
-### 61. Pub-Sub vs Point-To-Point
+### 60. Pub-Sub vs Point-To-Point
 
 Message brokers allows systems to communicate with each other asynchronously. This ensures **loose coupling** between
 systems.
@@ -1342,7 +1331,7 @@ Different messaging protocols AMQP, STOMP, MQTT can be used.
 
 Guarantee that every message will only be delivered once.
 
-### 62. Availability Metrics
+### 61. Availability Metrics
 
 Availability is the percentage of time that a system is operational (uptime). Measured in number of 9s.
 A service with 99.99% availability is described as having four 9s.
@@ -1358,7 +1347,7 @@ A service with 99.99% availability is described as having four 9s.
 
 ![](availability.png)
 
-### 63. Testing
+### 62. Testing
 
 **Functional testing**
 
@@ -1379,7 +1368,7 @@ A service with 99.99% availability is described as having four 9s.
 3. Usability test - Tests if the colors and button placement are good. Tracks user behaviour when using the system.
 4. Soak test - Runs suite of tests that run for longer period of time. eg: 2 days, 1 week etc.
 
-### 64. REST
+### 63. REST
 
 1. POST is always for creating a resource (does not matter if it was duplicated)
 2. PUT is for checking if resource exists then update, else create new resource.
@@ -1398,7 +1387,7 @@ it is executed.
 | PATCH   | Apply partial update on resource object                            | False      |
 | OPTIONS | Determine what HTTP methods are supported by a particular resource | Yes        |
 
-### 65. Types of database
+### 64. Types of database
 
 1. Relational Database - Each row is a record and column is a field in the record. eg: PostgresSQL, MySQL
 2. Columnar Database - Stores data by columns, handle write-heavy workloads. Eg: Apache Cassandra, HBase
@@ -1407,7 +1396,7 @@ it is executed.
 5. Key-Value Database - Data is stored in key value pairs, can be easily partitioned and scaled horizontally. eg: Redis, Amazon DynamoDB
 6. Time-Series Database - Optimized for timestamp data, comes with time based functions. eg: TimescaleDB
 
-### 66. Domain Name System (DNS)
+### 65. Domain Name System (DNS)
 
 Domain Name System (DNS) translates human-friendly domain names into their corresponding IP addresses
 
@@ -1417,12 +1406,12 @@ Domain Name System (DNS) translates human-friendly domain names into their corre
 
 ![](dns.png)
 
-### 67. Distributed File Systems
+### 66. Distributed File Systems
 
 Distributed file systems are storage solutions designed to manage and provide access to files and directories across multiple servers, nodes, or machines, often distributed over a network.
 eg: HDFS
 
-### 68. Full-text Search (Inverted Index)
+### 67. Full-text Search (Inverted Index)
 
 Full-text search enables users to search for specific words or phrases. Full-text search relies on an inverted index, which is a data structure that maps words or phrases to the documents in which they appear.
 An inverted index is an index data structure storing a mapping from content, such as words/numbers, to its locations in a document or a set of documents
@@ -1433,7 +1422,7 @@ Two types of inverted indexes
 1. Record-Level: Contains a list of references to documents for each word.
 2. Word-Level: Contains the positions of each word within a document.
 
-### 69. Backend for FrontEnd pattern (BFF)
+### 68. Backend for FrontEnd pattern (BFF)
 
 BFF is a variant of the API Gateway pattern, Instead of a single point of entry, it introduces multiple gateways. 
 You can have a tailored API that targets the needs of each client (mobile, web, desktop, voice assistant, etc.)

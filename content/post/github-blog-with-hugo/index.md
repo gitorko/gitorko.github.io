@@ -160,7 +160,7 @@ This will be the content of the note.
 
 ### Embed Raw Github file
 
-Create a file called ghcode.html under layouts/shortcodes
+Create a file called ghcode.md under layouts/shortcodes
 
 ```text
 {{ $file := .Get 0 }}
@@ -182,7 +182,7 @@ To use the tag in the post
 
 ### Embed Raw Markdown file
 
-Create a file called markcode.html under layouts/shortcodes
+Create a file called markcode.md under layouts/shortcodes
 
 ```text
 {{ $file := .Get 0 }}

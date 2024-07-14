@@ -205,7 +205,6 @@ Libraries that are written in other programming languages, such as C, C++, and a
 These libraries are usually present in the form of .dll or .so files. 
 These native libraries can be loaded through JNI.
 
-
 ### JVM errors
 
 1. **ClassNotFoundExcecption** - Class Loader is trying to load classes using Class.forName(), ClassLoader.loadClass() or ClassLoader.findSystemClass() but no definition for the class with the specified name is found.

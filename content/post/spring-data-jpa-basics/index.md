@@ -40,9 +40,9 @@ Spring Data JPA offers a repository abstraction that allows developers to intera
 
 For bi-directional associations where the child is in charge of handling association, you must still write setter methods in parent to sync both sides. Otherwise, you risk very subtle state propagation issues. 
 
-Locking
+## Locking & Transaction Isolation
 
-[https://gitorko.github.io/post/optimistic-pessimistic-locking](https://gitorko.github.io/post/optimistic-pessimistic-locking)
+{{< embed "content/post/optimistic-pessimistic-locking/common.md" >}}
 
 ### Code
 
