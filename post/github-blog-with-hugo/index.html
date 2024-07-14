@@ -48,7 +48,7 @@
 </span></span></code></pre></div><h3 id=table-of-contents>Table of Contents</h3><p>To add table of contents add the following in each posts .md file</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=ln>1</span><span class=cl>toc: true
 </span></span></code></pre></div><h3 id=notices>Notices</h3><p>To post notices use the following code</p><p>{{% notice note "Note Title" %}}
 This will be the content of the note.
-{{% /notice %}}</p><h3 id=embed-raw-github-file>Embed Raw Github file</h3><p>Create a file called ghcode.html under layouts/shortcodes</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=ln> 1</span><span class=cl>{{ $file := .Get 0 }}
+{{% /notice %}}</p><h3 id=embed-raw-github-file>Embed Raw Github file</h3><p>Create a file called ghcode.md under layouts/shortcodes</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=ln> 1</span><span class=cl>{{ $file := .Get 0 }}
 </span></span><span class=line><span class=ln> 2</span><span class=cl>{{ with resources.GetRemote $file }}
 </span></span><span class=line><span class=ln> 3</span><span class=cl>  {{ with .Err }}
 </span></span><span class=line><span class=ln> 4</span><span class=cl>    {{ errorf &#34;%s&#34; . }}
@@ -59,7 +59,7 @@ This will be the content of the note.
 </span></span><span class=line><span class=ln> 9</span><span class=cl>{{ else }}
 </span></span><span class=line><span class=ln>10</span><span class=cl>  {{ errorf &#34;Unable to get remote resource.&#34; }}
 </span></span><span class=line><span class=ln>11</span><span class=cl>{{ end }}
-</span></span></code></pre></div><p>To use the tag in the post</p><p>{{&lt; ghcode "https://raw.githubusercontent.com/..file.java" >}</p><h3 id=embed-raw-markdown-file>Embed Raw Markdown file</h3><p>Create a file called markcode.html under layouts/shortcodes</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=ln> 1</span><span class=cl>{{ $file := .Get 0 }}
+</span></span></code></pre></div><p>To use the tag in the post</p><p>{{&lt; ghcode "https://raw.githubusercontent.com/..file.java" >}</p><h3 id=embed-raw-markdown-file>Embed Raw Markdown file</h3><p>Create a file called markcode.md under layouts/shortcodes</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=ln> 1</span><span class=cl>{{ $file := .Get 0 }}
 </span></span><span class=line><span class=ln> 2</span><span class=cl>{{ with resources.GetRemote $file }}
 </span></span><span class=line><span class=ln> 3</span><span class=cl>    {{ with .Err }}
 </span></span><span class=line><span class=ln> 4</span><span class=cl>        {{ errorf &#34;%s&#34; . }}
