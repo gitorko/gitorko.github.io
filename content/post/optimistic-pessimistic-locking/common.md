@@ -115,3 +115,32 @@ spring:
 ```sql
 SHOW default_transaction_isolation;
 ```
+
+## Transaction Propagation
+
+When one transaciton functions calls another in the same class boundary then the parent transaction level is applied.
+You need to move the function to a different public class if you want its transaction to be enforced.
+When nested calls happen on transaction boundary then the transaction is suspended.
+
+1. `@Transactional(readOnly = true)` - transaction is readonly and now updates can happen.
+2. `@Transactional(propagation = Propagation.REQUIRES_NEW)` - creates a new transaction.
+3. `@Transactional(propagation = Propagation.REQUIRED)` - default, spring will create a new transaction if not present.
+4. `@Transactional(propagation = Propagation.MANDATORY)` - will throw exception if transaction doesn't exist.
+5. `@Transactional(propagation = Propagation.SUPPORTS)` - if existing transaction present then it will be used, else operation will happen without any transaction.
+6. `@Transactional(propagation = Propagation.NOT_SUPPORTED)` - operation will have with no transaction.
+7. `@Transactional(propagation = Propagation.NOT_SUPPORTED)` - will throw an exception if transaction present.
+
+You can define which exception call the rollback and which don't.
+
+```bash
+@Transactional(noRollbackFor = {CustomException.class}, rollbackFor = {RuntimeException.class})
+```
+
+To track transactions
+
+```yaml
+logging:
+  level:
+    root: info
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
+```
