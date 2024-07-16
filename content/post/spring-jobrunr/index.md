@@ -2,23 +2,32 @@
 title: 'Spring - JobRunr'
 description: 'Spring - JobRunr'
 summary: 'Spring boot integration with JobRunr'
-date: '2022-06-02'
+date: '2024-05-02'
 aliases: [/spring-jobrunr/]
 author: 'Arjun Surendra'
 categories: [JobRunr]
-tags: [spring, spring-boot, jobrunr]
+tags: [spring, spring-boot, jobrunr, retry, work-distribution, postgres]
 toc: true
 ---
 
-Spring boot integration with JobRunr
+Spring Boot integration with JobRunr
 
 Github: [https://github.com/gitorko/project59](https://github.com/gitorko/project59)
 
 ## JobRunr
 
-Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java applications using only Java 8 lambda's
+JobRunr is a distributed job scheduler. If a service runs on many nodes the JobRunr ensure that a scheduled job is run only on a single instance. 
+If you run a spring `@Scheduled` annotation then all instances will start the same job, you can use shedlock library to prevent this but this requires extra code.
 
-1. It lets you schedule background jobs using lambda. 
+**Types of Job**
+
+1. Fire-Forget
+2. Delayed
+3. Recurring Job
+
+**Advantages**
+
+1. It lets you schedule background jobs using lambda.
 2. The jobs can run on a distributed nodes, more node that join, the work gets distributed.
 3. It serializes the lambda as JSON and stores it in db. 
 4. It also contains an automatic retry feature with an exponential back-off policy for failed jobs. 
@@ -28,16 +37,24 @@ Perform fire-and-forget, delayed, scheduled and recurring jobs inside Java appli
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/HomeController.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/controller/HomeController.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/AppService.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/java/com/demo/project59/service/AppService.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project59/main/src/main/resources/application.yaml" >}}
 
 Open dashboard: [http://localhost:8000/dashboard/](http://localhost:8000/dashboard/)
+
+![](cron.png)
 
 ![](img01.png)
 ![](img02.png)
 ![](img03.png)
 ![](img04.png)
+![](img05.png)
+![](img06.png)
+![](img07.png)
+![](img08.png)
 
 ### Setup
 
