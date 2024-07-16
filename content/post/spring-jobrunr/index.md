@@ -10,7 +10,7 @@ tags: [spring, spring-boot, jobrunr, retry, work-distribution, postgres]
 toc: true
 ---
 
-Spring Boot integration with JobRunr
+Spring Boot 3 integration with JobRunr
 
 Github: [https://github.com/gitorko/project59](https://github.com/gitorko/project59)
 
@@ -63,3 +63,4 @@ Open dashboard: [http://localhost:8000/dashboard/](http://localhost:8000/dashboa
 ## References
 
 [https://www.jobrunr.io/en/](https://www.jobrunr.io/en/)
+[https://www.jobrunr.io/en/documentation/configuration/spring/](https://www.jobrunr.io/en/documentation/configuration/spring/)

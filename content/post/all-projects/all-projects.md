@@ -23,6 +23,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project02  | https://github.com/gitorko/project02  | Spring - Rsocket                                                                       |
 | project03  | https://github.com/gitorko/project03  | Kotlin Spring Boot Rest                                                                |
 | project04  | https://github.com/gitorko/project04  | Distributed Locking - Apache Ignite                                                    |
+| project05  | https://github.com/gitorko/project05  | Distributed Locking - Postgres                                                         |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
 | project58  | https://github.com/gitorko/project58  | Spring Virtual Threads                                                                 |
 | project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    | 
@@ -33,7 +34,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project64  | https://github.com/gitorko/project64  | Spring WebFlux Reactive JDBC                                                           |
 | project65  | https://github.com/gitorko/project65  | Spring Webflux & R2DBC                                                                 |
 | project66  | https://github.com/gitorko/project66  | Spring Data JPA N+1                                                                    |
-| project67  | https://github.com/gitorko/project67  |                                                                                        |
+| project67  | https://github.com/gitorko/project67  | Spring Batch - Multi Stage Job Orchestration                                           |
 | project68  | https://github.com/gitorko/project68  | Spring Boot Micrometer - Prometheus, Wavefront                                         |
 | project69  | https://github.com/gitorko/project69  | HTML reports with freemarker                                                           |
 | project70  | https://github.com/gitorko/project70  | Jasper Report with Spring                                                              |

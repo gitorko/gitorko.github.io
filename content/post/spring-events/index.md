@@ -2,7 +2,7 @@
 title: 'Spring Events - Modulith'
 description: 'Spring Events'
 summary: 'Spring events provides event handling mechanism in spring'
-date: '2020-08-07'
+date: '2024-04-07'
 aliases: [/spring-events/]
 author: 'Arjun Surendra'
 categories: [Spring, Spring-Modulith, Spring-Events]

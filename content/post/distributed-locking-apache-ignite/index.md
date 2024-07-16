@@ -10,7 +10,7 @@ tags: [ignite, distributed-lock, k8s, kubernetes]
 toc: true
 ---
 
-Spring boot application with distributed locking
+Spring boot application with distributed locking using apache ignite
 
 Github: [https://github.com/gitorko/project04](https://github.com/gitorko/project04)
 
