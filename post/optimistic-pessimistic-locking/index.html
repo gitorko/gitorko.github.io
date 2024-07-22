@@ -3,7 +3,7 @@
 </a><a href=https://www.linkedin.com/in/arjunsurendra/><svg class="icon"><title>linkedin</title><use xlink:href="#linkedin"/></svg>
 </a><a href=https://gitorko.github.io/index.xml><svg class="icon"><title>rss</title><use xlink:href="#rss"/></svg></a><div class=color_mode><input type=checkbox class=color_choice id=mode></div></div></div></nav></header><main><div class="grid-inverse wrap content"><article class=post_content><h1 class=post_title>Spring JPA - Optimistic vs Pessimistic Locking</h1><div class=post_meta><span><svg class="icon"><title>calendar</title><use xlink:href="#calendar"/></svg>
 </span><span class=post_date>Jun 12, 2024</span>
-<span class=post_time>· 7 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/optimistic-locking/ title=optimistic-locking class="post_tag button button_translucent">optimistic-locking
+<span class=post_time>· 8 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/optimistic-locking/ title=optimistic-locking class="post_tag button button_translucent">optimistic-locking
 </a><a href=https://gitorko.github.io/tags/pessimistic-locking/ title=pessimistic-locking class="post_tag button button_translucent">pessimistic-locking
 </a><a href=https://gitorko.github.io/tags/jpa/ title=JPA class="post_tag button button_translucent">JPA
 </a></span><span class=page_only>&nbsp;·<div class=post_share>Share on:
@@ -35,7 +35,19 @@ When nested calls happen on transaction boundary then the transaction is suspend
 </span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>level</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>root</span><span class=p>:</span><span class=w> </span><span class=l>info</span><span class=w>
 </span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>    </span><span class=nt>org.springframework.orm.jpa.JpaTransactionManager</span><span class=p>:</span><span class=w> </span><span class=l>DEBUG</span><span class=w>
-</span></span></span></code></pre></div><h3 id=code>Code</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln>  1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project82</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></div><p>Spring keeps the transaction open till the controller returns the response.
+This is because it thinks that the object may be accessed later in the HTML (web mvc templates).
+We don't use this, so we will set the below property to false that way transaction is closed after <code>@Transactional</code> function ends.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln>1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>jpa</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>open-in-view</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span></code></pre></div><p>By setting auto-commit to false spring won't commit immediately but will commit when the transaction ends.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln>1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>datasource</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>hikari</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>      </span><span class=nt>auto-commit</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span></code></pre></div><p>You can also use <code>TransactionTemplate</code> to control transactions if you dont want to use <code>@Transactional</code> and want more control.
+Try to the transaction boundary small. External calls need to be done outside the transaction context.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>transactionTemplate.executeWithoutResult<span class=o>()</span>
+</span></span><span class=line><span class=ln>2</span><span class=cl>transactionTemplate.execute<span class=o>()</span>
+</span></span></code></pre></div><h3 id=code>Code</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=ln>  1</span><span class=cl><span class=kn>package</span><span class=w> </span><span class=nn>com.demo.project82</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln>  2</span><span class=cl><span class=w>
 </span></span></span><span class=line><span class=ln>  3</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>java.util.concurrent.CountDownLatch</span><span class=p>;</span><span class=w>
 </span></span></span><span class=line><span class=ln>  4</span><span class=cl><span class=w></span><span class=kn>import</span><span class=w> </span><span class=nn>java.util.concurrent.ExecutorService</span><span class=p>;</span><span class=w>

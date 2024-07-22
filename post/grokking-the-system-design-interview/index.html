@@ -3,7 +3,7 @@
 </a><a href=https://www.linkedin.com/in/arjunsurendra/><svg class="icon"><title>linkedin</title><use xlink:href="#linkedin"/></svg>
 </a><a href=https://gitorko.github.io/index.xml><svg class="icon"><title>rss</title><use xlink:href="#rss"/></svg></a><div class=color_mode><input type=checkbox class=color_choice id=mode></div></div></div></nav></header><main><div class="grid-inverse wrap content"><article class=post_content><h1 class=post_title>Grokking the System Design Interview</h1><div class=post_meta><span><svg class="icon"><title>calendar</title><use xlink:href="#calendar"/></svg>
 </span><span class=post_date>Apr 24, 2023</span>
-<span class=post_time>· 62 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/interview/ title=interview class="post_tag button button_translucent">interview
+<span class=post_time>· 63 min read</span><span>&nbsp;· <a href=https://gitorko.github.io/tags/interview/ title=interview class="post_tag button button_translucent">interview
 </a><a href=https://gitorko.github.io/tags/system-design/ title=system-design class="post_tag button button_translucent">system-design
 </a></span><span class=page_only>&nbsp;·<div class=post_share>Share on:
 <a href="https://twitter.com/intent/tweet?text=Grokking%20the%20System%20Design%20Interview&url=https%3a%2f%2fgitorko.github.io%2fpost%2fgrokking-the-system-design-interview%2f&tw_p=tweetbutton" class=twitter title="Share on Twitter" target=_blank rel=nofollow><svg class="icon"><title>twitter</title><use xlink:href="#twitter"/></svg>
@@ -67,7 +67,19 @@ When nested calls happen on transaction boundary then the transaction is suspend
 </span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>level</span><span class=p>:</span><span class=w>
 </span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>root</span><span class=p>:</span><span class=w> </span><span class=l>info</span><span class=w>
 </span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>    </span><span class=nt>org.springframework.orm.jpa.JpaTransactionManager</span><span class=p>:</span><span class=w> </span><span class=l>DEBUG</span><span class=w>
-</span></span></span></code></pre></div><h3 id=6-indexing>6. Indexing</h3><p>Database indexes help improve the speed and efficiency of querying data in a database</p><ol><li>Clustered index - A special type of index that reorders the way records in the table are physically stored.
+</span></span></span></code></pre></div><p>Spring keeps the transaction open till the controller returns the response.
+This is because it thinks that the object may be accessed later in the HTML (web mvc templates).
+We don't use this, so we will set the below property to false that way transaction is closed after <code>@Transactional</code> function ends.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln>1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>jpa</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>open-in-view</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span></code></pre></div><p>By setting auto-commit to false spring won't commit immediately but will commit when the transaction ends.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=ln>1</span><span class=cl><span class=nt>spring</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>2</span><span class=cl><span class=w>  </span><span class=nt>datasource</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>3</span><span class=cl><span class=w>    </span><span class=nt>hikari</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=ln>4</span><span class=cl><span class=w>      </span><span class=nt>auto-commit</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span></span></span></code></pre></div><p>You can also use <code>TransactionTemplate</code> to control transactions if you dont want to use <code>@Transactional</code> and want more control.
+Try to the transaction boundary small. External calls need to be done outside the transaction context.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=ln>1</span><span class=cl>transactionTemplate.executeWithoutResult<span class=o>()</span>
+</span></span><span class=line><span class=ln>2</span><span class=cl>transactionTemplate.execute<span class=o>()</span>
+</span></span></code></pre></div><h3 id=6-indexing>6. Indexing</h3><p>Database indexes help improve the speed and efficiency of querying data in a database</p><ol><li>Clustered index - A special type of index that reorders the way records in the table are physically stored.
 Therefore, table can have only one clustered index. The leaf nodes of a clustered index contain the data pages. eg:
 primary key</li><li>Non-clustered index - A special type of index in which the logical order of the index does not match the physical
 stored order of the rows on disk. The leaf node of a non-clustered index does not consist of the data pages. Instead,
