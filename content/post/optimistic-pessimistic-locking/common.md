@@ -146,3 +146,30 @@ logging:
     root: info
     org.springframework.orm.jpa.JpaTransactionManager: DEBUG
 ```
+
+Spring keeps the transaction open till the controller returns the response.
+This is because it thinks that the object may be accessed later in the HTML (web mvc templates).
+We don't use this, so we will set the below property to false that way transaction is closed after `@Transactional` function ends.
+
+```yaml
+spring:
+  jpa:
+    open-in-view: false
+```
+
+By setting auto-commit to false spring won't commit immediately but will commit when the transaction ends.
+
+```yaml
+spring:
+  datasource:
+    hikari:
+      auto-commit: false
+```
+
+You can also use `TransactionTemplate` to control transactions if you dont want to use `@Transactional` and want more control.
+Try to the transaction boundary small. External calls need to be done outside the transaction context.
+
+```bash
+transactionTemplate.executeWithoutResult()
+transactionTemplate.execute()
+```

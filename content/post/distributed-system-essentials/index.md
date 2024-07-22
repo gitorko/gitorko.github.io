@@ -310,7 +310,9 @@ Always assume that all external API calls never return and design accordingly.
 You are noticing database connection timeout. What do you do?
 {{% /notice %}}
 
-Use a connection pool if you are interacting with database as it will prevent the connection from getting open & closed which is a costly operation. The connection in the pool will be reused.
+Use a connection pool if you are interacting with database as it will prevent the connection from getting open & closed which is a costly operation. 
+The connection in the pool will be reused. Optimal size of connection pool is recommended, too big a pool is bad as there is a lot of context switching. 
+The database also defines max connections allowed per application.
 
 Spring boot provides Hikari connection pool. If there are run away SQL connections then service can quickly run out of connection in the pool and slow down the entire system.
 
@@ -380,6 +382,13 @@ DBA call you up and informs you that there is a long-running query in your servi
 {{% /notice %}}
 
 Long-running queries often slow down the entire system.
+
+To check if there are long-running queries.
+
+```sql
+select * from pg_stat_activity 
+```
+
 To test this we explicitly slow down a query with pg_sleep function.
 
 We set timeout on the transaction `@Transactional(timeout = 5)` to ensure that long-running query doesn't impact the entire system, after 5 seconds if the query doesn't return result an exception is thrown.
@@ -431,6 +440,227 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.orm.jdbc.bind: TRACE
 ```
+
+### Database Schema Changes
+
+{{% notice note "Problem" %}}
+You add a SQL change to modify an existing table schema or add a new index. The table already exists in production with 10 million rows. 
+You test your change in QE environment which works fine but when your change hits production the database table gets locked for 30 minutes there by causing an outage.
+What do you do?
+{{% /notice %}}
+
+Changes to the schema of existing tables locks the table.
+
+1. Till the time the liquibase change is not applied the server will not start, this could mean that your server will take a long time to come online.
+2. Any other existing services that are still up and are reading from that table will also be blocked on either read/write.
+
+This could mean a big down-time depending on the data size.
+
+Insert some test data
+
+```sql
+INSERT INTO customer (name, phone, city)
+SELECT
+    'Test-Name',
+    '999-999-9999',
+    'Test-City'
+FROM generate_series(1, 10000000);
+select count(*) from customer;
+```
+
+**Adding column with default value**
+
+Since postgres 11 alter column with default value doesn't lock the table for read and write anymore as there is no table re-write. In older versions that table is entirely rewritten, so it's an expensive operation.
+
+```sql
+--since postgres11 this doesnt matter.
+ALTER TABLE customer ADD COLUMN last_update TIMESTAMP DEFAULT now();
+```
+vs
+
+```sql
+ALTER TABLE customer ADD COLUMN last_update TIMESTAMP;
+
+--This will take a long time, ensure that this happens in a different transaction and not part of alter table transaction.
+UPDATE customer SET last_update = now();
+```
+
+clean up
+
+```sql
+ALTER TABLE customer DROP COLUMN last_update;
+```
+
+**Lock queues & Lock timeouts** 
+
+Postgres uses lock queues. Transactions that modify a same row/table are queued, they remain blocked till they are executed in the order they were queued.
+
+Use lock timeout to set max limit to wait for operation. By setting lock_timeout, the DDL command will fail if it ends up waiting for a lock more than 5 seconds
+The downside is that your ALTER TABLE might not succeed, but you can try again later. 
+Check pg_stat_activity to see if there are long-running queries before starting the DDL command.
+
+```sql
+SET lock_timeout TO '5s';
+ALTER TABLE customer ADD COLUMN last_update TIMESTAMP;
+```
+
+To look at the locks
+
+```sql
+select * from pg_locks;
+```
+
+clean up
+
+```sql
+ALTER TABLE customer DROP COLUMN last_update;
+```
+
+**Creating/dropping indexes concurrently**
+
+Creating an index on a large table can take long time. This can affect the startup times of your service.
+The `create index` command blocks all writes for the duration of the command.  It doesn't block `select` it blocks only `insert` & `delete`.
+The `create index concurrently` is a better approach.
+Creating an index concurrently does have a downside. If something goes wrong it does not roll back and leaves an unfinished ("invalid") index behind. 
+If that happens, run `drop index concurrently name_index` and try to create it again.
+
+```sql
+CREATE INDEX name_index ON customer (name);
+````
+
+vs
+
+```sql
+CREATE INDEX CONCURRENTLY name_index ON customer (name);
+```
+
+clean up
+
+```sql
+DROP INDEX CONCURRENTLY name_index;
+```
+
+**Altering an indexed column & adding not null column**
+
+Altering a column that already has index is a costly operation.
+If not null columns are added it's a 2 step operation where you add the column and then add a default value.
+
+**Truncate vs Delete**
+
+Prefer truncate over delete to clean a table. Truncate doesn't write to transactional log hence is faster but there is no option of rollback.
+Both block read & modify operations.
+Truncate quickly remove all rows from a table and do not need to worry about triggers, foreign key constraints, or retaining identity column values.
+Delete removes specific rows, rely on triggers, enforce foreign key constraints, or need the operation to be fully logged.
+
+```sql
+delete from customer;
+```
+vs
+```sql
+truncate table customer;
+```
+
+**Modifying Large Data Set**
+
+Another approach of making changes to big tables and have them lock the table is by copying the data to a new table and then renaming it after the operation is completed.
+
+The below SQL will block all reads on the table till the transaction is completed.
+
+```sql
+BEGIN;
+ALTER TABLE customer ADD COLUMN age INTEGER;
+
+--This will take a long time, instead of DEFAULT we can refer to some other table and populate age here.
+UPDATE customer SET age = (select 18);
+
+ALTER TABLE customer ALTER COLUMN age SET NOT NULL;
+COMMIT;
+```
+
+The below SQL will create a copy of the table and modify the data and then rename it. This means that reads are not blocked unlike the above SQL.
+
+```sql
+BEGIN;
+CREATE TABLE customer_copy AS SELECT * FROM customer;
+ALTER TABLE customer_copy ADD COLUMN age INTEGER;
+--This will take a long time, instead of DEFAULT we can refer to some other table and populate age here.
+UPDATE customer_copy SET age = (select 18);
+ALTER TABLE customer_copy ALTER COLUMN age SET NOT NULL;
+DROP TABLE customer;
+ALTER TABLE customer_copy RENAME TO customer;
+COMMIT;
+
+```
+
+clean up
+
+```sql
+ALTER TABLE customer DROP COLUMN age;
+```
+
+**Adding a primary key**
+
+If you are adding/modifying primary key then index creation take a long time. 
+You need to introduce an unqiue constraint concurrently `CREATE UNIQUE INDEX CONCURRENTLY` and then use the unique index as a primary key, which is a fast operation.
+
+```sql
+--drop primary key for testing
+ALTER TABLE customer DROP CONSTRAINT customer_pkey;
+```
+
+```sql
+-- blocks queries for a long time
+ALTER TABLE customer ADD PRIMARY KEY (id);
+```
+
+```sql
+-- takes a long time, but doesn't block queries
+CREATE UNIQUE INDEX CONCURRENTLY customer_unq ON customer (id);
+-- blocks queries, but only very briefly
+ALTER TABLE customer ADD CONSTRAINT customer_pkey PRIMARY KEY USING INDEX customer_unq; 
+```
+
+**Locking in Database**
+
+1. Table level locks
+2. Row level locks
+
+Transactions run concurrently until they try to acquire a conflicting lock like updating the same row. 
+The first transaction to acquire the lock can proceed, and the second one waits until the first transaction commits or aborts. Locks are always kept until commit or rollback.
+
+There are 2 types of locks
+
+1. Shared lock (FOR SHARE)
+2. Exclusive lock (FOR UPDATE)
+
+Below query acquires a row lock that prevent any modification to the selected row.
+
+```sql
+--other transactions can still read the same row but cant modify it.
+SELECT * from customer where id = 1 FOR SHARE;
+``` 
+
+```sql
+--other transactions cant even read/modify the same row
+SELECT * from customer where id = 1 FOR UPDATE;
+```
+
+**Never VACUUM FULL**
+
+The `AUTOVACUUM` is a background process that automatically performs vacuuming which helps manage and optimize the storage of data within the database.
+
+1. Reclaims Storage
+2. Prevents Transaction ID Wraparound
+3. Updates Statistics
+4. Maintains Indexes
+
+To optimize PostgreSQL performance, you need to adjust autovacuum settings and effectively use indexes
+Running `VACUUM` (but not `VACUUM FULL`) periodically can help maintain database health.
+
+### Database rollback
+
+The database schema must be compatible with the previous version to ensure that application rollback doesn't require database rollback.
+Database rollback should be avoided as much as possible.
 
 ### Memory Leak & CPU Spike
 
