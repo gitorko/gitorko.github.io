@@ -15,23 +15,31 @@ Message Queue implementation using PostgreSQL
 
 Github: [https://github.com/gitorko/project81](https://github.com/gitorko/project81)
 
-## Main Topic
+## Message Queue
 
 PostgreSQL can be used a messaging queue, it also offers features like LISTEN/NOTIFY which make it a suitable to support message queue.
 
-Notifies the channel of a new message in the queue
+**Advantages**
+
+1. Reuse existing infrastructure - Use an existing database keeping the tech stack simple.
+2. Low messages throughput - Not every system needs high volume of messages to process per second.
+3. Persistent Store - You can query the db to check the messages if they are processed and manually trigger re-queue.
+
+This command notifies the channel of a new message in the queue
 
 ```sql
 NOTIFY new_task_channel, 'New task added';
 ```
 
-Listen for these notifications
+This command listens for these notifications
 
 ```sql
 LISTEN new_task_channel;
 ```
 
-`FOR UPDATE` clause -  locks the selected rows for update. This prevents other transactions from modifying these rows until the current transaction is completed (committed or rolled back)
+You also need to lock the row being read to avoid the same row from being updated by 2 different transactions
+
+`FOR UPDATE` clause -  This clause locks the selected rows for update. This prevents other transactions from modifying these rows until the current transaction is completed (committed or rolled back)
 `SKIP LOCKED` clause - This clause tells the database to skip rows that are already locked by another transaction. Instead of waiting for the lock to be released
 
 **Disadvantages**
