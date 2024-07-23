@@ -13,7 +13,7 @@ draft: true
 
 Introduction Line
 
-Github: [https://github.com/gitorko/project01](https://github.com/gitorko/project64)
+Github: [https://github.com/gitorko/project01](https://github.com/gitorko/project01)
 
 ## Main Topic
 

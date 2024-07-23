@@ -48,7 +48,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project78  | https://github.com/gitorko/project78  | Spring & RabbitMQ                                                                      |
 | project79  | https://github.com/gitorko/project79  | Spring Boot MVC Web project Thymeleaf, Login, Charts                                   |
 | project80  | https://github.com/gitorko/project80  | Spring Boot & Kafka                                                                    |
-| project81  | https://github.com/gitorko/project81  |                                                                                        |
+| project81  | https://github.com/gitorko/project81  | Message Queue - Postgres                                                               |
 | project82  | https://github.com/gitorko/project82  | Spring Data JPA Essentials                                                             |
 | project83  | https://github.com/gitorko/project83  | Spring Reactor, Functional Programming, Completable Future Basics                      |
 | project84  | https://github.com/gitorko/project84  | Jenkins Pipeline + Data processing                                                     |

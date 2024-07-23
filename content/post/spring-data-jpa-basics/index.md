@@ -6,7 +6,7 @@ date: '2024-06-12'
 aliases: [/spring-data-jpa-basics/]
 author: 'Arjun Surendra'
 categories: [Spring, JPA, Hibernate]
-tags: [jdbc, webflux, onetomany, manytoone, onetoone, jointable]
+tags: [jdbc, onetomany, manytoone, onetoone, jointable, locking, transactional]
 toc: true
 draft: false
 ---
@@ -60,5 +60,7 @@ Dirty checking default all columns as updated, if you want avoid it use the anno
 ## References
 
 [https://vladmihalcea.com/blog/](https://vladmihalcea.com/blog/)
+
 [https://thorben-janssen.com/ultimate-guide-association-mappings-jpa-hibernate/](https://thorben-janssen.com/ultimate-guide-association-mappings-jpa-hibernate/)
+
 [https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html](https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html)

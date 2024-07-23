@@ -6,7 +6,7 @@ date: '2024-06-18'
 aliases: [/spring-batch-orchestration/]
 author: 'Arjun Surendra'
 categories: [SpringBatch]
-tags: [spring, spring-boot, retry, orchestration, workflow, postgres]
+tags: [spring, spring-boot, retry, orchestration, workflow, postgres, flow, tasklet, job, step, csv, jpa]
 toc: true
 ---
 
