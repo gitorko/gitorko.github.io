@@ -16,20 +16,17 @@ The hardware is utilized to an almost optimal level, resulting in high levels of
 
 ```bash
 Runnable fn = () -> {
-  // your code
+  System.out.println("Running in thread: " + Thread.currentThread().getName());
 };
 
-Thread thread = new Thread(fn).start();
+Thread.ofVirtual().name("virtual-thread-1").start(fn);
+Thread.ofPlatform().name("platform-thread-1").start(fn);
 
-Thread thread = Thread.ofPlatform().start(runnable);
-                      
-Thread thread = Thread.ofVirtual(fn).start();
-
-Thread.startVirtualThread(fn);
+new Thread(fn, "platform-thread-2").start();
 
 var executors = Executors.newVirtualThreadPerTaskExecutor();
 executors.submit(() -> {
-  // your code
+    System.out.println("Running in thread: " + Thread.currentThread().threadId());
 });
 ```
 
