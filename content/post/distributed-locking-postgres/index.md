@@ -24,6 +24,8 @@ When there are many service running and need to acquire a lock to run a critical
 4. Use virtual threads cleanup locks after duration is completed.
 5. Only the node/server that acquired the lock can release the lock.
 
+Postgres is not a distributed database, here the services that run are distributed, the services require a lock which is provided by postgres.
+
 ### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project05/main/src/main/java/com/demo/project05/service/InternalLockService.java" >}}

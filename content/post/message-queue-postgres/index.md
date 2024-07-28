@@ -39,8 +39,12 @@ LISTEN new_task_channel;
 
 You also need to lock the row being read to avoid the same row from being updated by 2 different transactions
 
-`FOR UPDATE` clause -  This clause locks the selected rows for update. This prevents other transactions from modifying these rows until the current transaction is completed (committed or rolled back)
-`SKIP LOCKED` clause - This clause tells the database to skip rows that are already locked by another transaction. Instead of waiting for the lock to be released
+`select * from table FOR SHARE` - This clause locks the selected rows for read, other threads can read but cant modify.
+`select * from table FOR UPDATE` -  This clause locks the selected rows for update. This prevents other transactions from reading/modifying these rows until the current transaction is completed (committed or rolled back)
+`select * from table FOR UPDATE SKIP LOCKED` clause - This clause tells the database to skip rows that are already locked by another transaction. Instead of waiting for the lock to be released
+
+`select * from table FOR NO KEY SHARE` - Use this when you want to ensure that no other transaction can obtain locks that would conflict with your current transaction’s updates, but you do not need to prevent other transactions from acquiring `FOR SHARE` locks.
+`select * from table FOR NO KEY UPDATE` - Use this when you need to prevent all types of locks that could conflict with your updates, providing a more restrictive lock compared to `FOR NO KEY SHARE`
 
 **Disadvantages**
 

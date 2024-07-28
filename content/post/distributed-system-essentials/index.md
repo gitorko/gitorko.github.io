@@ -870,7 +870,9 @@ Always assume that your api will be invoked by clients more than they are intend
 One of the downstream service had a minor glitch (restart) and your rest call failed the first time it got a bad response. What do you do?
 {{% /notice %}}
 
-Rest calls often fail in distributed environment. You need to retry `@Retry` the api with exponential backoff and max attempts to avoid overwhelming the server
+Rest calls often fail in distributed environment. You need to retry `@Retry` the api with exponential backoff and max attempts to avoid overwhelming the server.
+
+Ensure that the external rest api being called in retry is **idempotent**.
 
 ```yaml
 resilience4j:

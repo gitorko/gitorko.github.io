@@ -32,6 +32,12 @@ Thread B: Reads row with updated amount 110$ and updates to 120$
 2. `LockModeType.PESSIMISTIC_WRITE` - Rows are locked and cannot be read, modified or deleted by other transactions. For PESSIMISTIC_WRITE no phantom reads can occur and access to data must be serialized.
 3. `LockModeType.PESSIMISTIC_FORCE_INCREMENT` - Rows are locked and cannot be read, modified or deleted by other transactions. it forces an increment of the version attribute
 
+Lock the row being read to avoid the same row from being updated by 2 different transactions
+
+`select * from table FOR SHARE` - This clause locks the selected rows for read, other threads can read but cant modify.
+`select * from table FOR UPDATE` -  This clause locks the selected rows for update. This prevents other transactions from reading/modifying these rows until the current transaction is completed (committed or rolled back)
+`select * from table FOR UPDATE SKIP LOCKED` clause - This clause tells the database to skip rows that are already locked by another transaction. Instead of waiting for the lock to be released
+
 **Optimistic locking**
 
 1. `LockModeType.OPTIMISTIC` - Checks the version attribute of the entity before committing the transaction to ensure no other transaction has modified the entity.
