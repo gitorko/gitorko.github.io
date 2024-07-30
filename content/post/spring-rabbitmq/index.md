@@ -3,7 +3,7 @@ title: 'Spring - RabbitMQ'
 description: 'Spring - RabbitMQ'
 summary: 'Spring Boot with RabbitMQ message broker that implements Advanced Message Queuing Protocol(AMQP)'
 date: '2020-03-15'
-aliases: [/spring-amqp/]
+aliases: ['/spring-amqp/', '/spring-rabbitmq/']
 author: 'Arjun Surendra'
 categories: [Messaging, RabbitMQ, Spring]
 tags: [spring, spring-boot, rabbitmq, amqp, rpc]
@@ -77,6 +77,16 @@ RPC
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project78/main/src/main/java/com/demo/project78/rpc/client/RpcClient.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project78/main/src/main/java/com/demo/project78/rpc/server/RpcServer.java" >}}
+
+Rest
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project78/main/src/main/java/com/demo/project78/controller/HomeController.java" >}}
+
+### Postman
+
+Import the postman collection to postman
+
+[Postman Collection](https://raw.githubusercontent.com/gitorko/project78/main/postman/Project78.postman_collection.json)
 
 ### Setup
 

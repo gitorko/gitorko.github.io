@@ -178,15 +178,14 @@ class FibForkJoin extends RecursiveTask<Integer> {
 
 [https://youtu.be/5wgZYyvIVJk](https://youtu.be/5wgZYyvIVJk)
 
-### 3. Distributed Transaction
+### 3. Distributed Coordination
 
-The best thing to do is completely avoid distributed transactions. As it makes the system complex to manage. However, if
-that is not possible.
+For distributed systems, achieving coordination and consistency despite unreliable communication requires following protocols
 
 1. Two phase (prepare & commit) - Blocking protocol as it waits for the prepare-ack for prepare phase.
 2. Three phase commit (prepare, pre-commit & commit) - Non-Blocking protocol as first phase gathers votes and only the
    second phase blocks with timeout.
-3. Saga - A sequence of transactions that updates each service and publishes a message or event to trigger the next transaction step.
+3. Consensus Algorithms (e.g., Paxos, Raft)
 
 ![](distributed-transaction.png)
 
@@ -195,6 +194,8 @@ that is not possible.
 [https://youtu.be/S4FnmSeRpAY](https://youtu.be/S4FnmSeRpAY)
 
 ### 4. Saga Pattern
+
+Try to avoid distributed transactions. As it makes the system complex to manage.
 
 A sequence of transactions that updates each service and publishes a message or event to trigger the next transaction step.
 Each local transaction updates the database and publishes a message/event to trigger the next local transaction in another service.
@@ -1184,6 +1185,10 @@ grid/node then add neighbouring grids/nodes.
 
 ### 54. Event sourcing
 
+1. Event Notification - Only informs something changed. Upto client to look at data and pick the new changes
+2. Event Carried State Transfer - Event itself carries the data on what changed.
+3. Event Sourcing - All the changes of change are stored, if we replay the events we will get the final object.
+
 Instead of storing the update to an object/record, change the db to append only. Every change to the object/record is
 stored as a new entry in append fashion.
 
@@ -1403,6 +1408,13 @@ Two types of inverted indexes
 1. Record-Level: Contains a list of references to documents for each word.
 2. Word-Level: Contains the positions of each word within a document.
 
+**Inverted index** - A data structure used primarily for full-text search. It maps content, such as words or terms, to their locations in a database.  Ideal for exact term-based full-text search, mapping terms to documents.
+
+**Trigram Index** - A type of index that helps in performing fast, efficient searches for substring matching and fuzzy matching by breaking down strings into a series of three-character sequences (trigrams).
+Suitable for approximate and fuzzy matching, indexing trigrams (three-character sequences) for efficient substring search.
+
+![](inverted-index.png)
+
 ### 68. Backend for FrontEnd pattern (BFF)
 
 BFF is a variant of the API Gateway pattern, Instead of a single point of entry, it introduces multiple gateways. 
@@ -1412,12 +1424,253 @@ The release of new features of one frontend does not affect the other.
 
 ![](bff.png)
 
+### 69. View vs Materialized View
+
+1. `CREATE VIEW` - Virtual table based on the result set of a query. The data is not stored physically in the database; rather, the query is executed each time the view is accessed
+2. `CREATE MATERIALIZED VIEW` - Stores the result set of the query physically in the database. It is like a snapshot of the data at a particular point in time, Needs manual refresh to reflect changes in the underlying data
+
+A materialized view is a cached result of a complicated query. You can even add primary keys and indexes to this view.
+
+```sql
+CREATE VIEW active_customers AS
+SELECT id, name
+FROM customer
+WHERE status = 'active';
+```
+
+```sql
+CREATE MATERIALIZED VIEW active_customers AS
+SELECT id, name
+FROM customer
+WHERE status = 'active'
+WITH DATA;
+
+REFRESH MATERIALIZED VIEW active_customers;
+```
+
+### 70. On-Prem vs IAAS vs PAAS vs SAAS 
+
+**Cloud models**
+
+1. Private Cloud - Cloud computing model where the infrastructure is dedicated exclusively to a single organization. High control and security, suitable for regulated industries.
+2. Public Cloud - Cloud computing model where resources are shared among multiple organizations (tenants). Cost-effective and scalable, ideal for startups and fluctuating workloads.
+3. Hybrid Cloud - Cloud computing model that combines private and public clouds, allowing data and applications to be shared between them. Combines private and public clouds for flexibility and optimized resources.
+4. Multi Cloud - Involves using multiple public cloud services from different providers. This approach avoids vendor lock-in, increases redundancy, and leverages the best services from each provider. Uses multiple providers for vendor independence and optimized services.
+
+**Infrastructure Models**
+
+1. On-Prem - All hardware and software are installed, managed, and maintained within the physical premises of an organization. Scalability limited by physical resources. 
+2. Infrastructure as a Service (IaaS) - Provides virtualized computing resources over the internet. It offers fundamental IT resources such as virtual machines, storage, and networks. Eg: Amazon Web Services (AWS) EC2, Azure Virtual Machines, Google Compute Engine (GCE)
+3. Platform as a Service (PaaS) - Allows customers to develop, run, and manage applications without dealing with the infrastructure. It includes operating systems, middleware, and development tools. Eg: Cloud Foundry, Azure App Service, Google App Engine (GAE), Heroku, AWS Elastic Beanstalk, Red Hat OpenShift
+4. Software as a Service (SaaS) - Delivers software applications over the internet on a subscription basis. The provider manages everything from infrastructure to applications. Eg: Google Workspace, Microsoft 365
+
+### 71. Map
+
+1. `new HashMap()` - is not a thread-safe data structure due to its non-synchronized nature. 
+2. `Collections.synchronizedMap()` - provides a synchronized (thread-safe) map. It synchronizes all the methods to ensure that only one thread can access the map at a time. Synchronization can be a bottleneck if many threads access the map concurrently.
+3. `ConcurrentHashMap` - is designed for concurrent access and allows multiple threads to read and write without locking the entire map. It employs a finer-grained locking mechanism, which divides the map into segments to allow greater concurrency.
+
+**Lock Striping**
+
+Lock striping is a technique used to improve the concurrency and performance of data structures by dividing the data into multiple segments, each protected by its own lock. This approach allows multiple threads to access different segments of the data structure simultaneously, reducing contention and increasing throughput.
+
+Eg: ConcurrentHashMap, the data is divided into multiple segments, each with its own lock. When a thread needs to read or write to the map, it only needs to acquire the lock for the relevant segment, not the entire map. This allows other threads to access different segments concurrently.
+It divides the map into 16 segments by default (this can be configured), each with its own lock.
+
+### 73. Normalization vs De-Normalization
+
+1. Normalization - focuses on reducing redundancy and ensuring data integrity by organizing data into related tables.
+2. De-Normalization introduces redundancy to improve read performance and simplify queries by combining related tables.
+
+De-Normalized tables are preferred for high scalability as joins are costly operations.
+Foreign keys impact performance.
+
+De-Normalized table
+
+| order_id | customer_id | customer_name | product_id | product_name | order_date |
+|:---------|:------------|:--------------|:-----------|:-------------|:-----------|
+| 1        | 101         | Alice         | 201        | Phone        | 2024-07-01 |
+| 2        | 102         | Bob           | 202        | Laptop       | 2024-07-12 |
+
+Normalized table
+
+| customer_id | customer_name |
+|:------------|:--------------|
+| 101         | Alice         |
+| 102         | Bob           |
+
+| product_id | product_name | 
+|:-----------|:-------------|
+| 201        | Phone        |
+| 202        | Laptop       |
+
+| order_id | customer_id | product_id | order_date |
+|:---------|:------------|:-----------|:-----------|
+| 1        | 101         | 201        | 2024-07-01 |
+| 2        | 102         | 202        | 2024-07-12 |
+
+**Normalization Forms**
+
+**1NF (First Normal Form)**: No multi-valued attributes. Ensure atomic values and uniqueness.
+
+Before:
+
+| student_id | name   | course         | 
+|:-----------|:-------|:---------------|
+| 101        | Alice  | Math, Science  |
+| 102        | Bob    | History, Math  |
+
+After:
+
+| student_id | name  | course  | 
+|:-----------|:------|:--------|
+| 101        | Alice | Math    |
+| 101        | Alice | Science |
+| 102        | Bob   | History |
+| 102        | Bob   | Math    |
+ 
+**2NF (Second Normal Form)**: Achieves 1NF and Remove partial dependencies.
+
+Before:
+
+student_id and course_id is a **composite primary key**, course_instructor doesn't depend on student_id so partial dependency exists.
+Relation: (AB) (student_id+course_id) combined should determine C (course_instructor), A alone or B alone cant determine C.
+
+| student_id | course_id | course_instructor |
+|:-----------|:----------|-------------------|
+| 101        | 101       | Dr. Smith         |
+| 101        | 102       | Dr. Jones         |
+| 102        | 103       | Dr. Brown         |
+
+After:
+
+| course_id | course     | course_instructor |
+|:----------|:-----------|:------------------|
+| 101       | Math       | Dr. Smith         |
+| 102       | Science    | Dr. Jones         |
+| 103       | History    | Dr. Brown         |
+
+| student_id | course_id  |
+|:-----------|:-----------|
+| 101        | 101        |
+| 101        | 102        |
+| 102        | 103        |
+| 102        | 104        |
+
+**3NF (Third Normal Form)**: Achieve 2NF and Remove transitive dependencies.
+
+Before:
+
+course_id and course is a **composite primary key** but phone number is associated with instructor which is not primary key.
+Relation: Transitive Dependency, A(course_id) determines -> B(course_instructor) which determines -> C(phone)
+
+| course_id | course     | course_instructor | phone        | 
+|:----------|:-----------|:------------------|:-------------|
+| 101       | Math       | Dr. Smith         | 999-978-9568 |
+| 101       | Science    | Dr. Jones         | 999-978-9468 |
+| 103       | History    | Dr. Brown         | 999-978-9368 |
+
+After:
+
+| course_id | course     | course_instructor | 
+|:----------|:-----------|:------------------|
+| 101       | Math       | Dr. Smith         |
+| 101       | Science    | Dr. Jones         |
+| 103       | History    | Dr. Brown         |
+
+| course_instructor | phone        | 
+|:------------------|:-------------|
+| Dr. Smith         | 999-978-9568 |
+| Dr. Jones         | 999-978-9468 |
+| Dr. Brown         | 999-978-9368 |
+
+**BCNF (Boyce-Codd Normal Form)**: A stricter version of 3NF, ensuring that every determinant is a candidate key.
+Relation: Where A(instructor_id) determines B(course_instructor), then A is a super key
+
+After:
+
+| course_id | course     | instructor_id | 
+|:----------|:-----------|:--------------|
+| 101       | Math       | 401           |
+| 101       | Science    | 402           |
+| 103       | History    | 403           |
+
+| instructor_id | course_instructor | phone        |
+|:--------------|:------------------|:-------------|
+| 401           | Dr. Smith         | 999-978-9568 |
+| 402           | Dr. Jones         | 999-978-9468 |
+| 403           | Dr. Brown         | 999-978-9368 |
+| 404           | Dr. Smith         | 777-978-9568 |
+
+**4NF**: Remove multi-valued dependencies. No table should have more than one multi-valued dependency.
+
+Before:
+
+| course_instructor | phone        | email        |
+|:------------------|:-------------|:-------------|
+| Dr. Smith         | 999-978-9568 |              |
+| Dr. Jones         | 999-978-9468 |              |
+| Dr. Brown         | 999-978-9368 |              |
+| Dr. Smith         |              | sm@email.com |
+| Dr. Jones         |              | jn@email.com |
+| Dr. Brown         |              | br@email.com |
+
+After:
+
+| course_instructor | email        |
+|:------------------|:-------------|
+| Dr. Smith         | sm@email.com |
+| Dr. Jones         | jn@email.com |
+| Dr. Brown         | br@email.com |
+
+| course_instructor | phone        |
+|:------------------|:-------------|
+| Dr. Smith         | 999-978-9568 |
+| Dr. Jones         | 999-978-9468 |
+| Dr. Brown         | 999-978-9368 |
+
+**5NF**: Decompose data into the smallest pieces without losing integrity. Lossless decomposition.
+
+Before:
+
+| course_instructor | email        |
+|:------------------|:-------------|
+| Dr. Smith         | sm@email.com |
+| Dr. Jones         | jn@email.com |
+| Dr. Brown         | br@email.com |
+
+| course_instructor | phone        |
+|:------------------|:-------------|
+| Dr. Smith         | 999-978-9568 |
+| Dr. Jones         | 999-978-9468 |
+| Dr. Brown         | 999-978-9368 |
+
+After:
+
+| instructor_id | course_instructor |
+|:--------------|:------------------|
+| 501           | Dr. Smith         |
+| 502           | Dr. Jones         |
+| 503           | Dr. Brown         |
+
+| instructor_id | email        |
+|:--------------|:-------------|
+| 501           | sm@email.com |
+| 502           | jn@email.com |
+| 503           | br@email.com |
+
+| instructor_id | phone        |
+|:--------------|:-------------|
+| 501           | 999-978-9568 |
+| 502           | 999-978-9468 |
+| 503           | 999-978-9368 |
+
 ### Other Topics
 
 * Normalization vs De-Normalization
 * Federation
 * First Level vs Second Level Cache
-* Distributed tracing - Zipkin
+* Distributed tracing
 * Observability - wavefront, prometheus, nagios
 * Hadoop - Map Reduce
 * CAS - compare and swap
@@ -1425,7 +1678,6 @@ The release of new features of one frontend does not affect the other.
 * GitOps & CI/CD
 * Telemetry
 * Block chain - distributed ledger
-* Concurrent HashMap Internals (HashMap vs syncronizedMap vs ConcurrentHashMap)
 * Disaster recovery
 * Auto scaling
 * Batch vs Stream data processing vs Micro Batch

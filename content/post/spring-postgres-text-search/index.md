@@ -23,10 +23,12 @@ Using `like` keyword for search is not efficient for text search. There is no ra
 select * from customer where description like '%play%';
 ```
 
-Elastic search can also be used to search text. Here will use postgres full text search feature
+Elastic search can also be used to search text for large scale. For simpler small scale text search you can use postgres and leverage existing database.
 
 1. to_tsvector - Will remove stop words, find lexical words, adds positions
 2. to_tsquery - Will search the tsvector
+
+`gin` - generalized inverted index will be created to search.
 
 SQL queries
 
