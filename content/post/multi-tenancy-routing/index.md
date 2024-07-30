@@ -1,9 +1,9 @@
 ---
-title: 'Spring & Postgres - Multi-Tenancy & Routing'
-description: 'Spring & Postgres - Multi-Tenancy & Routing'
-summary: 'Spring & Postgres - Multi-Tenancy & Routing'
+title: 'Spring Boot & Postgres - Multi-Tenancy & Routing'
+description: 'Spring Boot & Postgres - Multi-Tenancy & Routing'
+summary: 'Spring Boot & Postgres - Multi-Tenancy & Routing'
 date: '2024-07-28'
-aliases: [/alias/]
+aliases: [/multi-tenancy-routing/]
 author: 'Arjun Surendra'
 categories: [Spring, JPA]
 tags: [jdbc, multi-tenancy, liquibase]

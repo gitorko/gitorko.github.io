@@ -1,9 +1,9 @@
 ---
-title: 'Spring Boot Postgres - CQRS (Multiple Database)'
-description: 'Spring Boot Postgres - CQRS (Multiple Database)'
-summary: 'Spring Boot Postgres - CQRS (Multiple Database)'
+title: 'Spring Boot & Postgres - CQRS (Multiple Database)'
+description: 'Spring Boot & Postgres - CQRS (Multiple Database)'
+summary: 'Spring Boot & Postgres - CQRS (Multiple Database)'
 date: '2024-06-27'
-aliases: [/alias/]
+aliases: [/spring-postgres-cqrs/]
 author: 'Arjun Surendra'
 categories: [Spring, JPA, Liquibase, CQRS]
 tags: [jdbc, webflux, cqrs, multi-database, liquibase, leader-follower]
