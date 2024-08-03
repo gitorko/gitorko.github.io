@@ -6,7 +6,7 @@ date: '2024-06-20'
 aliases: [/points-of-failure/, /distributed-system-essentials/]
 author: 'Arjun Surendra'
 categories: [Distributed-System]
-tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-limit, circuit-breaker, spring-boot]
+tags: [fail-fast, resilience4j, kubernetes, spring, postgres, bulkhead, rate-limit, circuit-breaker, spring-boot, indexing]
 toc: true
 ---
 
@@ -439,6 +439,130 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.orm.jdbc.bind: TRACE
+```
+
+### Indexing
+
+{{% notice note "Problem" %}}
+You tested your code for data fetch via SQL on dev setup ensuring that indexes were created and used. 
+But in production the indexes are not being used despite being present, this is slowing your service. What do you do?
+{{% /notice %}}
+
+Creating an index doesn't garuntee that the SQL execution engine will use those indexes. The optimizer might choose a full table scan over an index if it determines that it is optimal.
+
+```sql
+EXPLAIN (FORMAT JSON) select * from customer where city = 'San Jose';
+EXPLAIN (FORMAT JSON, ANALYSE) select * from customer where city = 'San Jose';
+```
+
+Without Index
+
+```json
+[
+  {
+    "Plan": {
+      "Node Type": "Seq Scan",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "customer",
+      "Alias": "customer",
+      "Startup Cost": 0.00,
+      "Total Cost": 2.40,
+      "Plan Rows": 1,
+      "Plan Width": 39,
+      "Actual Startup Time": 0.034,
+      "Actual Total Time": 0.044,
+      "Actual Rows": 1,
+      "Actual Loops": 1,
+      "Filter": "((city)::text = 'San Jose'::text)",
+      "Rows Removed by Filter": 111
+    },
+    "Planning Time": 0.149,
+    "Triggers": [
+    ],
+    "Execution Time": 0.078
+  }
+]
+```
+
+With Index
+
+```json
+[
+  {
+    "Plan": {
+      "Node Type": "Index Scan",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Scan Direction": "Forward",
+      "Index Name": "idx_customer_city",
+      "Relation Name": "customer",
+      "Alias": "customer",
+      "Startup Cost": 0.14,
+      "Total Cost": 8.16,
+      "Plan Rows": 1,
+      "Plan Width": 1556,
+      "Actual Startup Time": 0.031,
+      "Actual Total Time": 0.033,
+      "Actual Rows": 1,
+      "Actual Loops": 1,
+      "Index Cond": "((city)::text = 'San Jose'::text)",
+      "Rows Removed by Index Recheck": 0
+    },
+    "Planning Time": 0.380,
+    "Triggers": [
+    ],
+    "Execution Time": 0.090
+  }
+]
+```
+
+1. Index Scan: This indicates that the query is using the index. The output will mention the specific index name.
+2. Seq Scan: This indicates a sequential scan, meaning the index is not being used.
+
+`EXPLAIN ANALYZE`: To see actual execution statistics rather than just an estimation, you can use EXPLAIN ANALYZE, which will run the query and provide runtime details.
+
+1. If the table is small, and a full table scan is faster than using the index.
+2. A significant portion of the table matches the condition, making an index scan less efficient.
+3. If there are many rows with the same city value, the optimizer might prefer a sequential scan.
+4. Index occupies space and impacts insert and delete row performance.
+5. If there are 2 indexes then its upto the optimizer to pick the one it finds a best fit. Behaviour might change at runtime.
+6. Order in which the where clause is written will impact which index is used. The index column should be the first in the where clause and any other filtering logic should come after index columns.
+7. Always ensure that the where clause contains the same columns that are indexed.
+
+You can also use hints to ensure that optimizer chooses to use the indexes.
+To provide hints enable the extension
+
+```bash
+CREATE EXTENSION pg_hint_plan;
+```
+
+Insert 100k records
+
+```sql
+INSERT INTO  public.customer (city, name, phone)
+SELECT
+    'city_' || gs,
+    'name_' || gen_random_uuid(),
+    'phone_' || gs
+FROM generate_series(1, 5000000) AS gs;
+```
+
+You can only provide a hint, there are no guarantee that optimizer will use those hints.
+
+```sql
+EXPLAIN (FORMAT JSON) /*+ IndexScan(customer idx_customer_city) */
+SELECT * FROM public.customer WHERE city = 'San Jose';
+
+EXPLAIN (FORMAT JSON) /*+ IndexScan(customer idx_customer_city NO) */
+SELECT * FROM public.customer WHERE city = 'San Jose';
+```
+
+Check index
+
+```sql
+SELECT * FROM pg_indexes WHERE indexname = 'idx_customer_city';
+SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'customer';
 ```
 
 ### Database Schema Changes
