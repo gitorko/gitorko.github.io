@@ -6,7 +6,7 @@ date: '2024-08-03'
 aliases: ['/spring-events/', '/spring-modulith/']
 author: 'Arjun Surendra'
 categories: [Spring, Modulith, Events]
-tags: [spring, spring-modulith, events]
+tags: [spring, spring-modulith, events, postgres, liquibase]
 toc: true
 ---
 
