@@ -2,7 +2,7 @@
 title: 'Spring Modulith - Events'
 description: 'Spring Modulith - Events'
 summary: 'Spring Modulith - Events'
-date: '2024-04-07'
+date: '2024-08-03'
 aliases: ['/spring-events/', '/spring-modulith/']
 author: 'Arjun Surendra'
 categories: [Spring, Modulith, Events]
@@ -10,23 +10,28 @@ tags: [spring, spring-modulith, events]
 toc: true
 ---
 
-Spring boot modulith implementation with spring events & persistence with postgres.
+Spring boot modulith implementation with spring events & persistence with postgres & replay of events.
 
 Github: [https://github.com/gitorko/project73](https://github.com/gitorko/project73)
 
 ## Spring Monolith
 
-Modular Monolith is an architectural style where our source code is structured on the concept of modules
+Modular Monolith is an architectural style where source code is structured on the concept of modules
 
 ![](modulith.png)
 
-Spring Modulith is a module of Spring that helps in organizing large applications into well-structured, manageable, and self-contained modules. It provides various features like module isolation, events, and monitoring to support a modular architecture.
+Spring Modulith is a module of Spring that helps in organizing large applications into well-structured, manageable, and self-contained modules. 
+It provides various features like module isolation, events, and monitoring to support a modular architecture.
 
-Building a Modern Monolith application, with Spring Modulith lets you avoid the network jumps, serialization & de-serialization. Each service is isolated via package boundary. 
-Eg: OrderService, NotificationService bean won't be injected in all the classes, instead they rely on spring events.
+Building a Modern Monolith application, with Spring Modulith lets you avoid the network jumps, serialization & de-serialization. 
+Each service is isolated via package boundary. 
+Eg: OrderService, NotificationService bean won't be injected in all the classes, instead they rely on spring event bus to communicate with each other.
 
-You can structure your code based on domain, Order package deals only with processing the order, notification package deals only with sending notifications etc. We can split the core of the monolith into modules by identifying the domains of our application and defining bounded contexts.
+You can structure your code based on domain, Order package deals only with processing the order, notification package deals only with sending notifications etc. 
+We can split the core of the monolith into modules by identifying the domains of our application and defining bounded contexts.
 We can consider the domain or business modules of our application as direct sub-packages of the application’s main package.
+
+Since the application becomes a monolith, you cant individually scale out individual services, so if a particular service needs more scale you can move only that module to a separate service (microservice architecture).
 
 Spring events ensures loose coupling in an application, it allows inter-module interaction.
 Instead of injecting different beans and invoking them in the directly you now publish an event and all other places that need to process it will implement a listener.
@@ -78,6 +83,8 @@ spring:
 
 ![](img01.png)
 
+![](img02.png)
+
 ### Code
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/ApplicationEventListener.java" >}}
@@ -99,3 +106,5 @@ spring:
 [https://spring.io/projects/spring-modulith](https://spring.io/projects/spring-modulith)
 
 [https://github.com/xmolecules/jmolecules](https://github.com/xmolecules/jmolecules)
+
+[https://www.youtube.com/watch?v=Pae2D4XcEIg](https://www.youtube.com/watch?v=Pae2D4XcEIg)
