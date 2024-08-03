@@ -14,7 +14,7 @@ Spring boot modulith implementation with spring events & persistence with postgr
 
 Github: [https://github.com/gitorko/project73](https://github.com/gitorko/project73)
 
-## Spring Monolith
+## Spring Modulith
 
 Modular Monolith is an architectural style where source code is structured on the concept of modules
 
