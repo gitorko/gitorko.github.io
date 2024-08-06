@@ -5,7 +5,9 @@ copyright = ""
 
 paginate = 10
 theme = ["hugo-clarity", "hugo-notice"]
-disqusShortname = "gitorko"
+[services]
+    [services.disqus]
+        shortname = "gitorko"
 enableRobotsTXT = true
 
 enableEmoji = true
