@@ -21,6 +21,7 @@ hugo mod get -u github.com/chipzoller/hugo-clarity
 Update all hugo modules
 ```bash
 hugo mod get -u ./...
+hugo mod tidy
 ```
 
 Old way of adding git submodule
@@ -42,14 +43,6 @@ hugo server -D
 
 ## Topics
 
-* JVM Memory analysis
-* Blue Green Deployments
-* First level & Second level caching
 * Open API design
 * Spring jpa stored proc
-* Fetch Mode
-* Fork Join Pool
-* Rate limit
-* Loom Java thread
 * Sharding
-* Resliency4j
