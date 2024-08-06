@@ -16,12 +16,13 @@ jobs:
         with:
           submodules: true  # Fetch submodules if needed
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          path: gitorko
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: '0.125.4'
-          # extended: true
+          extended: true
 
       - name: Build
         run: hugo --minify --verbose
