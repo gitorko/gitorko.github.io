@@ -83,8 +83,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
-        working-directory: gitorko
+          path: ./gitorko/public
 
   # Deployment job
   deploy:
