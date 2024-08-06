@@ -7,6 +7,6 @@
     {{ highlight .Content $lang }}
   {{ end }}
 {{ else }}
-  {{ errorf "Unable to get remote resource." }}
+  {{errorf "Unable to get remote resource '%s' $file}}
 {{ end }}
 
