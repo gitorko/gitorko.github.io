@@ -87,13 +87,13 @@ spring:
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/ApplicationEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/common/ApplicationEventListener.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/AuditEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/audit/internal/listener/AuditEventListener.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/CustomEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/order/internal/service/OrderService.java" >}}
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/listener/ObjectEventListener.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project73/main/src/main/java/com/demo/project73/reward/internal/listener/RewardListener.java" >}}
 
 ### Setup
 
