@@ -32,7 +32,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.128.0
+      HUGO_VERSION: 0.125.4
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,11 +40,6 @@ jobs:
           path: gitorko
           submodules: recursive
           fetch-depth: 0
-
-      - name: Update Submodules
-        run: |
-          git submodule update --init --recursive
-        working-directory: gitorko
 
       - name: Install Hugo CLI
         run: |
@@ -59,10 +54,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install Node.js dependencies
-        run: |
-          if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-            npm ci
-          fi
+        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
 
       - name: Build with Hugo
         env:

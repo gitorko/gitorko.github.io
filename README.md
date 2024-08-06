@@ -9,6 +9,7 @@ git submodule add https://github.com/martignoni/hugo-notice.git themes/hugo-noti
 
 ```bash
 git clone https://github.com/gitorko/gitorko.github.io.git gitorko
+cd gitorko
 git checkout -b blog origin/blog
 git submodule update --init --recursive
 ```
