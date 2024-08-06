@@ -42,6 +42,11 @@ jobs:
           fetch-depth: 0
           ref: blog
 
+      - name: Update Submodules
+        run: |
+            git submodule update --init --recursive
+        working-directory: gitorko
+
       - name: List Directory Contents
         run: ls -R gitorko
 
