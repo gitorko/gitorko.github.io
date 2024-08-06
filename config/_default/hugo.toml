@@ -1,20 +1,16 @@
-baseurl = "https://gitorko.github.io/"
-title = "GitOrko"
+baseURL = 'https://gitorko.github.io/'
+languageCode = 'en-us'
+title = 'GitOrko'
 copyright = ""
-# canonifyurls = true
+
 paginate = 10
-theme = ["github.com/chipzoller/hugo-clarity"]
+theme = ["hugo-clarity", "hugo-notice"]
 disqusShortname = "gitorko"
 enableRobotsTXT = true
 
 enableEmoji = true
 
 DefaultContentLanguage = "en"
-# [languages]
-# config/_default/languages.toml
-
-# [menus]
-# config/_default/menus/menu.xx.toml
 
 [mediaTypes."application/javascript"]
 suffixes = ["ts","js","jsm","mjs"]
