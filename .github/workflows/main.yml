@@ -48,7 +48,8 @@ jobs:
         working-directory: gitorko
 
       - name: List Directory Contents
-        run: ls -R gitorko
+        run: tree
+        working-directory: gitorko
 
       - name: Install Hugo CLI
         run: |
