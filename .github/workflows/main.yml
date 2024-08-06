@@ -40,6 +40,7 @@ jobs:
           path: gitorko
           submodules: recursive
           fetch-depth: 0
+          ref: blog
 
       - name: List Directory Contents
         run: ls -R gitorko
