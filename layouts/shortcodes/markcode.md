@@ -6,5 +6,5 @@
         {{ .Content | $.Page.RenderString }}
     {{ end }}
 {{ else }}
-    {{errorf "Unable to get remote resource '%s' $file}}
+    {{ errorf "Unable to get remote resource '%s'" $file }}
 {{ end }}
