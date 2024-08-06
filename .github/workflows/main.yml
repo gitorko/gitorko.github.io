@@ -76,6 +76,7 @@ jobs:
           hugo \
             --gc \
             --minify \
+            --logLevel debug \
             --config ./config/_default/hugo.toml \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
             --verbose
