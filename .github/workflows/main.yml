@@ -71,7 +71,7 @@ jobs:
           HUGO_ENVIRONMENT: production
           TZ: America/Los_Angeles
         run: |
-          pwd && hugo \
+          hugo \
             --gc \
             --minify \
             --config ./config/_default/hugo.toml \
