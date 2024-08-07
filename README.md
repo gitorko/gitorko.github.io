@@ -2,10 +2,7 @@
 
 ## Setup
 
-```bash
-git submodule add https://github.com/chipzoller/hugo-clarity themes/hugo-clarity
-git submodule add https://github.com/martignoni/hugo-notice.git themes/hugo-notice
-```
+Checkout code
 
 ```bash
 git clone https://github.com/gitorko/gitorko.github.io.git gitorko
@@ -15,13 +12,10 @@ git submodule update --init --recursive
 ```
 
 Start server
+
 ```bash
 hugo
 hugo server
-```
-
-```bash
-hugo server -D
 ```
 
 ## Topics

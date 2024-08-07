@@ -22,15 +22,15 @@ So we have a book product and we need to fetch the price from various sources an
 
 We can use a CountDownLatch to wait for the prices to be fetched. It will wait only for 3 seconds and return the prices fetched.
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/main/java/com/demo/project62/scattergather/latch/ScatterGatherLatch.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/latch/ScatterGatherLatchTest.java" >}}
 
 We can also use the invokeAll method
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/main/java/com/demo/project62/scattergather/invoke/ScatterGatherInvoke.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/invoke/ScatterGatherInvokeTest.java" >}}
 
 We can also use the CompletableFuture.
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/main/java/com/demo/project62/scattergather/completable/ScatterGatherCompletable.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/completable/ScatterGatherCompletableTest.java" >}}
 
 Result
 
