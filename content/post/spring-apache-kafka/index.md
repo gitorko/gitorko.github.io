@@ -2,15 +2,15 @@
 title: 'Spring - Apache Kafka'
 description: 'Spring - Apache Kafka'
 summary: 'Spring Boot integration with kafka & kafka streams'
-date: '2022-01-19'
+date: '2024-08-08'
 aliases: [/spring-apache-kafka/]
 author: 'Arjun Surendra'
 categories: [Messaging, Kafka]
-tags: [spring, spring-boot, kafka, kafka-stream]
+tags: [spring, spring-boot-3, kafka, kafka-stream]
 toc: true
 ---
 
-Spring Boot integration with kafka & kafka streams
+Spring Boot 3 integration with Apache Kafka & Kafka streams
 
 Github: [https://github.com/gitorko/project80](https://github.com/gitorko/project80)
 
@@ -51,9 +51,10 @@ There is an even higher level of abstraction provided by spring cloud stream whi
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/producer/KafkaProducer.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/consumer/KafkaConsumer.java" >}}
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/resources/application.yaml" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/kserver/src/main/java/com/demo/project80/KafkaProducer.java" >}}
+
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/kclient/src/main/java/com/demo/project80/KafkaConsumer.java" >}}
+
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/docker/docker-compose.yml" >}}
 
 Run the main method of producer and then the consumer.
@@ -86,7 +87,7 @@ We will now count the users by age group.
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/src/main/java/com/demo/project80/stream/KafkaStream.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/kstream/src/main/java/com/demo/project80/KafkaStream.java" >}}
 
 Run the main method of KafkaStream.
 

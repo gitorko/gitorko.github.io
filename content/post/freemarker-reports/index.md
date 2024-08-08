@@ -22,7 +22,7 @@ We will generate a single html file report using freemarker template and provide
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/src/main/java/org/gitokro/project69/HomeController.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/src/main/java/com/demo/HomeController.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project69/main/src/main/resources/templates/my-report.ftl" >}}
 
