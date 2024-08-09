@@ -1,7 +1,7 @@
 ---
-title: 'Spring - Apache Kafka'
-description: 'Spring - Apache Kafka'
-summary: 'Spring Boot integration with kafka & kafka streams'
+title: 'Spring Boot - Apache Kafka'
+description: 'Spring Boot - Apache Kafka'
+summary: 'Spring Boot - Apache Kafka'
 date: '2024-08-08'
 aliases: [/spring-apache-kafka/]
 author: 'Arjun Surendra'
@@ -16,17 +16,12 @@ Github: [https://github.com/gitorko/project80](https://github.com/gitorko/projec
 
 ## Kafka
 
-Kafka is a distributed & fault-tolerant,high throughput, scalable stream processing & messaging system.
-
-1. Kafka as publisher-subscriber messaging system.
-2. Kafka as queue (point-point) messaging system.
-3. Kafka as stream processing system that reacts to event in realtime.
-4. Kafka as a store for data.
-
-![](kafka-architecture.png)
+{{< embed "content/post/spring-apache-kafka/common.md" >}}
 
 Kafka stores streams of records (messages) in topics. Topics are partitioned and replicated across multiple nodes thus kafka can scale and be a distributed system.
 Producers publish data to the topics. Consumer groups can subscribe to topics.
+
+**Advantages**
 
 1. Data Store - Kafka is append only commit log. Which means it can also act as a data store.
 2. Queue (point-point) - If only one consumer group subscribes to a topic it behaves like a Queue (point-point) messaging system.
@@ -40,14 +35,12 @@ Producers publish data to the topics. Consumer groups can subscribe to topics.
 10. Adapters - Provides adapters that can be used to write data to db and other endpoints
 11. Stream - Provides stream processing capabilities 
 
-![](kafka-partition.png)
-
 Similar to spring rest template or jdbc template which abstracts the rest/jdbc calls spring provides kafka template which provides high level abstraction to interact with kafka. 
 There is an even higher level of abstraction provided by spring cloud stream which lets we integrate with kafka or rabbitmq and other messaging systems. So when the messaging systems changes you dont need to make code changes in producer or consumer.
 
+![](img01.png)
+![](img02.png)
 ![](img03.png)
-![](img04.png)
-![](img05.png)
 
 ### Code
 
@@ -57,12 +50,11 @@ There is an even higher level of abstraction provided by spring cloud stream whi
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project80/main/docker/docker-compose.yml" >}}
 
-Run the main method of producer and then the consumer.
+The group id of your client which uses group management to assign topic partitions to consumers
+The auto-offset-reset=earliest ensures the new consumer group will get the oldest available message. 
 
-The group id of your client which uses group management to assign topic partitions to consumers, auto-offset-reset=earliest ensures the new consumer group will get the oldest available message. 
-
-we can have multiple kafka listener for a topic with different group id
-A consumer can listen to more than one topic. We have created the topic 'mytopic' with only one partition. 
+We can have multiple kafka listener for a topic with different group id
+A consumer can listen to more than one topic. We have created the topic 'mytopic' with only one partition.
 For a topic with multiple partitions, @KafkaListener can explicitly subscribe to a particular partition of a topic with an initial offset.
 
 ```java
@@ -77,10 +69,15 @@ For a topic with multiple partitions, @KafkaListener can explicitly subscribe to
 
 ## Kafka Streams
 
-Kafka Streams has stream-table duality. Tables are a set of evolving facts. Each new event overwrites the old one, whereas streams are a collection of immutable facts. Kafka Streams provides two abstractions for Streams and Tables. KStream handles the stream of records. KTable manages the changelog stream with the latest state of a given key
+Kafka Streams has stream-table duality. Tables are a set of evolving facts. Each new event overwrites the old one, whereas streams are a collection of immutable facts. 
+Kafka Streams provides two abstractions for Streams and Tables. 
+KStream handles the stream of records. 
+KTable manages the changelog stream with the latest state of a given key
 For not partitioned tables we can use GlobalKTables to broadcast information to all tasks.
 
-When we use other projects like apache spark, storm,flink we write code and copy the jar to the nodes where the actual work happens. With the introduction of kafka stream we can now write your processing logic for streams and then it can run anywhere the jar can run. 
+When we use other projects like apache spark, storm, flink we write code and copy the jar to the nodes where the 
+actual work happens. With the introduction of kafka stream we can now write our processing logic for streams, then 
+it can run anywhere the jar can run.
 KafkaStreams enables us to consume from Kafka topics, analyze or transform data, and potentially, send it to another Kafka topic.
 
 We will now count the users by age group.
