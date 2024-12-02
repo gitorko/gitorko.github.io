@@ -6,7 +6,7 @@ date: '2024-06-01'
 aliases: [/spring-virtual-threads/]
 author: 'Arjun Surendra'
 categories: [VirtualThreads, Spring, JDK21]
-tags: [virtual-threads, spring, jdk21, auditing, liquibase]
+tags: [virtual-threads, spring, jdk21, auditing, liquibase, jacoco, spotbugs, checkstyle]
 toc: true
 featured: true
 draft: false

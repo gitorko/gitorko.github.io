@@ -18,7 +18,8 @@ Github: [https://github.com/gitorko/project80](https://github.com/gitorko/projec
 
 {{< embed "content/post/spring-apache-kafka/common.md" >}}
 
-Kafka stores streams of records (messages) in topics. Topics are partitioned and replicated across multiple nodes thus kafka can scale and be a distributed system.
+Kafka stores streams of records (messages) in topics. 
+Topics are partitioned and replicated across multiple nodes thus kafka can scale and be a distributed system.
 Producers publish data to the topics. Consumer groups can subscribe to topics.
 
 **Advantages**
@@ -27,8 +28,8 @@ Producers publish data to the topics. Consumer groups can subscribe to topics.
 2. Queue (point-point) - If only one consumer group subscribes to a topic it behaves like a Queue (point-point) messaging system.
 3. Pub-Sub - If more than one consumer group subscribe to a topic it behaves like Pub-Sub messaging system.
 4. Consumer Group - Number of consumers in a group must be less than or equal to number of partitions. Cant have more consumers in a group than there are partitions.
-5. Partition - Producer needs to be aware of the partition its publishing to.
-6. Partition - When you add a new kafka broker the partition is replicated so loss of one node doesnt crash the system.
+5. Partition - Producer can only write to topic but which partition the data gets written to is not in its control.
+6. Partition - When you add a new kafka broker the partition is replicated so loss of one node doesn't crash the system.
 7. Ordering - Ordering of messages is guaranteed only in a partition and not across partitions.
 8. Offset - Consumer can choose to read records from latest or from beginning.
 9. Long polling - Uses poll model compared to RabbitMQ which uses push model
