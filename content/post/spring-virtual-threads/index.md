@@ -26,7 +26,7 @@ spring.threads.virtual.enabled=true
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/src/main/java/com/demo/project58/controller/HomeController.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/src/main/java/com/demo/project58/controller/CustomerController.java" >}}
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project58/main/src/main/resources/application.yaml" >}}
 
 ### Setup
