@@ -12,7 +12,7 @@ toc: true
 
 Scatter Gather enterprise integration pattern is used for scenarios such as "best quote", where we need to request information from several suppliers and decide which one provides us with the best price for the requested item.
 
-Github: [https://github.com/gitorko/project62](https://github.com/gitorko/project62)
+Github: [https://github.com/gitorko/project01](https://github.com/gitorko/project01)
 
 ## Scatter Gather Pattern
 
@@ -22,15 +22,15 @@ So we have a book product and we need to fetch the price from various sources an
 
 We can use a CountDownLatch to wait for the prices to be fetched. It will wait only for 3 seconds and return the prices fetched.
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/latch/ScatterGatherLatchTest.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/src/test/java/com/demo/basics/designpatterns/_24_scattergather/latch/ScatterGatherLatchTest.java" >}}
 
 We can also use the invokeAll method
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/invoke/ScatterGatherInvokeTest.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/src/test/java/com/demo/basics/designpatterns/_24_scattergather/invoke/ScatterGatherInvokeTest.java" >}}
 
 We can also use the CompletableFuture.
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/src/test/java/com/demo/project62/_24_scattergather/completable/ScatterGatherCompletableTest.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/src/test/java/com/demo/basics/designpatterns/_24_scattergather/completable/ScatterGatherCompletableTest.java" >}}
 
 Result
 
@@ -40,4 +40,4 @@ Result
 
 ### Setup
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project62/main/README.md" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project01/main/README.md" >}}

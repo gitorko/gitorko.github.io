@@ -24,12 +24,13 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project03  | https://github.com/gitorko/project03  | Kotlin Spring Boot Rest                                                                |
 | project04  | https://github.com/gitorko/project04  | Distributed Locking - Apache Ignite                                                    |
 | project05  | https://github.com/gitorko/project05  | Distributed Locking - Postgres                                                         |
+| project07  | https://github.com/gitorko/project07  | HandleBars Template                                                                    |
+| project08  | https://github.com/gitorko/project08  | Apache Spark                                                                           |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
 | project58  | https://github.com/gitorko/project58  | Spring Virtual Threads, JUnit5 Test, JaCoCo, SpotBugs, Checkstyle                      |
 | project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    | 
 | project60  | https://github.com/gitorko/project60  | Spring WebFlux & Angular, Reactive MongoDB, Clarity, Docker                            |  
 | project61  | https://github.com/gitorko/project61  | Kubernetes Samples                                                                     |
-| project62  | https://github.com/gitorko/project62  | Java Design Patterns                                                                   |
 | project63  | https://github.com/gitorko/project63  | Spring Boot - Drools                                                                   |
 | project64  | https://github.com/gitorko/project64  | Spring WebFlux Reactive JDBC                                                           |
 | project65  | https://github.com/gitorko/project65  | Spring Webflux & R2DBC                                                                 |
