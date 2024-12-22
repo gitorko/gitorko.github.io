@@ -24,6 +24,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project03  | https://github.com/gitorko/project03  | Kotlin Spring Boot Rest                                                                |
 | project04  | https://github.com/gitorko/project04  | Distributed Locking - Apache Ignite                                                    |
 | project05  | https://github.com/gitorko/project05  | Distributed Locking - Postgres                                                         |
+| project06  | https://github.com/gitorko/project06  | Encode & Decode Watermarked message                                                    |
 | project07  | https://github.com/gitorko/project07  | HandleBars Template                                                                    |
 | project08  | https://github.com/gitorko/project08  | Apache Spark                                                                           |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
