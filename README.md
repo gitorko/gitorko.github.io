@@ -23,6 +23,7 @@ hugo v0.125.4-cc3574ef4f41fccbe88d9443ed066eb10867ada2 darwin/amd64 BuildDate=20
 hugo server
 hugo --ignoreCache
 hugo server --ignoreCache
+hugo server --cacheDir /tmp
 ```
 
 ## Topics
