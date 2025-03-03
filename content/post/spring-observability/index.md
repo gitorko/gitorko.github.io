@@ -14,26 +14,38 @@ Spring Boot Observability
 
 Github: [https://github.com/gitorko/project71](https://github.com/gitorko/project71)
 
-## Monitoring & Observability
+Application monitoring can be classified into
 
-- **Monitoring*** - ensures the system is healthy. With `spring-boot-starter-actuator` you can monitor CPU usage, memory usage, request rates, and error rates.
-- **Observability** - helps you understand issues and derive insights. Micrometer Observability API  
+1. Observability - Creates metrics, traces, logs that get stored in time-series db and charts are created. eg: Prometheus, Grafana, OpenTelemetry, Jaeger, Zipkin
+2. APM (Application Performance Management) - Runs an agents in the jvm that instruments the bytecode and sends metrics to a remote server, focuses on performance and user experience in the application layer. eg: New Relic, Datadog APM, AppDynamics, Dynatrace, Elastic APM
+3. Monitoring - Checks endpoint uri to monitor health (cpu, memory) infrastructure-centric for alerting. eg: Nagios, Prometheus
+
+## Observability
 
 Observability is the ability to observe the internal state of a running system from the outside. Observability has 3 pillars
 
-1. **Logging** - Logging Correlation IDs - Correlation IDs provide a helpful way to link lines in your log files to spans/traces.
-2. **Metrics** - Custom metrics to monitor time taken, count invocations etc.
-3. **Distributed Tracing** - Micrometer Tracing library is a facade for popular tracer libraries. eg: OpenTelemetry, OpenZipkin Brave
+1. **Metrics**: Quantitative data about system performance (e.g., CPU usage, request count, error rates) eg: `spring-boot-starter-actuator`.
+2. **Logs**: Event-based data for tracking specific actions and events with correlation/span id (e.g., application logs) eg: `micrometer-tracing-bridge-brave`.
+3. **Traces**: Distributed tracing for tracking the path of a request across services (e.g., tracing API calls) eg: `zipkin-reporter-brave`.
 
 Various tools that help in observability
 
-1. **Prometheus** — An open-source systems monitoring and alerting tool. Prometheus scrapes/collects metrics from an endpoint at regular intervals. Stores the data in a time series database.
-2. **Grafana** — A visualization tool, can pull data from multiple sources (Prometheus) and shows them in graphs.
-3. **Zipkin** — a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures. Features include both the collection and lookup of this data.
+1. **Prometheus** - An open-source systems monitoring and alerting tool. Prometheus scrapes/collects metrics from an endpoint at regular intervals. Stores the data in a time series database.
+2. **Grafana** - A visualization tool, can pull data from multiple sources (Prometheus) and shows them in graphs.
+3. **Zipkin** - A distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in service architectures.
+
+Micrometer is a vendor-neutral instrumentation library that allows you to collect metrics and traces for observability.
+
+1. Metrics Collection - Supports Prometheus, Graphite, Datadog, New Relic, etc.
+2. Tracing Support - Used with Brave (Zipkin), OpenTelemetry, Wavefront, etc.
+3. Logging Context Propagation - Adds tracing IDs in logs for better debugging
+4. Spring Integration - Works out of the box with Spring Boot’s Actuator
+
+Spring Observability internally uses Micrometer, so in Spring Boot 3+, you should use Spring Observability APIs for new projects
 
 ### Logging
 
-Micrometer tracing adds spans/traces to all logs.
+Tracing adds spans/traces to all logs.
 
 ### Metrics
 
@@ -47,7 +59,8 @@ A `Meter` consists of a name and tags, There are 4 main types of meters.
 
 ### Distributed Tracing
 
-Spring Boot samples only 10% of requests to prevent overwhelming the trace backend. Change probability to 1.0 so that every request is sent to the trace backend.
+Spring Boot samples only 10% of requests to prevent overwhelming the trace backend. 
+Change probability to 1.0 so that every request is sent to the trace backend.
 
 ```yaml
 management:
