@@ -30,7 +30,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project09  | https://github.com/gitorko/project09  | Spring AI & Ollama                                                                     |
 | project10  | https://github.com/gitorko/project10  | Arduino Projects                                                                       |
 | project11  | https://github.com/gitorko/project11  | Distributed Periodic Task Scheduler                                                    |
-| project12  | https://github.com/gitorko/project12  | NestJs + NextJs + Postgresql.                                                          |
+| project12  | https://github.com/gitorko/project12  | NestJs + NextJs + Postgresql                                                           |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
 | project58  | https://github.com/gitorko/project58  | Spring Virtual Threads, JUnit5 Test, JaCoCo, SpotBugs, Checkstyle                      |
 | project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    | 
