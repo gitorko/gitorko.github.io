@@ -32,7 +32,8 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project11  | https://github.com/gitorko/project11  | Distributed Periodic Task Scheduler                                                    |
 | project12  | https://github.com/gitorko/project12  | NestJs + NextJs + Postgresql                                                           |
 | project14  | https://github.com/gitorko/project14  | Spring Boot + Bazel                                                                    |
-| project15  | https://github.com/gitorko/project15  | ExpressJs + Expo + Postgres                                                            |
+| project15  | https://github.com/gitorko/project15  | ExpressJs + Expo + Postgres  (Mobile Application)                                                          |
+| project15  | https://github.com/gitorko/project16  | Next.js (Frontend + Backend)                                                           |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
 | project58  | https://github.com/gitorko/project58  | Spring Virtual Threads, JUnit5 Test, JaCoCo, SpotBugs, Checkstyle                      |
 | project59  | https://github.com/gitorko/project59  | Spring Boot JobRunr                                                                    |
