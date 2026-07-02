@@ -63,12 +63,12 @@ How many requests per second need to be handled?
 
 How much storage is needed for 5 year?
 
-| Type                                   | Count   | Description         |
-|:---------------------------------------|:--------|:--------------------|
-| Average Total requests per day         | 10^7    | 10 million requests |
-| Average size of request per user       | 2 MB    |                     |
-| Average size of request per day        | 20^7 MB | 20 TB               |
-| Average size of request for 5 year day | 36 PB   |                     |
+| Type                                   | Count     | Description         |
+|:---------------------------------------|:----------|:--------------------|
+| Average Total requests per day         | 10^7      | 10 million requests |
+| Average size of request per user       | 2 MB      |                     |
+| Average size of request per day        | 2x10^7 MB | 20 TB               |
+| Average size of request for 5 year day | 36 PB     |                     |
 
 **Bandwidth Estimation**
 
@@ -96,8 +96,8 @@ How many CPU core/servers are needed?
 |:----------------------------------------|:------------|:------------|
 | Average total requests per sec          | 100 req/sec |             |
 | Average cpu processing time per request | 100 ms/req  |             |
-| Average cpu processing time per sec     | 10^6 ms/sec |             |
-| Average 1 cpu core processing per sec   | 10^5 ms/sec |             |
+| Average cpu processing time per sec     | 10^4 ms/sec |             |
+| Average 1 cpu core processing per sec   | 10^3 ms/sec |             |
 | Average number of cpu core              | 10          |             |
 
 ## High Level Design (HLD)
@@ -150,8 +150,8 @@ Eg: Design the order acceptance system for food delivery app that can cater to 7
 Fork Join is suited for tasks that create sub-tasks. Fork/Join framework uses work-stealing algorithm.
 Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks
 from other threads.
-Uses a deque (double ended queue), main thread picks task from the front of the queue, other threads steal tasks from
-the back of the queue.
+Uses a deque (double ended queue) per worker thread, the owning thread picks its own tasks from the front of its
+deque, while idle threads steal tasks from the back of other threads' deques.
 
 ![](fork-join.png)
 
@@ -608,8 +608,8 @@ Metaspace is automatically resized hence applications won't run out of memory if
 Types of garbage collector:
 
 1. `-XX:+UseSerialGC` - Serial garbage collector. Single thread for both minor & major gc.
-2. `XX:+UseParallelGC` - Parallel garbage collector. Multiple thread for both minor gc & single/multiple thread for major gc. Doesn't run concurrently with application. The pause time is longest. eg: Batch jobs
-3. `XX:+UseConcMarkSweepGC` - CMS (Concurrent Mark & Sweep) Deprecated since java 9. Multiple thread for both minor & major gc. Concurrent Mark & Sweep. Runs concurrently with application to mark live objects. The pause time is minimal. eg: CPU intensive.
+2. `-XX:+UseParallelGC` - Parallel garbage collector. Multiple thread for both minor gc & single/multiple thread for major gc. Doesn't run concurrently with application. The pause time is longest. eg: Batch jobs
+3. `-XX:+UseConcMarkSweepGC` - CMS (Concurrent Mark & Sweep) Deprecated since java 9. Multiple thread for both minor & major gc. Concurrent Mark & Sweep. Runs concurrently with application to mark live objects. The pause time is minimal. eg: CPU intensive.
 4. `-XX:+UseG1GC` - G1 (Garbage first) garbage collector. Entire heap is divided to multiple regions that can be resized. A region can be either young or old. Identifies the regions with the most garbage and performs garbage collection on that region first, it is called Garbage First The pause time is predictable as regions are small.
 5. `-XX:+UseEpsilonGC` - Epsilon collector - Do nothing collector. JVM shutsdown once heap is full. Used for zero pause time application provided memory is planned.
 6. `-XX:+UseShenandoahGC` - Shenandoah collector - Similar to G1, but runs concurrently with application. CPU intensive.
@@ -646,9 +646,9 @@ Load balancer distributes traffic across multiple nodes ensuring high availabili
 Always create health check url that can determine if node is healthy or not, based on this the load balancer decides if
 the node is up or down.
 
-1. L3 - IP Based
-2. L4 - DNS Based
-3. L7 - Application Based
+1. L4 - Transport Layer, routes based on IP address & port (TCP/UDP), doesn't inspect packet content.
+2. L7 - Application Layer, routes based on HTTP content like URL, headers, cookies.
+3. DNS Based - resolves a domain to different IPs (eg: Route53 GeoDNS/latency routing), works at DNS resolution time before the request reaches a load balancer.
 
 Sticky sessions - Will assign the same user request to the same node in order to maintain the session state on the node.
 Ideally sticky session should be avoided, if the node goes down few users will experience outage. However in some cases
@@ -696,7 +696,16 @@ Implementing CQRS in your application can maximize its performance, scalability,
 
 ### 29. HTTPS & TLS Handshake
 
-Asymmetric encryption vs symmetric encryption
+HTTPS is HTTP layered over TLS, it uses asymmetric encryption to securely exchange a symmetric session key, then uses
+that faster symmetric key for the rest of the session.
+
+1. Client Hello - Client sends supported TLS versions & cipher suites, along with a random number.
+2. Server Hello - Server picks a cipher suite, responds with its own random number & its certificate (contains the
+   server's public key, signed by a trusted Certificate Authority).
+3. Certificate validation - Client validates the certificate against trusted root CAs & checks the domain matches.
+4. Key exchange - Client generates a pre-master secret, encrypts it with the server's public key and sends it over.
+   Both sides derive the same symmetric session key from the pre-master secret & the earlier random numbers.
+5. Finished - Both sides switch to the symmetric session key and all further data is encrypted using it.
 
 ![](working-https.png)
 
@@ -912,7 +921,7 @@ CREATE TABLE customer
     created_on TIMESTAMP    NOT NULL,
 ) PARTITION BY HASH (id);
 CREATE TABLE customer_even PARTITION OF customer FOR VALUES WITH (MODULUS 2,REMAINDER 0);
-CREATE TABLE customer_odd PARTITION OF customer FOR VALUES WITH (MODULUS 2,REMAINDER 0);
+CREATE TABLE customer_odd PARTITION OF customer FOR VALUES WITH (MODULUS 2,REMAINDER 1);
 ```
 
 Range Partition
@@ -953,11 +962,11 @@ CREATE TABLE customer
 ) PARTITION BY LIST (EXTRACT(YEAR FROM created_on));
 CREATE TABLE customer_2021 PARTITION OF customer FOR VALUES IN
 (
-    '2021'
+    2021
 );
 CREATE TABLE customer_2022 PARTITION OF customer FOR VALUES IN
 (
-    '2022'
+    2022
 );
 ```
 
@@ -1026,7 +1035,7 @@ servers will avoid this to some extent.
 1. Token Bucket - Burst - Fixed token are added to bucket, bucket is always kept in full state. Can lead to burst of
    traffic.
 2. Token Bucket - Sustain - Constant token are added to bucket only if previous token are consumed. Smooth traffic.
-3. Leaky Bucket - Bucket size if fixed, if bucket full request are rejected, a processor de-queue bucket at fixed rate.
+3. Leaky Bucket - Bucket size is fixed, if bucket full request are rejected, a processor de-queue bucket at fixed rate.
 4. Fixed Window - For the time period maintain a key,value pair (key=time, value=counter). If counter is greater than rate limit reject. Leads to
    burst traffic around edges of time period. eg: If rate limit is 10 per min, then 8 request come in the last 30 sec of min window and  8 more requests come in the first 30 second of next min window, within the window the rate limit is honored but we still processed 16 requests within a 1 min window.
 5. Sliding Log - Go over all previous nodes upto the time interval, in the link list and check rate limit exceeded, if
@@ -1332,7 +1341,7 @@ it is executed.
 | DELETE  | Delete a resource object                                           | Yes        |
 | POST    | Create a new resource object                                       | No         |
 | HEAD    | Return meta data of resource object                                | Yes        |
-| PATCH   | Apply partial update on resource object                            | False      |
+| PATCH   | Apply partial update on resource object                            | No         |
 | OPTIONS | Determine what HTTP methods are supported by a particular resource | Yes        |
 
 ### 64. Types of database
@@ -1439,7 +1448,7 @@ Lock striping is a technique used to improve the concurrency and performance of 
 Eg: ConcurrentHashMap, the data is divided into multiple segments, each with its own lock. When a thread needs to read or write to the map, it only needs to acquire the lock for the relevant segment, not the entire map. This allows other threads to access different segments concurrently.
 It divides the map into 16 segments by default (this can be configured), each with its own lock.
 
-### 73. Normalization vs De-Normalization
+### 72. Normalization vs De-Normalization
 
 1. Normalization - focuses on reducing redundancy and ensuring data integrity by organizing data into related tables.
 2. De-Normalization introduces redundancy to improve read performance and simplify queries by combining related tables.
@@ -1629,7 +1638,6 @@ After:
 
 ### Other Topics
 
-* Normalization vs De-Normalization
 * Federation
 * First Level vs Second Level Cache
 * Distributed tracing
@@ -1665,7 +1673,6 @@ After:
 * Operational transformation - Shared document edit
 * Strangler pattern
 * API versioning
-* Backend for frontend (BFF) pattern
 * Transaction propagation & rollback policy 
 * Adaptive Bitrate Streaming for video
 
@@ -1812,7 +1819,7 @@ Instead of incrementing/decrementing a counter, check if it's possible to create
 tokens in a queue/bucket it's easier to scale than trying to update a single counter in atomic fashion.
 {{% /notice %}}
 
-### 4. Design a Code Build & Deploy System
+### 5. Design a Code Build & Deploy System
 
 Build the code when someone commits code to a branch and deploy it to a machine.
 
@@ -1835,7 +1842,7 @@ Build the code when someone commits code to a branch and deploy it to a machine.
 Split the tasks into smaller sub-tasks so that they can be restarted in case of failure.
 {{% /notice %}}
 
-### 5. Design a large scale file de-duplication service
+### 6. Design a large scale file de-duplication service
 
 You will receive a number of files (customer records) in a folder once a day, the file sizes range from 10GB-50GB that
 need to be de-duplicated based on few columns eg: Name & phone number column.
@@ -1862,7 +1869,7 @@ Smaller tasks take less time, can be restarted/retried, can be distributed. Alwa
 When there are more producers than consumers it will quickly overwhelm the system, use a queue to store and process the tasks asynchronously.
 {{% /notice %}}
 
-### 6. Design a flash sale system
+### 7. Design a flash sale system
 
 You have limited items that are up for sale. You can expect a large number of users trying to buy the product by adding it to the shopping cart. You cant oversell or undersell.
 
@@ -1882,7 +1889,7 @@ If the add to cart operation has to be completed within same request-response th
 Always minimize the request-response time window. The longer the request is kept open it will negatively impact the system.
 {{% /notice %}}
 
-### 7. Design a chat server
+### 8. Design a chat server
 
 The chat server needs to support 1-1 and group text based chat. The client can be offline and will receive all the message when they are back online.
 
@@ -1905,15 +1912,15 @@ The chat server needs to support 1-1 and group text based chat. The client can b
 Split the communication channel to command and data channel.
 {{% /notice %}}
 
-### 8. Design a Voting service
+### 9. Design a Voting service
 
 [https://gitorko.github.io/voting-system/](https://gitorko.github.io/post/voting-system/)
 
-### 9. Design a Stock Exchange (Price Time Priority Algorithm)
+### 10. Design a Stock Exchange (Price Time Priority Algorithm)
 
 [https://gitorko.github.io/stock-exchange/](https://gitorko.github.io/post/stock-exchange/)
 
-### 10. Design a ticket booking system
+### 11. Design a ticket booking system
 
 [https://gitorko.github.io/ticket-booking-system/](https://gitorko.github.io/post/ticket-booking-system/)
 
