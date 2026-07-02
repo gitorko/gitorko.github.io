@@ -50,7 +50,7 @@ There 2 types of protocol/connectors a tomcat server can be configured for
 
 In the BIO configuration, there are 2 types of threads
 
-1. Acceptors — To accept incoming requests and to add in a queue. Acceptors discard any request when the queue if full, default is 100.
+1. Acceptors — To accept incoming requests and to add in a queue. Acceptors discard any request when the queue is full, default is 100.
 2. Workers — To pick requests from the acceptor queue and process each request in its own thread stack
 
 Accept queue size
@@ -152,7 +152,7 @@ System users are complaining of a slow system?
 Always prefer **fail-fast** instead of a slow system **fail-later**. 
 By failing fast the downstream consumers of your service can use **circuit breaker** pattern to handle the outages gracefully instead of dealing with a slow api.
 
-If a function takes too long to complete it will block the tomcat thread which will further degrade the system performance. Use Resilience4j `@TimeLimiter` to explicitly timeout long running jobs, this way runaway functions cant impact your entire system.
+If a function takes too long to complete it will block the tomcat thread which will further degrade the system performance. Use Resilience4j `@TimeLimiter` to explicitly timeout long running jobs, this way runaway functions can't impact your entire system.
 
 Invoke this rest api that takes 10 secs to complete the job but timeout happens in 5 sec.
 
@@ -205,9 +205,9 @@ server:
 ```
 
 Max number of connections the server can accept and process, for BIO (Blocking IO) tomcat the `server.tomcat.threads.max` is equal to `server.tomcat.max-connections`
-You cant have more connections than the threads.
+You can't have more connections than the threads.
 
-For NIO tomcat, the number of threads can be less and the max-connections can be more. Since the threads not blocked while waiting for IO to complete then can open up more connections and server other requests.
+For NIO tomcat, the number of threads can be less and the max-connections can be more. Since the threads are not blocked while waiting for IO to complete, they can open up more connections and serve other requests.
 
 ```yaml
 # Applies only for NIO
@@ -254,7 +254,7 @@ Benchmark the system on a varied load to arrive at the peek throughput the syste
 Network admin calls you to tell that many TCP connections are being created to the same clients. What do you do?
 {{% /notice %}}
 
-TCP connections take time to be established, `keep-alive` keeps the connection alive for some more time incase the client want to send more data again in the new future. 
+TCP connections take time to be established, `keep-alive` keeps the connection alive for some more time in case the client wants to send more data again in the near future. 
 
 ```yaml
 server:
@@ -273,7 +273,7 @@ You are invoking rest calls to an external service which has degraded and has be
 {{% /notice %}}
 
 If the server makes external calls ensure to set the read and connection timeout on the rest client.
-If you dont set this then your server which is a client will wait forever to get the response.
+If you don't set this then your server which is a client will wait forever to get the response.
 
 ```bash
 # If unable to connect the external server then give up after 5 seconds.
@@ -359,7 +359,7 @@ Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection i
 	at com.zaxxer.hikari.pool.HikariPool.getConnection(HikariPool.java:144) ~[HikariCP-5.1.0.jar:na]
 ```
 
-The configuration `spring.hikari.connectionTimeout` applies for new async thread pool. 
+The configuration `spring.datasource.hikari.connectionTimeout` applies for new async thread pool. 
 However, the tomcat thread pool will always wait in blocking state to get a connection from the pool.
 
 Invoke this rest api that runs 10 long-running db query job but will not timeout and wait in blocking state.
@@ -448,7 +448,7 @@ You tested your code for data fetch via SQL on dev setup ensuring that indexes w
 But in production the indexes are not being used despite being present, this is slowing your service. What do you do?
 {{% /notice %}}
 
-Creating an index doesn't garuntee that the SQL execution engine will use those indexes. The optimizer might choose a full table scan over an index if it determines that it is optimal.
+Creating an index doesn't guarantee that the SQL execution engine will use those indexes. The optimizer might choose a full table scan over an index if it determines that it is optimal.
 
 ```sql
 EXPLAIN (FORMAT JSON) select * from customer where city = 'San Jose';
@@ -597,7 +597,7 @@ select count(*) from customer;
 Since postgres 11 alter column with default value doesn't lock the table for read and write anymore as there is no table re-write. In older versions that table is entirely rewritten, so it's an expensive operation.
 
 ```sql
---since postgres11 this doesnt matter.
+--since postgres11 this doesn't matter.
 ALTER TABLE customer ADD COLUMN last_update TIMESTAMP DEFAULT now();
 ```
 vs
@@ -617,7 +617,7 @@ ALTER TABLE customer DROP COLUMN last_update;
 
 **Lock queues & Lock timeouts** 
 
-Postgres uses lock queues. Transactions that modify a same row/table are queued, they remain blocked till they are executed in the order they were queued.
+Postgres uses lock queues. Transactions that modify the same row/table are queued, they remain blocked till they are executed in the order they were queued.
 
 Use lock timeout to set max limit to wait for operation. By setting lock_timeout, the DDL command will fail if it ends up waiting for a lock more than 5 seconds
 The downside is that your ALTER TABLE might not succeed, but you can try again later. 
@@ -650,7 +650,7 @@ If that happens, run `drop index concurrently name_index` and try to create it a
 
 ```sql
 CREATE INDEX name_index ON customer (name);
-````
+```
 
 vs
 
@@ -667,13 +667,13 @@ DROP INDEX CONCURRENTLY name_index;
 **Altering an indexed column & adding not null column**
 
 Altering a column that already has index is a costly operation.
-If not null columns are added it's a 2 step operation where you add the column and then add a default value.
+If not null columns are added it's a 2 step operation where you add the column (nullable), backfill the data, and then add the not-null constraint.
 
 **Truncate vs Delete**
 
-Prefer truncate over delete to clean a table. Truncate doesn't write to transactional log hence is faster but there is no option of rollback.
+Prefer truncate over delete to clean a table. Truncate doesn't write each deleted row to the transactional log hence is faster, but like other DDL in postgres it is still transactional and can be rolled back if run inside an explicit transaction.
 Both block read & modify operations.
-Truncate quickly remove all rows from a table and do not need to worry about triggers, foreign key constraints, or retaining identity column values.
+Truncate quickly removes all rows from a table and do not need to worry about triggers, foreign key constraints, or retaining identity column values.
 Delete removes specific rows, rely on triggers, enforce foreign key constraints, or need the operation to be fully logged.
 
 ```sql
@@ -725,7 +725,7 @@ ALTER TABLE customer DROP COLUMN age;
 **Adding a primary key**
 
 If you are adding/modifying primary key then index creation take a long time. 
-You need to introduce an unqiue constraint concurrently `CREATE UNIQUE INDEX CONCURRENTLY` and then use the unique index as a primary key, which is a fast operation.
+You need to introduce a unique constraint concurrently `CREATE UNIQUE INDEX CONCURRENTLY` and then use the unique index as a primary key, which is a fast operation.
 
 ```sql
 --drop primary key for testing
@@ -760,12 +760,12 @@ There are 2 types of locks
 Below query acquires a row lock that prevent any modification to the selected row.
 
 ```sql
---other transactions can still read the same row but cant modify it.
+--other transactions can still read the same row but can't modify it.
 SELECT * from customer where id = 1 FOR SHARE;
 ``` 
 
 ```sql
---other transactions cant even read/modify the same row
+--other transactions can still read the row with a plain SELECT (MVCC), but can't modify it or acquire FOR SHARE/FOR UPDATE on it.
 SELECT * from customer where id = 1 FOR UPDATE;
 ```
 
@@ -823,7 +823,7 @@ This causes a memory spike, the pod will be killed (OOMKilled) and a new pod bro
 ![](img04.png)
 
 {{% notice info "Note" %}}
-For an OutOfMemoryError the pod doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
+For an OutOfMemoryError, Kubernetes doesn't necessarily kill the pod unless some health check is configured. Pod will still remain in running state despite the OOM error.
 Only the resource limits defined determine when the pod gets killed.
 {{% /notice %}}
 
@@ -883,7 +883,7 @@ Client will send the last modified `If-Modified-Since` header field and if paylo
 Always try to reduce the size of the response payload, send only the data required instead of the whole payload. Use pagination for data records and gzip payload to reduce the size.
 {{% /notice %}}
 
-If there is an api being called every second then it makes sends to either use **Web Sockets** or **Server Send Events (SSE)** which can stream data and avoid the costly request-response. 
+If there is an api being called every second then it makes sense to either use **Web Sockets** or **Server Sent Events (SSE)** which can stream data and avoid the costly request-response. 
 
 ### API versioning & Feature Flag
 
@@ -1023,7 +1023,7 @@ curl --location 'http://localhost:8080/api/retry-job'
 
 The circuit breaker pattern protects a downstream service by restricting the upstream service from calling the downstream service during a partial or complete downtime.
 
-The `@CircuitBreaker` will close the circuit so that downstream client dont keep calling the same api again & again when it is having issues.
+The `@CircuitBreaker` will open the circuit so that downstream client doesn't keep calling the same api again & again when it is having issues.
 
 ```yaml
 resilience4j:
@@ -1060,6 +1060,71 @@ curl --location 'http://localhost:8080/api/circuit-breaker-job/false'
 
 ### Health Check
 
+{{% notice note "Problem" %}}
+Kubernetes keeps routing traffic to a pod that hasn't finished starting up yet, or keeps a pod in rotation even though it has lost its connection to the database. What do you do?
+{{% /notice %}}
+
+Kubernetes and load balancers rely on health checks to decide whether a pod should receive traffic, needs to be restarted, or removed from rotation. Spring Boot Actuator exposes this out of the box.
+
+```yaml
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+```
+
+```bash
+curl --location 'http://localhost:8080/actuator/health'
+curl --location 'http://localhost:8080/actuator/health/liveness'
+curl --location 'http://localhost:8080/actuator/health/readiness'
+```
+
+These three answer different questions and have different consumers.
+
+1. `/actuator/health` - the overall **health check**. Aggregates every indicator (DB, disk space, custom indicators, plus the liveness/readiness states below) into one UP/DOWN. It's meant for humans and monitoring dashboards, not for Kubernetes to act on directly.
+2. `/actuator/health/readiness` - the **readiness check**. Narrower and action-oriented: "should traffic be routed to this pod right now?" It's allowed to depend on downstream systems (DB, cache, message broker). If it fails, Kubernetes pulls the pod out of the Service's endpoint list but leaves it running, and adds it back automatically once readiness passes again.
+3. `/actuator/health/liveness` - the **liveness check**. Narrower still and dependency-free: "is the process itself stuck or corrupted?" If it fails, Kubernetes kills and restarts the pod.
+
+Kubernetes maps these last two to two distinct probes on the deployment.
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 5
+```
+
+You can also write a custom `HealthIndicator` to add checks specific to your service, eg: verifying connectivity to a downstream dependency.
+
+```java
+@Component
+public class DownstreamHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        boolean isUp = checkDownstreamConnection();
+        return isUp ? Health.up().build() : Health.down().withDetail("reason", "downstream unreachable").build();
+    }
+}
+```
+
+{{% notice info "Note" %}}
+Never mix up liveness and readiness. A failing downstream dependency should mark the pod not-ready (removed from traffic), not dead (restarted) - restarting a pod won't fix a downstream outage and can even cause a restart loop across all replicas at once.
+{{% /notice %}}
+
 ### Observability & Monitoring
 
 {{% notice note "Problem" %}}
@@ -1082,7 +1147,7 @@ Observability is the ability to observe the internal state of a running system f
 ### Exception Handling
 
 {{% notice note "Problem" %}}
-You errors are returning 500 Internal Server error, downstream services are not able to determine reason for the error.
+Your errors are returning 500 Internal Server error, downstream services are not able to determine reason for the error.
 {{% /notice %}}
 
 Use `@RestControllerAdvice` to return custom error responses. 
@@ -1105,14 +1170,14 @@ Be aware that if you are using dev tools `org.springframework.boot:spring-boot-d
 ### Logging
 
 {{% notice note "Problem" %}}
-Kubernetes pods are ephemeral, you dont have access to history logs that are written to console.
+Kubernetes pods are ephemeral, you don't have access to history logs that are written to console.
 {{% /notice %}}
 
 1. Enable file logging
 2. Enable rolling of log file
 3. Enable trace-id in log file
 4. Enable GC logging
-5. Enable async logging (does come with risk of loosing few log messages)
+5. Enable async logging (does come with risk of losing few log messages)
 6. Logs must contain pod name to determine which instance the error occurred on
 7. Log file name must contain pod name
 
@@ -1233,7 +1298,7 @@ Some of the basic security checks
 5. Permissions to production is restricted to few people by Authentication & Authorization.
 6. Salt has been added to password before storing it.
 7. Url don't have password or secure information in parameter as url get logged.
-8. Custom exceptions are thrown to customer and dont expose the backend exception to the end user.
+8. Custom exceptions are thrown to customer and don't expose the backend exception to the end user.
 9. Cross site scripting is blocked.
 10. SQL injection attacks are blocked.
 11. Vulnerability scan are done and libraries updated to use latest fix.
