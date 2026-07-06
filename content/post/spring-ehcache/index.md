@@ -10,7 +10,7 @@ tags: [spring, spring-boot, ehcache]
 toc: true
 ---
 
-Spring Boot 3 with EhCache 3
+Spring Boot 4 with EhCache 3
 
 Github: [https://github.com/gitorko/project98](https://github.com/gitorko/project98)
 
@@ -56,11 +56,11 @@ The `@CacheConfig` annotation allows us to define certain cache configurations a
 
 Notice the SQL is printed each time a db call happens, if the data is cached no DB call is made.
 
-### Postman
+### Bruno
 
-Import the postman collection to postman
+Import the [Bruno](https://www.usebruno.com/) collection to try out the requests.
 
-[Postman Collection](https://raw.githubusercontent.com/gitorko/project98/main/postman/Project98.postman_collection.json)
+[Bruno Collection](https://github.com/gitorko/project98/tree/main/bruno/Project98)
 
 ### Setup
 
@@ -70,4 +70,4 @@ Import the postman collection to postman
 
 [https://www.ehcache.org/documentation/3.0](https://www.ehcache.org/documentation/3.0)
 
-[https://docs.spring.io/spring-boot/docs/2.7.2/reference/htmlsingle/#io.caching](https://docs.spring.io/spring-boot/docs/2.7.2/reference/htmlsingle/#io.caching)
+[https://docs.spring.io/spring-boot/reference/io/caching.html](https://docs.spring.io/spring-boot/reference/io/caching.html)
