@@ -35,7 +35,7 @@ References to all projects under [https://github.com/gitorko/](https://github.co
 | project14  | https://github.com/gitorko/project14  | Spring Boot + Bazel                                                                    |
 | project15  | https://github.com/gitorko/project15  | ExpressJs + Expo + Postgres  (Mobile Application)                                      |
 | project15  | https://github.com/gitorko/project16  | Next.js (Frontend + Backend)                                                           |
-| project18  | https://github.com/gitorko/project18  | Task Processor                                                                         |
+| project18  | https://github.com/gitorko/project18  | Task processor                                                                        |
 | project56  | https://github.com/gitorko/project56  | Spring & Redis (Messaging + Data)                                                      |
 | project57  | https://github.com/gitorko/project57  | Distributed System Essentials                                                          |
 | project58  | https://github.com/gitorko/project58  | Spring Virtual Threads, JUnit5 Test, JaCoCo, SpotBugs, Checkstyle                      |
