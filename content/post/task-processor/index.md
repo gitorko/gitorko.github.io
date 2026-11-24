@@ -8,7 +8,7 @@ author: 'Arjun Surendra'
 categories: [Java, Backend]
 tags: [task-processing, java, spring-boot, queues, concurrency]
 toc: true
-draft: true
+draft: false
 ---
 
 A task processor should make it straightforward to accept work, queue it safely, and execute it efficiently across machines with different CPU and I/O capacity. This library provides a backend API for submitting and managing tasks, with priority-aware scheduling, fairness, adaptive polling, retries, and operational statistics.
