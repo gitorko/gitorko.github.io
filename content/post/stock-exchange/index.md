@@ -226,6 +226,20 @@ If fractional order could be fulfilled then you could look at implementing the a
 Where heap is sorted by price and then by time. In such a case the algorithm becomes simple and just insertion and deletion to heap can be done in constant time.
 If heaps are implemented then in the above case, if there are only 2 transactions in the entire day. Then the seller will only be able to sell 100 items out of 200. Since there cant be fractional buy/sell we will not use Priority Queue (Heaps).
 
+Cases 1–18 show the default `WHOLE_ORDER` behavior. The next case shows the optional `PARTIAL` mode, enabled with `STOCK_EXCHANGE_MATCHING_MODE=PARTIAL`.
+
+#### Case 19 : Partial fills across price levels (`PARTIAL` mode)
+
+The incoming BUY has a limit of 10.0 and quantity 120. It matches the best eligible ask first: 50 shares at 9.0, then 70 shares at 10.0. The second SELL has 30 shares left open. Each fill is recorded separately at the resting seller's ask price.
+
+| Event | Type | Price | Order Qty | Fill Qty | Remaining Qty | Status |
+|:------|:-----|:------|:----------|:---------|:--------------|:-------|
+| Resting order | SELL | 9.0 | 50 | 50 | 0 | COMPLETED |
+| Resting order | SELL | 10.0 | 100 | 70 | 30 | PARTIALLY FILLED / OPEN |
+| SUBMIT | BUY | 10.0 | 120 | 120 | 0 | COMPLETED |
+
+The BUY completes because its full 120 shares were filled. The 10.0 SELL remains in the book for its unfilled 30 shares, which can match against a later BUY.
+
 ### Non-Functional Requirements
 
 1. Latency should be low.
