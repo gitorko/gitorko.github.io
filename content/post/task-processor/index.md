@@ -392,6 +392,18 @@ pool information, and an estimated backlog drain time. Counts are stored in
 the database, but runtime measurements are process-local, so multi-worker
 estimates are approximate. ETA is not a completion guarantee.
 
+Beyond totals, the processor records how long each task **waited** between
+becoming runnable and being claimed (the clearest sign that workers are falling
+behind), how long each **attempt** ran, labelled by outcome (completed, retried,
+failed, or timed out), and counters for retries, timeouts, tasks recovered by
+stale-task recovery, tasks released at shutdown, and tasks purged.
+
+To follow one task through the logs, every request carries a **correlation id**:
+the caller's `X-Correlation-Id` header, or a generated one. It is stored on the
+task and added to the logging context, together with the task id and attempt
+number, while the task runs. Searching the logs for that id shows both the
+request that enqueued the task and the worker that ran it.
+
 **Without it:** A growing queue or repeated failures may only become visible
 through user complaints or manual database inspection.
 
