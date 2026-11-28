@@ -1,0 +1,11 @@
+{{ $file := .Get 0 }}
+{{ with try (resources.GetRemote $file) }}
+  {{ with .Err }}
+    {{ errorf "Unable to get remote resource '%s': %s" $file . }}
+  {{ else with .Value }}
+    {{ $lang := path.Ext $file | strings.TrimPrefix "." }}
+    {{ highlight .Content $lang }}
+  {{ else }}
+    {{ errorf "Unable to get remote resource '%s'" $file }}
+  {{ end }}
+{{ end }}

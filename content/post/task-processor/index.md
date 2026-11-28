@@ -169,12 +169,22 @@ task.
 **Why it matters:** Without a way to detect abandoned work, tasks claimed by a
 crashed machine can remain `PROCESSING` forever and never return to the queue.
 
-**How it behaves:** Workers update their active tasks every five seconds by
-default. If no heartbeat arrives for 30 seconds, recovery treats the task as
-stale: it returns it to `PENDING` when attempts remain, or marks it `FAILED`
-when the attempt limit has been reached. A task can also specify
-`timeoutSeconds`; the default timeout is 120 seconds. Timeout cancellation
-requests Java thread interruption, which handlers must honor.
+**How it behaves:** Workers update all of their active tasks every five
+seconds by default, using a single batched database update rather than one
+update per task. If no heartbeat arrives for 30 seconds, recovery treats the
+task as stale: it returns it to `PENDING` when attempts remain, or marks it
+`FAILED` when the attempt limit has been reached. A task can also specify
+`timeoutSeconds`; the default timeout is 120 seconds. A separate watchdog thread
+checks for overrunning tasks every second, so timeouts are enforced promptly
+even if heartbeat writes are slow. Timeout cancellation requests Java thread
+interruption, which handlers must honor.
+
+When a worker is shut down gracefully, it first waits for running tasks to
+finish (30 seconds by default). Tasks still running after that are handed
+straight back to the queue, and only then are their threads interrupted, so the
+interruption cannot make a well-behaved handler report a failure that burns an
+attempt. Nothing has to wait for the stale threshold, and that aborted attempt
+is not counted against `maxAttempts`.
 
 **Without it:** A worker crash can leave claimed tasks stuck indefinitely.
 If a handler ignores interruption, timeout handling cannot forcibly stop its
@@ -210,6 +220,12 @@ of one task type should not take every available slot from other types.
 priorities are selected first. Within each priority, the processor shares
 work across task types in round-robin order.
 
+Per-type concurrency caps (described below) interact with fairness too. When a
+type has used all of its slots on a worker, the claim query leaves that type out
+entirely, and if a type reaches its cap part-way through filling a batch, the
+worker looks deeper in the queue. This keeps a capped type with a huge backlog
+from filling the candidate window and starving everything behind it.
+
 **Without it:** Urgent work may wait behind routine work, and a busy type may
 crowd out other types. A continuous stream of high-priority work can still
 delay lower priorities.
@@ -220,6 +236,8 @@ Workers need to check the database to find out whether new tasks are waiting. Th
 
 **Adaptive polling** adjusts the wait between checks based on what the worker finds. When the queue is empty, this processor doubles the wait up to its configured maximum. When it finds tasks, it returns to the minimum wait so new work is picked up quickly. In the default configuration, the interval backs off up to five seconds and resets to 100 milliseconds when work appears.
 
+A finished task also frees a worker slot. If the last check found work, the worker checks again right away (never faster than the minimum interval) instead of leaving that slot idle until the next scheduled check. When the queue is empty this shortcut is skipped, so quiet periods still back off.
+
 This is a practical tradeoff: fewer unnecessary checks during quiet periods, and quicker pickup when work is flowing.
 
 **Why it matters:** Polling very often creates database queries while idle;
@@ -227,8 +245,8 @@ polling too slowly leaves new work waiting between checks.
 
 **How it behaves:** When the queue is empty, the worker lengthens the wait
 between checks up to a configured maximum. When it finds tasks, it returns
-toward the minimum interval. Defaults range from 100 milliseconds to five
-seconds.
+toward the minimum interval, and a finished task triggers an early check while
+there is work waiting. Defaults range from 100 milliseconds to five seconds.
 
 **Without it:** A fixed short interval wastes database capacity during idle
 periods. A fixed long interval saves queries but adds pickup delay when tasks
@@ -240,7 +258,7 @@ Each application instance has a pool of threads that run task handlers. A thread
 
 CPU-heavy tasks, such as image conversion, keep the processor busy and usually need a smaller pool. Tasks that mostly wait for another service, such as an HTTP call, can often use more threads because those threads are waiting instead of using CPU. The right setting depends on the task and the machine, so the pool size and polling settings can be adjusted for each deployment.
 
-The poller also checks available local worker capacity before claiming more tasks. That helps avoid claiming a large batch that would simply wait in the instance's in-memory executor queue.
+The poller also checks available local worker capacity before claiming more tasks. That helps avoid claiming a large batch that would simply wait in the instance's in-memory executor queue. If a claimed task cannot be handed to the thread pool, for example because the pool is shutting down, it is released back to the queue rather than being run on the polling thread or left marked as processing.
 
 Different task types can have different concurrency caps on each worker. For
 example, a deployment can allow only two report-generation tasks at once, so
@@ -307,11 +325,11 @@ cooperative cancellation inside the handler.
 
 ## Retry after failure
 
-A task can fail because a downstream service is temporarily unavailable or because of another error in its handler. The API lets the caller set `maxAttempts`. If attempts remain, the task waits before trying again. The delay grows exponentially: one second, two seconds, four seconds, and so on, up to a one-minute default cap. A small random amount called **jitter** is added so a group of failed tasks does not all retry at exactly the same time. When attempts run out, the task becomes `FAILED` and stays available for inspection.
+A task can fail because a downstream service is temporarily unavailable or because of another error in its handler. The API lets the caller set `maxAttempts`. If attempts remain, the task waits before trying again. The delay grows exponentially: one second, two seconds, four seconds, and so on, up to a one-minute default cap. A small random amount called **jitter** is added so a group of failed tasks does not all retry at exactly the same time. When attempts run out, the task becomes `FAILED` and stays available for inspection until the retention purge removes it (see below).
 
 This is called **at-least-once execution**: a task will be retried after failures, but it may run more than once. For example, a worker could charge a card and then crash before saving the success status. A retry could attempt the charge again. Handlers should be safe to repeat or use an idempotency key with the downstream service. The API's `Idempotency-Key` only prevents duplicate task acceptance; it cannot guarantee exactly-once side effects inside a handler.
 
-Failed tasks act as dead-letter records: they remain in the database and can be listed with `GET /api/v1/tasks?status=FAILED`. `POST /api/v1/tasks/{taskId}/replay` creates a new task linked to the failed record. This lets an operator correct the underlying issue and retry the work without erasing the original failure.
+Failed tasks act as dead-letter records: they remain in the database until the retention purge removes them, and can be listed with `GET /api/v1/tasks?status=FAILED`. `POST /api/v1/tasks/{taskId}/replay` creates a new task linked to the failed record. This lets an operator correct the underlying issue and retry the work without erasing the original failure.
 
 `maxAttempts` includes the first run. Its default is one, so retries must be
 enabled by setting a larger value. The initial delay, maximum delay, and jitter
@@ -324,7 +342,7 @@ remain visible for diagnosis.
 
 **How it behaves:** `maxAttempts` includes the first run and defaults to one.
 When attempts remain, the delay grows exponentially up to a cap, with random
-jitter to spread out retries. Exhausted tasks remain `FAILED`; replay creates
+jitter to spread out retries. Exhausted tasks remain `FAILED` until purged; replay creates
 a new linked task and preserves the original failure. Polling selects only
 `PENDING` tasks, so a `FAILED` row is never picked up by the next poll. A
 failed task is retried only if someone explicitly replays it, which creates a
@@ -334,11 +352,36 @@ new task record.
 can hammer a failing dependency, while discarding failures removes the record
 needed to investigate and replay them.
 
+## Cleaning up finished tasks
+
+A queue that keeps every finished task grows forever. The table, its indexes,
+and the summary queries all get slower as old `COMPLETED`, `FAILED`, and
+`CANCELLED` rows pile up.
+
+**Why it matters:** Finished tasks are only useful for a while: to confirm a
+result, diagnose a failure, or replay it. After that they only cost storage and
+query time.
+
+**How it behaves:** A background job deletes finished tasks that were last
+updated before a retention window, in small batches so it never holds long
+locks. It also removes the idempotency record that points at each deleted task,
+and it never deletes a task that a recurring schedule is still tracking. The
+window is `task-processor.retention.retention-hours`. The default is `0`, which
+deletes finished tasks on the next purge run (every five minutes by default);
+set a larger value such as `168` to keep them for a week, or disable the purge
+with `task-processor.retention.enabled: false`.
+
+**Without it:** The task table grows without bound. With the default of `0`,
+note the trade-off: a finished task is quickly gone, so it can no longer be
+fetched by ID, a failed task can no longer be replayed after the purge, and a
+retry with the same idempotency key creates a new task. Raise the retention
+window if you rely on any of those.
+
 ## Metrics and queue statistics
 
 Metrics are measurements that help you see how the processor is behaving: how many tasks were accepted, how many completed or failed, how long processing takes, and how busy the worker pool is. The library records these measurements with **Micrometer**, a Java metrics toolkit, and includes a **Prometheus** endpoint. Prometheus can periodically read that endpoint and store the measurements for dashboards or alerts.
 
-The task summary API also reports database-backed counts for waiting, running, and finished tasks; counts grouped by task type; average processing time; and an estimated time to drain the current backlog.
+The task summary API also reports database-backed counts (gathered with a single grouped query rather than one count per status) for waiting, running, and finished tasks (finished counts stay small when the retention purge is on); counts grouped by task type; average processing time; and an estimated time to drain the current backlog.
 
 **Why it matters:** Measurements help operators see if the queue is growing,
 which task types are slow, and whether worker capacity is being used.
@@ -386,7 +429,7 @@ JobRunr is an established Java framework for background jobs. Both projects can 
 | Distributed workers | Multiple instances claim tasks from the shared PostgreSQL queue | Multiple background servers supported |
 | Retry on failure | Supported | Supported, with automatic retries and backoff |
 | Idempotent submission | Optional key for single-task requests | Supported |
-| Failed task replay | New task linked to retained failed record | Failed jobs can be retried |
+| Failed task replay | New task linked to the failed record while it is retained | Failed jobs can be retried |
 | Priority and fairness | Named priorities; round-robin by type within each priority | Priority queues are a Pro feature |
 | Queue admission limits | Global and per-task-type outstanding limits | Configuration and plan dependent |
 | Per-type worker caps | Configurable per worker instance | Worker configuration available |
@@ -401,9 +444,10 @@ JobRunr has a broader set of features and storage choices. This processor is aim
 
 Backlog completion time is an estimate based on observed runtimes and the current process's worker capacity; it is not a promise, especially when task types have different runtimes or several worker instances are running.
 
-The queue currently uses PostgreSQL only. It has no built-in task retention
-or cleanup policy, cron or calendar-based schedules, bulk idempotency keys, or
-authentication and authorization. Running handlers cannot be forcibly
+The queue currently uses PostgreSQL only. Its cleanup is a simple age-based
+purge of finished tasks, with no per-status or per-type retention rules. It has
+no cron or calendar-based schedules, bulk idempotency keys, or authentication
+and authorization. Running handlers cannot be forcibly
 cancelled, and metrics used in ETA calculations are local to each worker.
 Worker pool sizing and per-type caps are configured manually; there is no
 automatic CPU-based scaling. Task payloads are generic text, so the library

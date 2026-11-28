@@ -23,7 +23,7 @@ In this example we will run the **llama3.1** LLM model which will run locally an
 
 ### Code
 
-{{< ghcode "https://raw.githubusercontent.com/gitorko/project09/refs/heads/main/src/main/java/com/demo/project09/controller/HomeController.java" >}}
+{{< ghcode "https://raw.githubusercontent.com/gitorko/project09/refs/heads/main/src/main/java/com/demo/project09/controller/AssistantController.java" >}}
 
 {{< ghcode "https://raw.githubusercontent.com/gitorko/project09/refs/heads/main/src/main/java/com/demo/project09/config/ChatConfig.java" >}}
 
